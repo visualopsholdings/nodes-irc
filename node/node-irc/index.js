@@ -78,11 +78,11 @@ IRC.initWorker = function(server, subport, reqport) {
   var pullSocket = zmq.socket('sub');	
   pullSocket.connect('tcp://127.0.0.1:' + subport);
   pullSocket.subscribe('');
-  console.log('IRC Consumer connected to port ' + subport);
+  console.log('Local PUB/SUB connected to port ' + subport);
 
   server.localSocket = zmq.socket('req');	
   server.localSocket.connect('tcp://127.0.0.1:' + reqport);
-  console.log('Local connected to port ' + reqport);
+  console.log('Local REP/REQ connected to port ' + reqport);
 
   var logger = { log: function() {} };
 //  var logger = console;

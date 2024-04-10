@@ -45,6 +45,83 @@ This is a modified version of:
 
 https://github.com/song940/node-irc
 
+## Protocol
+
+The protocol used to talk to Nodes is sending stringified JSON over 2 ZMQ message queues.
+
+### ZMQ sockets
+
+A SUB socket on port tcp://127.0.0.1:3012 which is used to receive new messages from other nodes
+and users locally connected to this node.
+
+A REQ socket on port tcp://127.0.0.1:3013 which is used to send messages to other nodes and
+users connected locally to this node. This port is also used to "ask" for things of the Visual Ops
+system such as login etc.
+
+### JSON formats
+
+#### Login
+
+```
+{ 
+  "type": "login", 
+  "username": "username" 
+}
+```
+
+This will be processed by the Visual Ops system and it will return:
+
+```
+{ 
+  "type"": "user", 
+  "name": "tracy",
+  "id": "user guid",
+  streams: [
+    {
+      "name": "Conversation 1",
+      "stream": "stream guid",
+      "policy": "stream policy guid"
+    }
+  ]
+}
+```
+
+#### Message
+
+This is sent to the REQ socket when a message happens on IRC, and will be received on the 
+SUB socket when a new message is received.
+
+```
+{ 
+  "type": "message", 
+  "text": "Message text",
+  "stream": "stream guid",
+  "policy": "stream policy guid",
+  "user": "user guid"
+}
+```
+
+#### Acknowlege
+
+This is received on the REQ socket when a Message is sent.
+
+```
+{ 
+  "type": "ack"
+}
+```
+
+#### Error
+
+This is received on the REQ socket when a a bad request has happened
+
+```
+{ 
+  "type": "err",
+  "msg": "LOL what are you doing!"
+}
+```
+
 
 ## Current development focus
 
