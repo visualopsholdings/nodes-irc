@@ -1,10 +1,6 @@
-var irc = require('./modules/irc/index'),
-	db = require('./modules/db/index');
+var irc = require('./node-irc/index');
 	
 var port = parseInt(process.argv[2]);
-
-// initialise the db
-db.init('mongodb://fiveEstellas:visualops@localhost/fiveEstellas');
 
 const server = irc.createServer();
 server.listen(6667);
