@@ -73,7 +73,7 @@ This will be processed by the Visual Ops system and it will return:
 
 ```
 { 
-  "type"": "user", 
+  "type": "user", 
   "name": "tracy",
   "id": "user guid",
   streams: [
@@ -81,6 +81,40 @@ This will be processed by the Visual Ops system and it will return:
       "name": "Conversation 1",
       "stream": "stream guid",
       "policy": "stream policy guid"
+    }
+  ]
+}
+```
+
+#### Policy users
+
+Since the Visual Ops (and the node system) is persistent, when you join a stream, you can query the 
+users in that stream by the stream policy and join those users too.
+
+```
+{ 
+  "type": "policyusers", 
+  "polict": "stream policy guid" 
+}
+```
+
+This will be processed by the Visual Ops system and it will return:
+
+```
+{ 
+  "type": "user", 
+  "name": "policyusers",
+  "id": "stream policy guid",
+  users: [
+    {
+      "name": "tracy",
+      "fullname": "Tracy",
+      "id": "user guid"
+    },
+    {
+      "name": "leanne",
+      "fullname": "Leanne",
+      "id": "user guid"
     }
   ]
 }
