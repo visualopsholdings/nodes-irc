@@ -122,11 +122,23 @@ This is received on the REQ socket when a a bad request has happened
 }
 ```
 
+## Testing
+
+The end to end tests use cucumber (Ruby) to get that going.
+
+```
+$ bundle install
+$ bundle exec cucumber
+```
 
 ## Current development focus
 
-### NodeJS reference implementation
-  
+### Cucumber testing framework
+
+## License
+
+ZMQIRC is licensed under [version 3 of the GNU General Public License] contained in LICENSE.
+
 ## Change Log
 
 ### 10 Apr 2024
