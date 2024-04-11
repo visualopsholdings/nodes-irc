@@ -36,6 +36,9 @@ function join (opts) {
     } else {
       user.send(server, RPL_NOTOPIC, [ user.nickname, channel.name, ':No topic is set.' ])
     }
+    
+    // other users
+    server.policyUsers(channel.policy);
   }
 }
 

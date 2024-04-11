@@ -60,6 +60,19 @@ repSocket.on('message', (msg) => {
     console.log("got", m.text, "from", m.user);
     repSocket.send(JSON.stringify({ type: "ack" }));
   }
+  if (m.type == "policyusers") {
+    if (m.policy != "p1") {
+      repSocket.send(JSON.stringify({ type: "err", msg: "not correct policy" }));
+      return;
+    }
+    repSocket.send(JSON.stringify({ type: "policyusers", id: "p1", 
+      users: [
+        { id: "u1", name: "tracy", fullname: "Tracy" },
+        { id: "u2", name: "leanne", fullname: "Leanne" }
+      ]
+    }));
+    return;
+  }
   
   logger.log("REQ got", m);
   repSocket.send(JSON.stringify({ type: "err", msg: "not implemented" }));

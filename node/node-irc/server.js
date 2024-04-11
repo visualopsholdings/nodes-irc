@@ -36,7 +36,7 @@ class Server extends net.Server {
     this.created = new Date();
     this.channels = new Map();
     this.hostname = options.hostname || 'localhost';
-    this.localSocket = null;
+    this.reqSocket = null;
     this.on('connection', sock => {
       const user = new User(sock);
       this.users.push(user);
@@ -94,7 +94,15 @@ class Server extends net.Server {
     }    
     return null;
   }
-
+  addOtherUser(id, username, fullname) {
+    const user = new User(null);
+    user.id = id;
+    user.username = username;
+    user.nickname = username;
+    user.fullname = fullname;
+    this.users.push(user);
+    return user;
+  }
   /**
    * Finds a channel on the server.
    *
@@ -108,6 +116,14 @@ class Server extends net.Server {
   findChannelId(id) {
     for (let [key, value] of this.channels.entries()) {
       if (value.id === id) {
+        return value;
+      }
+    }    
+    return null;
+  }
+  findChannelPolicy(id) {
+    for (let [key, value] of this.channels.entries()) {
+      if (value.policy === id) {
         return value;
       }
     }    
@@ -209,11 +225,15 @@ class Server extends net.Server {
 
   newMessage(msg) {
     msg.type = "message";
-    this.localSocket.send(JSON.stringify(msg));
+    this.reqSocket.send(JSON.stringify(msg));
   }
 
   login(username) {
-    this.localSocket.send(JSON.stringify({ type: "login", username: username }));
+    this.reqSocket.send(JSON.stringify({ type: "login", username: username }));
+  }
+
+  policyUsers(policy) {
+    this.reqSocket.send(JSON.stringify({ type: "policyusers", policy: policy }));
   }
 
 }

@@ -21,21 +21,25 @@ class User extends Duplex {
     this.channels = [];
     this.nickname = null;
     this.id = null;
-    this.hostname = sock.remoteAddress;
+    if (sock) {
+      this.hostname = sock.remoteAddress;
+    }
     this.on('end', () => {
       const message = new Message(null, 'QUIT', []);
       this.onReceive(message);
     });
-    sock.pipe(Parser()).pipe(to.obj((message, enc, cb) => {
-      this.onReceive(message)
-      cb()
-    }));
-    sock.on('error', e => {
-      debug('error', e);
-    });
-    sock.on('end', e => {
-      this.emit('end', e);
-    });
+    if (sock) {
+      sock.pipe(Parser()).pipe(to.obj((message, enc, cb) => {
+        this.onReceive(message)
+        cb()
+      }));
+      sock.on('error', e => {
+        debug('error', e);
+      });
+      sock.on('end', e => {
+        this.emit('end', e);
+      });
+    }
   }
 
   onReceive(message) {
@@ -51,6 +55,10 @@ class User extends Duplex {
 
   _write(message, enc, cb) {
     debug('write', message + '');
+    if (!this.socket) {
+      console.log("no real socket to write");
+      return;
+    }
     if (this.socket.destroyed) {
       debug('user socket destroyed', this.nickname);
       this.socket.emit('error');
@@ -117,6 +125,10 @@ class User extends Duplex {
    * end socket
    */
   end() {
+    if (!this.socket) {
+      console.log("no real socket to end");
+      return;
+    }
     this.socket.end();
     return this;
   }
