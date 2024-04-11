@@ -1,0 +1,34 @@
+{
+  "name": "irc-server",
+  "version": "0.0.4",
+  "description": "IRC server implementation in Node.js",
+  "main": "index.js",
+  "directories": {
+    "example": "example"
+  },
+  "scripts": {
+    "test": "node test",
+    "start": "node example"
+  },
+  "keywords": [
+    "irc",
+    "irc-server"
+  ],
+  "author": "Lsong",
+  "license": "MIT",
+  "dependencies": {
+    "split2": "^2.1.1",
+    "each-async": "^1.1.1",
+    "stream-combiner": "^0.2.2",
+    "flush-write-stream": "^2.0.0"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/song940/node-irc.git"
+  },
+  "bugs": {
+    "url": "https://github.com/song940/node-irc/issues"
+  },
+  "homepage": "https://github.com/song940/node-irc#readme"
+}

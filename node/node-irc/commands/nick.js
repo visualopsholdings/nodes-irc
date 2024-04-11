@@ -26,7 +26,6 @@ module.exports = function nick ({ user, server, parameters: [ nickname ] }) {
     return user.send(server, ERR_NICKNAMEINUSE, 
       [ user.nickname, nickname, ':Nickname is already in use' ])
   }
-  
   user.nickname = nickname;
   user.send(user, 'NICK', [ nickname ])
   user.channels.forEach(chan => chan.broadcast(user, 'NICK', [ nickname ]));

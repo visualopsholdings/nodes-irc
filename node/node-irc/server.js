@@ -134,6 +134,7 @@ class Server extends net.Server {
     var channel = this.channels.get(channelName);
     channel.id = id;
     channel.policy = policy;
+    return channel;
   }
 
   /**

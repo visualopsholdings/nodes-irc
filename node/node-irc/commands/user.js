@@ -1,4 +1,5 @@
 const { debuglog } = require('util');
+const pkg = require('../package.json')
 const { 
   ERR_NEEDMOREPARAMS 
 } = require('../replies');
@@ -17,12 +18,17 @@ function USER({ user, server, parameters }) {
   const [ username, hostname, servername, realname ] = parameters;
   debug('USER', user.mask(), username, hostname, servername, realname);
 
-  user.hostname = hostname;
   user.username = username;
   user.realname = realname;
+  user.hostname = hostname;
   user.servername = servername;
   server.login(username);
 
+//  user.send(server, '001', [ user.nickname, ':Welcome' ]);
+//  user.send(server, '002', [ user.nickname, `:Your host is ${server.hostname} running version ${pkg.version}` ]);
+//  user.send(server, '003', [ user.nickname, `:This server was created ${server.created}` ]);
+//  user.send(server, '004', [ user.nickname, pkg.name, pkg.version ]);
+//  user.send(server, 'MODE', [ user.nickname, '+w' ]);
 }
 
 module.exports = USER;
