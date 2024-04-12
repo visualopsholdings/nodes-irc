@@ -14,7 +14,7 @@ and any device that can run a browser.
 - A security system allows subsets of users to View and Edit "Streams" which are analagous to Channels
 in IRC.
 - A system called "Nodes" correctly delivers missing messages when nodes "go away".
-- The system useds ZMQ message queues in a novel fashion which are the backbone for delivery
+- The system uses ZMQ message queues in a novel fashion which are the backbone for delivery
 and use EC (Eliptical Curve) Cryptography to ensure transport security.
 - Visual Ops is monolithic. Every server is completely standalone and require no more resources
 from the internet (Cloud).
