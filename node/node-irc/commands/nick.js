@@ -20,6 +20,16 @@ module.exports = function nick ({ user, server, parameters: [ nickname ] }) {
   }
 
   const lnick = nickname.toLowerCase()
+  
+  // remove the temporary user.
+  for (var i=0; i<server.users.length; i++) {
+    const user = server.users[i];
+    if (user.nickname == lnick && !user.socket) {
+      server.users.splice(i, 1);
+      break;
+    }
+  }
+  
   if (server.users.some((us) => us.nickname &&
                                 us.nickname.toLowerCase() === lnick &&
                                 us !== user)) {
