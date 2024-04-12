@@ -170,6 +170,18 @@ against the IRC client.
 
 You can find the actual tests in "features".
 
+To run a single test:
+
+```
+bundle exec cucumber -n "More than one user can connect and login"
+```
+
+To turn on logging for the old NodeJS while you run the tests:
+
+```
+export NODE_DEBUG=ircs:*
+```
+
 ## Current development focus
 
 ### Implemeht in C++

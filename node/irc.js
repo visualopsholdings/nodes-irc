@@ -13,11 +13,11 @@ var reqport = port + 13;
 var subSocket = zmq.socket('sub');	
 subSocket.connect('tcp://127.0.0.1:' + subport);
 subSocket.subscribe('');
-console.log('Local PUB/SUB connected to port ' + subport);
+console.log('Local SUB connected to port ' + subport);
 
 server.reqSocket = zmq.socket('req');	
 server.reqSocket.connect('tcp://127.0.0.1:' + reqport);
-console.log('Local REP/REQ connected to port ' + reqport);
+console.log('Local REQ connected to port ' + reqport);
 
 var logger = { log: function() {} };
 //  var logger = console;
