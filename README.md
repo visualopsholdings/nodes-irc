@@ -19,7 +19,7 @@ and use EC (Eliptical Curve) Cryptography to ensure transport security.
 - Visual Ops is monolithic. Every server is completely standalone and require no more resources
 from the internet (Cloud).
 
-For these reasons, it would be the perfect backend for IRC and solve many of the existing drawbacks
+For these reasons, it would be the perfect backend for IRC Clients and solve many of the existing drawbacks
 and problems that plague IRC
 
 This project will implement an IRC front end in C++ that uses ZMQ to talk to the Visual Ops "Nodes"
