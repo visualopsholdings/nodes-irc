@@ -41,6 +41,9 @@ $ forever start --killSignal=SIGINT irc.js 3000
 On reboot, Visual ops will look for the irc.js file and correctly start it up so it really
 just needs to exist in "zmqirc/node".
 
+Make sure that port 6667 is punched through yoru firewall and you can connect to your Visual Ops
+server and chat that way.
+
 This is a modified version of:
 
 https://github.com/song940/node-irc
@@ -181,19 +184,6 @@ To turn on logging for the old NodeJS while you run the tests:
 ```
 export NODE_DEBUG=ircs:*
 ```
-
-## Install in Visual Ops
-
-SSH into the Visual ops server and type
-
-```
-git clone https://github.com/visualopsholdings/zmqirc.git
-cd zmqirc/node
-npm install
-```
-
-Now make sure that port 6667 is punched through yoru firewall and you can connect to your Visual Ops
-server and chat that way.
 
 ## Current development focus
 
