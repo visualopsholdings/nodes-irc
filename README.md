@@ -168,7 +168,7 @@ $ bundle install
 $ bundle exec cucumber
 ```
 
-This will run up a dummy "nodes" with some dummy data and tun end to end tests
+This will run up a dummy "nodes" with some dummy data and run end to end tests
 against the IRC client.
 
 You can find the actual tests in "features".
