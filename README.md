@@ -158,16 +158,21 @@ This is received on the REQ socket when a a bad request has happened
 
 ## Testing
 
-The end to end tests use cucumber (Ruby) to get that going.
+The end to end tests use cucumber (Ruby), to get that going:
 
 ```
 $ bundle install
 $ bundle exec cucumber
 ```
 
+This will run up a dummy "nodes" with some dummy data and tun end to end tests
+against the IRC client.
+
+You can find the actual tests in "features".
+
 ## Current development focus
 
-### Cucumber testing framework
+### Implemeht in C++
 
 ## License
 
