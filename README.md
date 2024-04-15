@@ -4,26 +4,9 @@ A frontend for IRC that uses ZMQ to send/receive messages.
 
 ## Visual Ops
 
-Visual Ops is a messaging system (and more) that exists on the edge. Visual Ops nodes are
-standalone servers which can be formed into a tree of servers delivering new messages to users
-using ZMQ message queues and (in the web) Web sockets.
+This is a companion project to:
 
-- There is a full featured Web App which can be configured as a standalone app on iOS and Android
-and any device that can run a browser.
-- Messages persist in a MongoDB database.
-- A security system allows subsets of users to View and Edit "Streams" which are analagous to Channels
-in IRC.
-- A system called "ZMQChat" correctly delivers missing messages when nodes "go away".
-- The system uses ZMQ message queues in a novel fashion which are the backbone for delivery
-and use EC (Eliptical Curve) Cryptography to ensure transport security.
-- Visual Ops is monolithic. Every server is completely standalone and require no more resources
-from the internet (Cloud).
-
-For these reasons, it would be the perfect backend for IRC Clients and solve many of the existing drawbacks
-and problems that plague IRC
-
-This project will implement an IRC front end in C++ that uses ZMQ to talk to the Visual Ops "ZMQChat"
-system for message delivery, security, persistence etc.
+https://github.com/visualopsholdings/zmqchat
 
 ## Reference version using nodejs
 
