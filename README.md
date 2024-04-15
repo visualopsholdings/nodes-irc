@@ -13,7 +13,7 @@ and any device that can run a browser.
 - Messages persist in a MongoDB database.
 - A security system allows subsets of users to View and Edit "Streams" which are analagous to Channels
 in IRC.
-- A system called "Nodes" correctly delivers missing messages when nodes "go away".
+- A system called "ZMQChat" correctly delivers missing messages when nodes "go away".
 - The system uses ZMQ message queues in a novel fashion which are the backbone for delivery
 and use EC (Eliptical Curve) Cryptography to ensure transport security.
 - Visual Ops is monolithic. Every server is completely standalone and require no more resources
@@ -22,24 +22,24 @@ from the internet (Cloud).
 For these reasons, it would be the perfect backend for IRC Clients and solve many of the existing drawbacks
 and problems that plague IRC
 
-This project will implement an IRC front end in C++ that uses ZMQ to talk to the Visual Ops "Nodes"
+This project will implement an IRC front end in C++ that uses ZMQ to talk to the Visual Ops "ZMQChat"
 system for message delivery, security, persistence etc.
 
 ## Reference version using nodejs
 
-A reference version of what we are aiming for exists in "node".
+A reference version of what we are aiming for exists in "nodejs".
 
 To use it with Visual Ops:
 
 ```
 $ git clone https://github.com/visualopsholdings/zmqirc.git
-$ cd zmqirc/node
+$ cd zmqirc/nodejs
 $ npm install
 $ forever start --killSignal=SIGINT irc.js 3000
 ```
 
 On reboot, Visual ops will look for the irc.js file and correctly start it up so it really
-just needs to exist in "zmqirc/node".
+just needs to exist in "zmqirc/nodejs".
 
 Make sure that port 6667 is punched through yoru firewall and you can connect to your Visual Ops
 server and chat that way.
@@ -50,7 +50,7 @@ https://github.com/song940/node-irc
 
 ## Protocol
 
-The protocol used to talk to Nodes is sending stringified JSON over 2 ZMQ message queues.
+The protocol used to talk to ZMQChat is sending stringified JSON over 2 ZMQ message queues.
 
 ### ZMQ sockets
 
@@ -91,7 +91,7 @@ This will be processed by the Visual Ops system and it will return:
 
 #### Policy users
 
-Since the Visual Ops (and the node system) is persistent, when you join a stream, you can query the 
+Since the Visual Ops (and the ZMQChat system) is persistent, when you join a stream, you can query the 
 users in that stream by the stream policy and join those users too.
 
 ```
@@ -168,7 +168,7 @@ $ bundle install
 $ bundle exec cucumber
 ```
 
-This will run up a dummy "nodes" with some dummy data and run end to end tests
+This will run up a dummy "ZMQChat" with some dummy data and run end to end tests
 against the IRC client.
 
 You can find the actual tests in "features".

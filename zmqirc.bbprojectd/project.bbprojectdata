@@ -148,7 +148,7 @@
 				<integer>1</integer>
 			</dict>
 			<key>ItemName</key>
-			<string>node</string>
+			<string>nodejs</string>
 			<key>ItemType</key>
 			<string>FolderReference</string>
 			<key>UserOverrideItemName</key>
