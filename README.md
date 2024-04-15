@@ -187,7 +187,7 @@ export NODE_DEBUG=ircs:*
 
 ## Current development focus
 
-### Implemeht in C++
+### Implement in C++
 
 ## License
 
@@ -197,4 +197,8 @@ ZMQIRC is licensed under [version 3 of the GNU General Public License] contained
 
 ### 10 Apr 2024
 - Initial project creation.
+
+### 15 Apr 2024
+- Cucumber tests, slight rename to include the ZMQChat project (new) which is an open source
+implementation of the proprietary "Visual Ops" server.
 
