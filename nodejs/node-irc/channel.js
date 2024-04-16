@@ -39,8 +39,9 @@ class Channel {
    */
   join(user) {
     if (this.hasUser(user)) {
-      console.log(this.toString());
-      throw new Error(`User ${user.nickname} has already join this channel ${this.name}`);
+//       console.log(this.toString());
+//       throw new Error(`User ${user.nickname} has already join this channel ${this.name}`);
+      return this;
     } else {
       user.join(this);
       this.users.push(user);
