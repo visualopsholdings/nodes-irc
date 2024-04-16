@@ -9,6 +9,7 @@ end
 
 ServiceManager.define_service 'irc' do |s|
    s.start_cmd = 'cd nodejs; ./local-irc.sh'
+#   s.start_cmd = 'build/ZMQIRC'
    s.loaded_cue = /Local REQ/
    s.cwd = Dir.pwd
    s.pid_file = 'irc.pid'

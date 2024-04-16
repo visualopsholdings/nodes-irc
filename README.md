@@ -168,6 +168,15 @@ To turn on logging for the old NodeJS while you run the tests:
 export NODE_DEBUG=ircs:*
 ```
 
+## C++ Development
+
+```
+$ mkdir build
+$ cd build
+$ cmake ..
+$ make
+```
+
 ## Current development focus
 
 ### Implement in C++

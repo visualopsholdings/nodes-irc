@@ -31,5 +31,8 @@
 *.out
 *.app
 
+# build folder
+build
+
 # nodejs stuff
 node_modules
