@@ -194,3 +194,6 @@ ZMQIRC is licensed under [version 3 of the GNU General Public License] contained
 - Cucumber tests, slight rename to include the ZMQChat project (new) which is an open source
 implementation of the proprietary "Visual Ops" server.
 
+### 18 Apr 2024
+- Implement server and session.
+

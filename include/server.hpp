@@ -15,19 +15,26 @@
 #define H_server
 
 #include <zmq.hpp>
+#include <boost/asio.hpp>
+
+class Session;
 
 class Server {
 
 public:
-  Server(zmq::socket_t *sub, zmq::socket_t *req):
-    _sub(sub), _req(req) {}
-  ~Server();
+  Server(zmq::socket_t *sub, zmq::socket_t *req);
   
   void run();
-  
+    
 private:
+  boost::asio::io_service _io_service;
+  boost::asio::ip::tcp::acceptor _acceptor;
   zmq::socket_t *_sub;
   zmq::socket_t *_req;
+
+  void start_accept();
+  void handle_accept(boost::shared_ptr<Session> session,
+      const boost::system::error_code& error);
 
 };
 
