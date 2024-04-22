@@ -14,15 +14,13 @@
 #ifndef H_session
 #define H_session
 
-#include "user.hpp"
 #include "request.hpp"
 
 #include <boost/enable_shared_from_this.hpp>
 #include <boost/asio.hpp>
+#include <list>
 
-class Session :
-  public User,
-  public boost::enable_shared_from_this<Session> {
+class Session : public boost::enable_shared_from_this<Session> {
 
 public:
   
@@ -34,12 +32,16 @@ public:
   void start();
   boost::asio::streambuf& buffer();
   
+  void nick(const std::list<std::string> &args);
+  void user(const std::list<std::string> &args);
+  
 private:
 
   boost::asio::ip::tcp::socket _socket;
   boost::asio::streambuf _buffer;
   Request _request;
-
+  std::string _nick;
+  
   explicit Session(boost::asio::io_service& io_service);
   
   void handle_read(const boost::system::error_code& error,

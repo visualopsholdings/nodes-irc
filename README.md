@@ -170,11 +170,20 @@ export NODE_DEBUG=ircs:*
 
 ## C++ Development
 
+To build ZMQIRC
+
 ```
 $ mkdir build
 $ cd build
 $ cmake ..
 $ make
+$ make test
+```
+
+To run all the tests. And show failures.
+
+```
+make && make test || cat /Users/paul/Dev/zmqirc/test/build/Testing/Temporary/LastTest.log
 ```
 
 ## Current development focus
@@ -184,6 +193,14 @@ $ make
 ## License
 
 ZMQIRC is licensed under [version 3 of the GNU General Public License] contained in LICENSE.
+
+## Acknowlegements
+
+https://github.com/skywodd/Boost_IRC_server
+https://github.com/song940/node-irc
+https://zeromq.org/
+https://www.boost.org/
+https://cucumber.io/
 
 ## Change Log
 
@@ -196,4 +213,7 @@ implementation of the proprietary "Visual Ops" server.
 
 ### 18 Apr 2024
 - Implement server and session.
+
+### 22 Apr 2024
+- Simple parser, handle NICK
 

@@ -65,3 +65,9 @@ void Session::handle_read(const boost::system::error_code& error,
 	}
 }
 
+void Session::nick(const std::list<std::string> &args) {
+  _nick = args.front();
+}
+
+void Session::user(const std::list<std::string> &args) {
+}
