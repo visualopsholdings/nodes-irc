@@ -196,7 +196,7 @@ ZMQIRC is licensed under [version 3 of the GNU General Public License] contained
 
 ## Acknowlegements
 
-### C++ adn Boost inspiration
+### C++ and Boost inspiration
 
 - https://github.com/skywodd/Boost_IRC_server
 
