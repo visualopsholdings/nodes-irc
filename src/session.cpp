@@ -14,16 +14,17 @@
 #include <iostream>
 #include <boost/bind.hpp>
 #include <boost/log/trivial.hpp>
+#include <boost/algorithm/string/join.hpp>
 
 using namespace std;
 
-Session::Session(boost::asio::io_service& io_service) :
-	_socket(io_service), _request(this) {
+Session::Session(Server *server, boost::asio::io_service& io_service) :
+	_server(server), _socket(io_service), _request(this) {
 }
 	
-boost::shared_ptr<Session> Session::create(boost::asio::io_service& io_service) {
+boost::shared_ptr<Session> Session::create(Server *server, boost::asio::io_service& io_service) {
 
-	return boost::shared_ptr<Session>(new Session(io_service));
+	return boost::shared_ptr<Session>(new Session(server, io_service));
 
 }
 
@@ -49,25 +50,39 @@ void Session::start(void) {
 void Session::handle_read(const boost::system::error_code& error,
 		const std::size_t bytes_transferred) {
 
-	/* Check for error */
-	if (!error) {
-
-		_request.handle();
-
-		boost::asio::async_read_until(_socket, _buffer, "\r\n",
-				boost::bind(&Session::handle_read, shared_from_this(),
-						boost::asio::placeholders::error,
-						boost::asio::placeholders::bytes_transferred));
-
-	} else {
-
+	if (error) {
 		// TBD: Handle error
+		return;
+  }
+  
+  _request.handle();
+
+  boost::asio::async_read_until(_socket, _buffer, "\r\n",
+      boost::bind(&Session::handle_read, shared_from_this(),
+          boost::asio::placeholders::error,
+          boost::asio::placeholders::bytes_transferred));
+
+}
+
+void Session::handle_write(const boost::system::error_code& error) {
+
+	if (error) {
+    // TBD: Handle error;
 	}
+	
 }
 
-void Session::nick(const std::list<std::string> &args) {
-  _nick = args.front();
+void Session::write(const std::string &line) {
+
+	boost::asio::async_write(_socket, boost::asio::buffer(line + "\r\n"),
+			boost::bind(&Session::handle_write, shared_from_this(),
+					boost::asio::placeholders::error));
+
 }
 
-void Session::user(const std::list<std::string> &args) {
+void Session::send(const std::string &cmd, const std::list<std::string> &args) {
+  
+  write(":localhost " + cmd + " " + boost::algorithm::join(args, " "));
+  
 }
+

@@ -217,3 +217,6 @@ implementation of the proprietary "Visual Ops" server.
 ### 22 Apr 2024
 - Simple parser, handle NICK
 
+### 24 Apr 2024
+- command list, handle USER and send ZMQ login to record user.
+

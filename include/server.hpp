@@ -16,6 +16,8 @@
 
 #include <zmq.hpp>
 #include <boost/asio.hpp>
+#include <boost/optional.hpp>
+#include <nlohmann/json.hpp>
 
 class Session;
 
@@ -25,17 +27,21 @@ public:
   Server(zmq::socket_t *sub, zmq::socket_t *req);
   
   void run();
+  void login(const std::string &username);
     
 private:
   boost::asio::io_service _io_service;
   boost::asio::ip::tcp::acceptor _acceptor;
   zmq::socket_t *_sub;
   zmq::socket_t *_req;
-
+  std::vector<boost::shared_ptr<Session> > _sessions;
+  
   void start_accept();
   void handle_accept(boost::shared_ptr<Session> session,
       const boost::system::error_code& error);
-
+  boost::optional<nlohmann::json::iterator> get(nlohmann::json *json, const std::string &name);
+  boost::shared_ptr<Session> find_session_username(const std::string &username);
+  
 };
 
 #endif // H_server

@@ -18,13 +18,14 @@
 
 #include <boost/enable_shared_from_this.hpp>
 #include <boost/asio.hpp>
-#include <list>
+
+class Server;
 
 class Session : public boost::enable_shared_from_this<Session> {
 
 public:
   
-  static boost::shared_ptr<Session> create(
+  static boost::shared_ptr<Session> create(Server *server,
       boost::asio::io_service& io_service);
 
   boost::asio::ip::tcp::socket& socket();
@@ -32,22 +33,28 @@ public:
   void start();
   boost::asio::streambuf& buffer();
   
-  void nick(const std::list<std::string> &args);
-  void user(const std::list<std::string> &args);
-  
 private:
-
+  friend class Request;
+  friend class Server;
+  
   boost::asio::ip::tcp::socket _socket;
   boost::asio::streambuf _buffer;
   Request _request;
   std::string _nick;
+  std::string _username;
+  std::string _id;
+  Server *_server;
   
-  explicit Session(boost::asio::io_service& io_service);
+  explicit Session(Server *server, boost::asio::io_service& io_service);
   
   void handle_read(const boost::system::error_code& error,
       const std::size_t bytes_transferred);
+  void handle_write(const boost::system::error_code& error);
 
-
+  void write(const std::string &line);
+  void send(const std::string &cmd, const std::list<std::string> &args);
+  void login(const std::string &username);
+  
 };
 
 #endif // H_session

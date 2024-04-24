@@ -13,6 +13,7 @@
 
 #include "session.hpp"
 #include "parser.hpp"
+#include "server.hpp"
 
 #include <iostream>
 #include <sstream>
@@ -22,6 +23,10 @@ using namespace std;
 
 Request::Request(Session* session) :
   _session(session) {
+
+	_commands["NICK"] = Request::nick;
+	_commands["USER"] = Request::user;
+	
 }
 
 void Request::handle() {
@@ -30,19 +35,35 @@ void Request::handle() {
   istream is(&_session->buffer());
   getline(is, line, '\n');
 
-  // Erase \r at the end
-  line.erase(line.size() - 1, 1);
+  if (line.size() == 0) {
+    return;
+  }
   
+  // Erase \r at the end
+  line.erase(line.size()-1, 1);
+  
+  // parse the command
   list<string> args;
   string cmd = Parser::parse(line, &args);
-  if (cmd == "NICK") {
-    _session->nick(args);
-  }
-  else if (cmd == "USER") {
-    _session->user(args);
-  }
-  else {
-    cout << "ignoring " << cmd << " [" << boost::algorithm::join(args, ", ") << "]" << endl;
-  }
   
+  // execute the handler.
+  map<string, cmdHandler>::iterator handler = _commands.find(cmd);
+  if (handler == _commands.end()) {
+    cout << "ignoring " << cmd << " [" << boost::algorithm::join(args, ", ") << "]" << endl;
+    return;
+  }
+  handler->second(_session, args);
+  
+}
+
+
+void Request::nick(Session *session, const list<string> &args) {
+  session->_nick = args.front();
+}
+
+void Request::user(Session *session, const list<string> &args) {
+
+  session->_username = args.front();
+  session->_server->login(session->_username);
+
 }

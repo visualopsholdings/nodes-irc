@@ -20,6 +20,8 @@ var self = this;
 repSocket.on('message', (msg) => {
 
   var m = JSON.parse(msg);
+  logger.log(m);
+  
   if (m.type == "login") {
     if (m.username == "tracy") {
       repSocket.send(JSON.stringify({ type: "user", id: "u1", name: m.username, 
