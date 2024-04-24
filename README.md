@@ -196,11 +196,25 @@ ZMQIRC is licensed under [version 3 of the GNU General Public License] contained
 
 ## Acknowlegements
 
-https://github.com/skywodd/Boost_IRC_server
-https://github.com/song940/node-irc
-https://zeromq.org/
-https://www.boost.org/
-https://cucumber.io/
+### C++ adn Boost inspiration
+
+- https://github.com/skywodd/Boost_IRC_server
+
+### NodeJS IRC inspiration
+
+- https://github.com/song940/node-irc
+
+### ZeroMQ messaging
+
+- https://zeromq.org/
+
+### Boost C++ library
+
+- https://www.boost.org/
+
+### End to end testing
+
+- https://cucumber.io/
 
 ## Change Log
 
