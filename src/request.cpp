@@ -27,6 +27,8 @@ Request::Request(Session* session) :
 
 	_commands["NICK"] = Request::nick;
 	_commands["USER"] = Request::user;
+	_commands["LIST"] = Request::listCmd;
+	_commands["JOIN"] = Request::join;
 	
 }
 
@@ -59,12 +61,27 @@ void Request::handle() {
 
 
 void Request::nick(Session *session, const list<string> &args) {
+
   session->_nick = args.front();
+  
 }
 
 void Request::user(Session *session, const list<string> &args) {
 
   session->_username = args.front();
   session->_server->login(session->_username);
+
+}
+
+void Request::listCmd(Session *session, const list<string> &args) {
+
+// :localhost 321 tracy Channel :Users  Name
+// :localhost 322 tracy #my+conversation 0 
+// :localhost 322 tracy #welcome 0 
+// :localhost 323 tracy :End of /LIST
+
+}
+
+void Request::join(Session *session, const list<string> &args) {
 
 }

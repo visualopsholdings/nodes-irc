@@ -32,6 +32,8 @@ public:
   // command handlers
   static void nick(Session *session, const std::list<std::string> &args);
   static void user(Session *session, const std::list<std::string> &args);
+  static void listCmd(Session *session, const std::list<std::string> &args);
+  static void join(Session *session, const std::list<std::string> &args);
   
 private:
   Session *_session;
