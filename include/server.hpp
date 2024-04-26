@@ -20,6 +20,7 @@
 #include <nlohmann/json.hpp>
 
 class Session;
+class Channel;
 
 class Server {
 
@@ -35,12 +36,14 @@ private:
   zmq::socket_t *_sub;
   zmq::socket_t *_req;
   std::vector<boost::shared_ptr<Session> > _sessions;
-  
+  std::vector<boost::shared_ptr<Channel> > _channels;
+   
   void start_accept();
   void handle_accept(boost::shared_ptr<Session> session,
       const boost::system::error_code& error);
   boost::optional<nlohmann::json::iterator> get(nlohmann::json *json, const std::string &name);
   boost::shared_ptr<Session> find_session_username(const std::string &username);
+  void create_channel(const std::string &name, const std::string &id, const std::string &policy);
   
 };
 

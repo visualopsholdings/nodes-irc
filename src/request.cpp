@@ -18,6 +18,7 @@
 #include <iostream>
 #include <sstream>
 #include <boost/algorithm/string/join.hpp>
+#include <boost/log/trivial.hpp>
 
 using namespace std;
 
@@ -32,7 +33,7 @@ Request::Request(Session* session) :
 void Request::handle() {
 
   string line;
-  istream is(&_session->buffer());
+  istream is(&_session->_buffer);
   getline(is, line, '\n');
 
   if (line.size() == 0) {
@@ -49,7 +50,7 @@ void Request::handle() {
   // execute the handler.
   map<string, cmdHandler>::iterator handler = _commands.find(cmd);
   if (handler == _commands.end()) {
-    cout << "ignoring " << cmd << " [" << boost::algorithm::join(args, ", ") << "]" << endl;
+	  BOOST_LOG_TRIVIAL(warning) << "ignoring " << cmd << " [" << boost::algorithm::join(args, ", ") << "]";
     return;
   }
   handler->second(_session, args);

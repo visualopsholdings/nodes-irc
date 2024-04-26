@@ -28,15 +28,6 @@ boost::shared_ptr<Session> Session::create(Server *server, boost::asio::io_servi
 
 }
 
-boost::asio::ip::tcp::socket& Session::socket() {
-	return _socket;
-}
-
-boost::asio::streambuf& Session::buffer() {
-	return _buffer;
-}
-
-
 void Session::start(void) {
 
 	BOOST_LOG_TRIVIAL(info) << "session started ";
@@ -51,7 +42,7 @@ void Session::handle_read(const boost::system::error_code& error,
 		const std::size_t bytes_transferred) {
 
 	if (error) {
-		// TBD: Handle error
+	  BOOST_LOG_TRIVIAL(error) << error.message();
 		return;
   }
   
@@ -67,7 +58,7 @@ void Session::handle_read(const boost::system::error_code& error,
 void Session::handle_write(const boost::system::error_code& error) {
 
 	if (error) {
-    // TBD: Handle error;
+	  BOOST_LOG_TRIVIAL(error) << error.message();
 	}
 	
 }

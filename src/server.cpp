@@ -10,13 +10,16 @@
 */
 
 #include "server.hpp"
+
 #include "session.hpp"
+#include "channel.hpp"
 
 #include <iostream>
 #include <boost/asio.hpp>
 #include <boost/bind.hpp>
 #include <boost/thread/thread.hpp>
 #include <boost/chrono/duration.hpp>
+#include <boost/log/trivial.hpp>
 
 using namespace std;
 using json = nlohmann::json;
@@ -45,7 +48,7 @@ void Server::start_accept() {
 
 	boost::shared_ptr<Session> session = Session::create(this, _io_service);
 
-	_acceptor.async_accept(session->socket(),
+	_acceptor.async_accept(session->_socket,
 			boost::bind(&Server::handle_accept, this, session,
 					boost::asio::placeholders::error));
 }
@@ -71,10 +74,9 @@ boost::optional<json::iterator> Server::get(json *json, const string &name) {
   
 }
 
-
-void Server::login(const std::string &username) {
+void Server::login(const string &username) {
   
-	std::string m = "{ \"type\": \"login\", \"username\": \"" + username + "\"}";
+	string m = "{ \"type\": \"login\", \"username\": \"" + username + "\"}";
 	zmq::message_t msg(m.length());
 	memcpy(msg.data(), m.c_str(), m.length());
   _req->send(msg);
@@ -82,49 +84,85 @@ void Server::login(const std::string &username) {
   // and wait for reply.
   zmq::message_t reply;
   _req->recv(&reply);
-  std::string r((const char *)reply.data(), reply.size());
+  string r((const char *)reply.data(), reply.size());
   json doc = json::parse(r);
   boost::optional<json::iterator> type = get(&doc, "type");
   if (!type) {
-    cout << "no type" << endl;
+	  BOOST_LOG_TRIVIAL(error) << "no type";
     return;
   }
   if (**type == "user") {
     boost::optional<json::iterator> name = get(&doc, "name");
     if (!name) {
-      cout << "no name" << endl;
+	    BOOST_LOG_TRIVIAL(error) << "no name for user";
       return;
     }
     boost::optional<json::iterator> id = get(&doc, "id");
     if (!id) {
-      cout << "no id" << endl;
+	    BOOST_LOG_TRIVIAL(error) << "no id for user";
       return;
     }
     boost::shared_ptr<Session> session = find_session_username(**name);
     if (!session) {
-      cout << "no session" << endl;
+	    BOOST_LOG_TRIVIAL(error) << "no session for " << **name;
       return;
     }
+	  BOOST_LOG_TRIVIAL(info) << "session assigned to " << session->_nick;
     session->_id = **id;
     session->send("001", { session->_nick, ":Welcome" });
     session->send("002", { session->_nick, ":Your host is localhost running version 1" });
     session->send("004", { session->_nick, "ZMQIRC", "1" });
     session->send("MODE", { session->_nick, "+w" });
-//     m.streams.forEach(s => {
-//       var channelName = "#" + s.name.replace(/ /g, '+').toLowerCase();
-//       server.createChannel(channelName, s.id, s.policy);
-//     });
+    
+    boost::optional<json::iterator> streams = get(&doc, "streams");
+    if (streams) {
+      if ((**streams).is_array()) {
+        for (json::iterator i = (**streams).begin(); i != (**streams).end(); i++) {
+          boost::optional<json::iterator> id = get(&(*i), "id");
+          boost::optional<json::iterator> name = get(&(*i), "name");
+          boost::optional<json::iterator> policy = get(&(*i), "policy");
+          if (id && name && policy) {
+            create_channel(**name, **id, **policy);
+          }
+          else {
+	          BOOST_LOG_TRIVIAL(error) << "stream not complete";
+          }
+        }
+      }
+      else {
+	      BOOST_LOG_TRIVIAL(error) << "streams not array";
+      }
+    }
   }
   else {
-    cout << "unknown reply type " << **type << endl;
+	  BOOST_LOG_TRIVIAL(error) << "unknown reply type " << **type;
   }
 }
 
-boost::shared_ptr<Session> Server::find_session_username(const std::string &username) {
-  std::vector<boost::shared_ptr<Session> >::iterator i = find_if(_sessions.begin(), _sessions.end(),
+boost::shared_ptr<Session> Server::find_session_username(const string &username) {
+
+  vector<boost::shared_ptr<Session> >::iterator i = find_if(_sessions.begin(), _sessions.end(),
     [&username](boost::shared_ptr<Session> &session) { return session->_username == username; });
   if (i == _sessions.end()) {
     return boost::shared_ptr<Session>();
   }
   return *i;
+  
+}
+
+void Server::create_channel(const string &name, const string &id, const string &policy) {
+
+  string channame = Channel::from_stream_name(name);
+  
+  BOOST_LOG_TRIVIAL(info) << "create channel " << channame;
+  
+  vector<boost::shared_ptr<Channel> >::iterator i = find_if(_channels.begin(), _channels.end(),
+    [&channame](boost::shared_ptr<Channel> &channel) { return channel->_name == channame; });
+  if (i != _channels.end()) {
+    BOOST_LOG_TRIVIAL(error) << "channel already exists";
+    return;
+  }
+  boost::shared_ptr<Channel> channel = Channel::create(channame, id, policy);
+  _channels.push_back(channel);
+  
 }

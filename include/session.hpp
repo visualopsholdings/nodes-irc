@@ -28,22 +28,20 @@ public:
   static boost::shared_ptr<Session> create(Server *server,
       boost::asio::io_service& io_service);
 
-  boost::asio::ip::tcp::socket& socket();
-
   void start();
-  boost::asio::streambuf& buffer();
   
 private:
   friend class Request;
   friend class Server;
   
+  Server *_server;
   boost::asio::ip::tcp::socket _socket;
   boost::asio::streambuf _buffer;
   Request _request;
+  
   std::string _nick;
   std::string _username;
   std::string _id;
-  Server *_server;
   
   explicit Session(Server *server, boost::asio::io_service& io_service);
   

@@ -216,6 +216,11 @@ ZMQIRC is licensed under [version 3 of the GNU General Public License] contained
 
 - https://cucumber.io/
 
+
+### JSON for C++
+
+- https://github.com/nlohmann/json
+
 ## Change Log
 
 ### 10 Apr 2024
@@ -233,4 +238,7 @@ implementation of the proprietary "Visual Ops" server.
 
 ### 24 Apr 2024
 - command list, handle USER and send ZMQ login to record user.
+
+### 26 Apr 2024
+- start to implement channels mapped from streams.
 
