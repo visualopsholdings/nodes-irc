@@ -11,8 +11,12 @@
 
 #include "channel.hpp"
 
+#include "session.hpp"
+#include "user.hpp"
+
 #include <boost/algorithm/string.hpp>
 #include <regex>
+#include <boost/log/trivial.hpp>
 
 using namespace std;
 
@@ -25,6 +29,17 @@ boost::shared_ptr<Channel> Channel::create(const string &name, const string &id,
 	return boost::shared_ptr<Channel>(new Channel(name, id, policy));
 
 }
+
+void Channel::join(boost::shared_ptr<User> user) {
+
+  if (find(_users.begin(), _users.end(), user) != _users.end()) {
+    BOOST_LOG_TRIVIAL(warning) << "user already joined";
+    return;
+  }
+  _users.push_back(user);
+  
+}
+
 string Channel::normalise(const std::string &chan) {
 
   string s = chan;

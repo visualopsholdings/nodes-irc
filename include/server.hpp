@@ -14,6 +14,8 @@
 #ifndef H_server
 #define H_server
 
+#include "prefixable.hpp"
+
 #include <zmq.hpp>
 #include <boost/asio.hpp>
 #include <boost/optional.hpp>
@@ -22,14 +24,23 @@
 class Session;
 class Channel;
 
-class Server {
+class Server : public Prefixable {
 
 public:
   Server(zmq::socket_t *sub, zmq::socket_t *req);
+  ~Server();
   
   void run();
   void login(const std::string &username);
+  void policy_users(const std::string &policy);
+  std::vector<boost::shared_ptr<Channel> >::iterator find_channel(const std::string &name);
+  std::vector<boost::shared_ptr<Channel> >::iterator begin_channel();
+  std::vector<boost::shared_ptr<Channel> >::iterator end_channel();
+  void create_channel(const std::string &name, const std::string &id, const std::string &policy);
     
+  // Prefixable
+  const std::string prefix();
+
 private:
   boost::asio::io_service _io_service;
   boost::asio::ip::tcp::acceptor _acceptor;
@@ -43,7 +54,6 @@ private:
       const boost::system::error_code& error);
   boost::optional<nlohmann::json::iterator> get(nlohmann::json *json, const std::string &name);
   boost::shared_ptr<Session> find_session_username(const std::string &username);
-  void create_channel(const std::string &name, const std::string &id, const std::string &policy);
   
 };
 

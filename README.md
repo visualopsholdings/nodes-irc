@@ -242,3 +242,6 @@ implementation of the proprietary "Visual Ops" server.
 ### 26 Apr 2024
 - start to implement channels mapped from streams.
 
+### 29 Apr 2024
+- start to implemement users.
+

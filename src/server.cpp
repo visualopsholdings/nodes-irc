@@ -13,6 +13,7 @@
 
 #include "session.hpp"
 #include "channel.hpp"
+#include "user.hpp"
 
 #include <iostream>
 #include <boost/asio.hpp>
@@ -38,6 +39,9 @@ Server::Server(zmq::socket_t *sub, zmq::socket_t *req) :
 
 	start_accept();
 
+}
+
+Server::~Server() {
 }
 
 void Server::run() {
@@ -107,12 +111,12 @@ void Server::login(const string &username) {
 	    BOOST_LOG_TRIVIAL(error) << "no session for " << **name;
       return;
     }
-	  BOOST_LOG_TRIVIAL(info) << "session assigned to " << session->_nick;
-    session->_id = **id;
-    session->send("001", { session->_nick, ":Welcome" });
-    session->send("002", { session->_nick, ":Your host is localhost running version 1" });
-    session->send("004", { session->_nick, "ZMQIRC", "1" });
-    session->send("MODE", { session->_nick, "+w" });
+	  BOOST_LOG_TRIVIAL(info) << "session assigned to " << session->_user->_nick;
+    session->_user->_id = **id;
+    session->send(this, "001", { session->_user->_nick, ":Welcome" });
+    session->send(this, "002", { session->_user->_nick, ":Your host is localhost running version 1" });
+    session->send(this, "004", { session->_user->_nick, "ZMQIRC", "1" });
+    session->send(this, "MODE", { session->_user->_nick, "+w" });
     
     boost::optional<json::iterator> streams = get(&doc, "streams");
     if (streams) {
@@ -139,15 +143,34 @@ void Server::login(const string &username) {
   }
 }
 
+void Server::policy_users(const std::string &policy) {
+  // TBD:
+}
+
 boost::shared_ptr<Session> Server::find_session_username(const string &username) {
 
   vector<boost::shared_ptr<Session> >::iterator i = find_if(_sessions.begin(), _sessions.end(),
-    [&username](boost::shared_ptr<Session> &session) { return session->_username == username; });
+    [&username](boost::shared_ptr<Session> &session) { return session->_user->_username == username; });
   if (i == _sessions.end()) {
     return boost::shared_ptr<Session>();
   }
   return *i;
   
+}
+
+vector<boost::shared_ptr<Channel> >::iterator Server::find_channel(const std::string &name) {
+
+  return find_if(_channels.begin(), _channels.end(),
+    [&name](boost::shared_ptr<Channel> &channel) { return channel->_name == name; });
+
+}
+
+vector<boost::shared_ptr<Channel> >::iterator Server::end_channel() {
+  return _channels.end();
+}
+
+vector<boost::shared_ptr<Channel> >::iterator Server::begin_channel() {
+  return _channels.begin();
 }
 
 void Server::create_channel(const string &name, const string &id, const string &policy) {
@@ -156,9 +179,8 @@ void Server::create_channel(const string &name, const string &id, const string &
   
   BOOST_LOG_TRIVIAL(info) << "create channel " << channame;
   
-  vector<boost::shared_ptr<Channel> >::iterator i = find_if(_channels.begin(), _channels.end(),
-    [&channame](boost::shared_ptr<Channel> &channel) { return channel->_name == channame; });
-  if (i != _channels.end()) {
+  vector<boost::shared_ptr<Channel> >::iterator i = find_channel(channame);
+  if (i != end_channel()) {
     BOOST_LOG_TRIVIAL(error) << "channel already exists";
     return;
   }
@@ -166,3 +188,9 @@ void Server::create_channel(const string &name, const string &id, const string &
   _channels.push_back(channel);
   
 }
+
+// Prefixable
+const std::string Server::prefix() {
+  return ":localhost";
+}
+

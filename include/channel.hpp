@@ -15,7 +15,10 @@
 #define H_channel
 
 #include <string>
+#include <vector>
 #include <boost/enable_shared_from_this.hpp>
+
+class User;
 
 class Channel : public boost::enable_shared_from_this<Channel> {
 
@@ -26,12 +29,17 @@ public:
   static std::string from_stream_name(const std::string &stream);
   static std::string normalise(const std::string &chan);
   
+  void join(boost::shared_ptr<User> user);
+  
 private:
   friend class Server;
+  friend class Session;
   
   std::string _name;
   std::string _id;
   std::string _policy;
+
+  std::vector<boost::shared_ptr<User> > _users;
   
   explicit Channel(const std::string &name, const std::string &id, const std::string &policy);
   

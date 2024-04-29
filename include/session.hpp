@@ -14,12 +14,19 @@
 #ifndef H_session
 #define H_session
 
-#include "request.hpp"
-
 #include <boost/enable_shared_from_this.hpp>
 #include <boost/asio.hpp>
+#include <boost/function.hpp>
+#include <list>
+#include <string>
+#include <map>
 
 class Server;
+class Channel;
+class User;
+class Prefixable;
+
+typedef boost::function<void (const std::list<std::string> &args)> cmdHandler;
 
 class Session : public boost::enable_shared_from_this<Session> {
 
@@ -29,30 +36,35 @@ public:
       boost::asio::io_service& io_service);
 
   void start();
+  void join(boost::shared_ptr<Channel> channel);
   
 private:
-  friend class Request;
   friend class Server;
   
   Server *_server;
   boost::asio::ip::tcp::socket _socket;
   boost::asio::streambuf _buffer;
-  Request _request;
-  
-  std::string _nick;
-  std::string _username;
-  std::string _id;
+  std::map<std::string, cmdHandler> _commands;
+  boost::shared_ptr<User> _user;
   
   explicit Session(Server *server, boost::asio::io_service& io_service);
-  
+
   void handle_read(const boost::system::error_code& error,
       const std::size_t bytes_transferred);
   void handle_write(const boost::system::error_code& error);
 
   void write(const std::string &line);
-  void send(const std::string &cmd, const std::list<std::string> &args);
+  void send(Prefixable *prefix, const std::string &cmd, const std::list<std::string> &args);
   void login(const std::string &username);
   
+  void handle_request();
+  
+  // command handlers
+  void nickCmd(const std::list<std::string> &args);
+  void userCmd(const std::list<std::string> &args);
+  void listCmd(const std::list<std::string> &args);
+  void joinCmd(const std::list<std::string> &args);
+
 };
 
 #endif // H_session
