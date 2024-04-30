@@ -14,6 +14,8 @@
 #include "session.hpp"
 #include "channel.hpp"
 #include "user.hpp"
+#include "parser.hpp"
+#include "vecutil.hpp"
 
 #include <iostream>
 #include <boost/asio.hpp>
@@ -46,7 +48,8 @@ void Server::run() {
 
 void Server::start_accept() {
 
-	sessionPtr session = Session::create(this, _io_service);
+  sessionPtr session = sessionPtr(new Session(this, _io_service));
+//	sessionPtr session = Session::create(this, _io_service);
 
 	_acceptor.async_accept(session->_socket,
 			bind(&Server::handle_accept, this, session,
@@ -102,7 +105,8 @@ void Server::login(const string &username) {
 	    BOOST_LOG_TRIVIAL(error) << "no id for user";
       return;
     }
-    sessionPtr session = find_session_username(**name);
+    sessionPtr session = find_in<sessionPtr>(_sessions, **name,
+      [](sessionPtr &c) { return c->_user->_username; });
     if (!session) {
 	    BOOST_LOG_TRIVIAL(error) << "no session for " << **name;
       return;
@@ -165,7 +169,8 @@ void Server::policy_users(const string &policy) {
 	    BOOST_LOG_TRIVIAL(error) << "no id for policyusers";
       return;
     }
-    channelPtr channel = find_channel_policy(**id);
+    channelPtr channel = find_in<channelPtr>(_channels, **id,
+      [](channelPtr &c) { return c->_policy; });
     if (!channel) {
 	    BOOST_LOG_TRIVIAL(error) << "no channel for policy " << **id;
       return;
@@ -180,10 +185,8 @@ void Server::policy_users(const string &policy) {
           if (id && name && fullname) {
             userPtr user = channel->find_user_id(**id);
             if (!user) {
-              user = User::create(**name);
-              user->_realname = **fullname;
-              user->_id = **id;
-              add_user(user);
+              user = userPtr(new User(**id, **name,  **fullname));
+              _users.push_back(user);
               channel->join(user);
               channel->send(user.get(), "JOIN", { channel->_name, user->_username, user->_realname });
             }
@@ -229,7 +232,9 @@ void Server::send(userPtr user, channelPtr channel, const string &text) {
     optional<json::iterator> userid = get(&doc, "user");
     optional<json::iterator> text = get(&doc, "text");
     if (stream && userid && text) {
-      channelPtr channel = find_channel_stream(**stream);
+      channelPtr channel = find_in<channelPtr>(_channels, **stream,
+        [](channelPtr &c) { return c->_id; });
+//      channelPtr channel = find_channel_stream(**stream);
       if (channel) {
         userPtr user = find_user_id(**userid);
         if (user) {
@@ -253,98 +258,30 @@ void Server::send(userPtr user, channelPtr channel, const string &text) {
   
 }
 
-channelPtr Server::find_channel_policy(const string &policy) {
-
-  vector<channelPtr >::iterator i = find_if(_channels.begin(), _channels.end(),
-    [&policy](channelPtr &channel) { return channel->_policy == policy; });
-  if (i == _channels.end()) {
-    return 0;
-  }
-  return *i;
-
-}
-
-channelPtr Server::find_channel_stream(const string &stream) {
-
-  vector<channelPtr >::iterator i = find_if(_channels.begin(), _channels.end(),
-    [&stream](channelPtr &channel) { return channel->_id == stream; });
-  if (i == _channels.end()) {
-    return 0;
-  }
-  return *i;
-
-}
-
 channelPtr Server::find_channel(const string &name) {
 
-  vector<channelPtr >::iterator i = find_if(_channels.begin(), _channels.end(),
-    [&name](channelPtr &channel) { return channel->_name == name; });
-  if (i == _channels.end()) {
-    return 0;
-  }
-  return *i;
+  return find_in<channelPtr>(_channels, name,
+    [](channelPtr &c) { return c->_name; });
 
-}
-
-sessionPtr Server::find_session_username(const string &username) {
-
-  vector<sessionPtr >::iterator i = find_if(_sessions.begin(), _sessions.end(),
-    [&username](sessionPtr &session) { return session->_user->_username == username; });
-  if (i == _sessions.end()) {
-    return 0;
-  }
-  return *i;
-  
 }
 
 userPtr Server::find_user_id(const string &id) {
 
-  vector<userPtr >::iterator i = find_if(_users.begin(), _users.end(),
-    [&id](userPtr &user) { return user->_id == id; });
-  if (i == _users.end()) {
-    return 0;
-  }
-  return *i;
+  return find_in<userPtr>(_users, id,
+    [](userPtr &c) { return c->_id; });
 
-}
-
-userPtr Server::find_user_nick(const string &nick) {
-
-  vector<userPtr >::iterator i = find_if(_users.begin(), _users.end(),
-    [nick](userPtr &user) { return user->_nick == nick; });
-  if (i == _users.end()) {
-    return 0;
-  }
-  return *i;
-
-}
-
-void Server::add_user(userPtr user) {
-  _users.push_back(user);
 }
 
 sessionPtr Server::find_session_for_nick(const string &nick) {
 
-  vector<sessionPtr >::iterator i = find_if(_sessions.begin(), _sessions.end(),
-    [&nick](sessionPtr &session) { return session->_user->_nick == nick; });
-  if (i == _sessions.end()) {
-    return 0;
-  }
-  return *i;
+  return find_in<sessionPtr>(_sessions, nick,
+    [](sessionPtr &c) { return c->_user->_nick; });
 
-}
-
-vector<channelPtr >::iterator Server::end_channel() {
-  return _channels.end();
-}
-
-vector<channelPtr >::iterator Server::begin_channel() {
-  return _channels.begin();
 }
 
 void Server::create_channel(const string &name, const string &id, const string &policy) {
 
-  string channame = Channel::from_stream_name(name);
+  string channame = Parser::from_stream_name(name);
   
   BOOST_LOG_TRIVIAL(info) << "create channel " << channame;
   
@@ -353,7 +290,7 @@ void Server::create_channel(const string &name, const string &id, const string &
     BOOST_LOG_TRIVIAL(error) << "channel already exists";
     return;
   }
-  channel = Channel::create(this, channame, id, policy);
+  channel = channelPtr(new Channel(this, channame, id, policy));
   _channels.push_back(channel);
   
 }

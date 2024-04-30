@@ -32,19 +32,15 @@ class Channel : public enable_shared_from_this<Channel> {
 
 public:
 
-  static channelPtr create(Server *server, const string &name, const string &id, const string &policy);
-
-  static string from_stream_name(const string &stream);
-  static string normalise(const string &chan);
+  Channel(Server *server, const string &name, const string &id, const string &policy);
   
   void join(userPtr user);
   userPtr find_user_id(const string &id);
-  void add_user(userPtr user);
   void send(Prefixable *prefix, const string &cmd, const list<string> &args);
   
 private:
-  friend class Server;
-  friend class Session;
+   friend class Server;
+   friend class Session;
   
   Server *_server;
   
@@ -54,7 +50,6 @@ private:
 
   vector<userPtr > _users;
   
-  explicit Channel(Server *server, const string &name, const string &id, const string &policy);
   
 };
 

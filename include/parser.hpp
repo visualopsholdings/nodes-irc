@@ -26,6 +26,12 @@ public:
   static string parse(const string &line, vector<string> *args);
     // parse the line, returning the CMD and list of possible arguments.
   
+  static string from_stream_name(const string &stream);
+    // create a channel name from a stream name.
+    
+  static string normalise(const string &chan);
+    // normalse a channel name.
+
 };
 
 #endif // H_parser

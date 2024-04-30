@@ -11,7 +11,7 @@
 
 #include <iostream>
 
-#include "channel.hpp"
+#include "parser.hpp"
 
 #define BOOST_AUTO_TEST_MAIN
 #include <boost/test/auto_unit_test.hpp>
@@ -22,8 +22,8 @@ BOOST_AUTO_TEST_CASE( normalise )
 {
   cout << "=== normalise ===" << endl;
   
-  BOOST_CHECK(Channel::normalise("a") == "a");
-  BOOST_CHECK(Channel::normalise("A") == "a");
+  BOOST_CHECK(Parser::normalise("a") == "a");
+  BOOST_CHECK(Parser::normalise("A") == "a");
 
 }
 
@@ -31,6 +31,6 @@ BOOST_AUTO_TEST_CASE( streamNames )
 {
   cout << "=== streamNames ===" << endl;
   
-  BOOST_CHECK(Channel::from_stream_name("A Stream Name") == "#a+stream+name");
+  BOOST_CHECK(Parser::from_stream_name("A Stream Name") == "#a+stream+name");
 
 }

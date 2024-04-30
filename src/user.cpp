@@ -15,13 +15,8 @@ User::User(const string &nick) :
 	_nick(nick) {
 }
 
-User::~User() {
-}
-
-userPtr User::create(const string &nick) {
-
-	return userPtr(new User(nick));
-
+User::User(const string &id, const string &nick, const string &realname) : 
+  _id(id), _nick(nick), _realname(realname) {
 }
 
 const string User::prefix() {

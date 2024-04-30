@@ -38,10 +38,8 @@ class Session : public enable_shared_from_this<Session> {
 
 public:
   
-  static sessionPtr create(Server *server,
-      boost::asio::io_service& io_service);
+  Session(Server *server, boost::asio::io_service& io_service);
 
-  void start();
   void join(channelPtr channel);
   void send(Prefixable *prefix, const string &cmd, const list<string> &args);
   
@@ -54,7 +52,7 @@ private:
   map<string, cmdHandler> _commands;
   userPtr _user;
   
-  explicit Session(Server *server, boost::asio::io_service& io_service);
+  void start();
 
   void handle_read(const boost::system::error_code& error,
       const size_t bytes_transferred);

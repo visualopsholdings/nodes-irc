@@ -38,17 +38,7 @@ public:
   ~Server();
   
   void run();
-  void login(const string &username);
-  void policy_users(const string &policy);
-  channelPtr find_channel(const string &name);
-  vector<channelPtr >::iterator begin_channel();
-  vector<channelPtr >::iterator end_channel();
-  void create_channel(const string &name, const string &id, const string &policy);
-  channelPtr find_channel_policy(const string &policy);
-  channelPtr find_channel_stream(const string &stream);
   userPtr find_user_id(const string &id);
-  userPtr find_user_nick(const string &nick);
-  void add_user(userPtr user);
   sessionPtr find_session_for_nick(const string &nick);
   void send(userPtr user, channelPtr channel, const string &text);
   
@@ -56,6 +46,7 @@ public:
   const string prefix();
 
 private:
+  friend class Session;
   
   boost::asio::io_service _io_service;
   boost::asio::ip::tcp::acceptor _acceptor;
@@ -69,8 +60,11 @@ private:
   void handle_accept(sessionPtr session,
       const boost::system::error_code& error);
   optional<json::iterator> get(json *json, const string &name);
-  sessionPtr find_session_username(const string &username);
-  
+  void login(const string &username);
+  void policy_users(const string &policy);
+  channelPtr find_channel(const string &name);
+  void create_channel(const string &name, const string &id, const string &policy);
+    
 };
 
 #endif // H_server

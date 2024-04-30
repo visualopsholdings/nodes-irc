@@ -15,6 +15,7 @@
 #include "server.hpp"
 #include "channel.hpp"
 #include "user.hpp"
+#include "vecutil.hpp"
 
 #include <iostream>
 #include <boost/log/trivial.hpp>
@@ -32,12 +33,6 @@ Session::Session(Server *server, boost::asio::io_service& io_service) :
 
 }
 	
-sessionPtr Session::create(Server *server, boost::asio::io_service& io_service) {
-
-	return sessionPtr(new Session(server, io_service));
-
-}
-
 void Session::start(void) {
 
 	BOOST_LOG_TRIVIAL(info) << "session started ";
@@ -132,7 +127,8 @@ void Session::nickCmd(const vector<string> &args) {
 	  return;
   }
   // this session has no user yet.
-  userPtr user = _server->find_user_nick(args.front());
+  userPtr user = find_in<userPtr>(_server->_users, args.front(),
+    [](userPtr &c) { return c->_nick; });
   if (user) {
     if (_server->find_session_for_nick(user->_nick)) {
 	    BOOST_LOG_TRIVIAL(error) << "NICK server already has different session for this user";
@@ -144,8 +140,8 @@ void Session::nickCmd(const vector<string> &args) {
   }
   
   // create a new user and add it to the server.
-  _user = User::create(args.front());
-  _server->add_user(_user);
+  _user = userPtr(new User(args.front()));
+  _server->_users.push_back(_user);
 }
 
 void Session::userCmd(const vector<string> &args) {
@@ -175,7 +171,7 @@ void Session::listCmd(const vector<string> &args) {
   }
 
   send(_server, "321", { _user->_nick, "Channel", ":Users", "Name" });
-  for (vector<channelPtr >::iterator i = _server->begin_channel(); i != _server->end_channel(); i++) {
+  for (vector<channelPtr >::iterator i = _server->_channels.begin(); i != _server->_channels.end(); i++) {
     send(_server, "322", { _user->_nick, (*i)->_name, "0" });
   }
   send(_server, "323", {  _user->_nick, ":End of /LIST" });
@@ -198,7 +194,7 @@ void Session::joinCmd(const vector<string> &args) {
   list<string> channels;
   boost::split(channels, args.front(), boost::is_any_of(","));
   for (list<string>::iterator i=channels.begin(); i != channels.end(); i++) {
-    string name = Channel::normalise(*i);
+    string name = Parser::normalise(*i);
     channelPtr chan = _server->find_channel(name);
     if (chan) {
       chan->join(_user);

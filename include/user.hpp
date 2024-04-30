@@ -28,10 +28,9 @@ typedef shared_ptr<User> userPtr;
 class User : public enable_shared_from_this<User>, Prefixable {
 
 public:
-  ~User();
+  User(const string &nick);
+  User(const string &id, const string &nick, const string &realname);
   
-  static userPtr create(const string &nick);
-
   // Prefixable
   const string prefix();
 
@@ -40,8 +39,6 @@ private:
   friend class Session;
   friend class Channel;
   
-  explicit User(const string &nick);
-
   string _nick;
   string _username;
   string _realname;
