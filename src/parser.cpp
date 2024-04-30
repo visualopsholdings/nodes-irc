@@ -15,11 +15,11 @@
 
 using namespace std;
 
-string Parser::parse(const string &line, list<string> *args) {
+string Parser::parse(const string &line, vector<string> *args) {
 
   boost::split(*args, line, boost::is_any_of(" "));
   string cmd = args->front();
-  args->pop_front();
+  args->erase(args->begin());
   return cmd;
   
 }

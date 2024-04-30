@@ -31,6 +31,7 @@ Session::Session(Server *server, boost::asio::io_service& io_service) :
   _commands["USER"] = boost::bind( &Session::userCmd, this, _1 );
   _commands["LIST"] = boost::bind( &Session::listCmd, this, _1 );
   _commands["JOIN"] = boost::bind( &Session::joinCmd, this, _1 );
+  _commands["PRIVMSG"] = boost::bind( &Session::msgCmd, this, _1 );
 
 }
 	
@@ -108,7 +109,7 @@ void Session::handle_request() {
   line.erase(line.size()-1, 1);
   
   // parse the command
-  list<string> args;
+  vector<string> args;
   string cmd = Parser::parse(line, &args);
   
   // execute the handler.
@@ -121,7 +122,7 @@ void Session::handle_request() {
   
 }
 
-void Session::nickCmd(const list<string> &args) {
+void Session::nickCmd(const vector<string> &args) {
 
   if (args.size() < 1) {
 	  BOOST_LOG_TRIVIAL(error) << "NICK missing nickname";
@@ -150,7 +151,7 @@ void Session::nickCmd(const list<string> &args) {
   _server->add_user(_user);
 }
 
-void Session::userCmd(const list<string> &args) {
+void Session::userCmd(const vector<string> &args) {
 
   if (args.size() < 1) {
 	  BOOST_LOG_TRIVIAL(error) << "USER missing username";
@@ -168,7 +169,7 @@ void Session::userCmd(const list<string> &args) {
 
 }
 
-void Session::listCmd(const list<string> &args) {
+void Session::listCmd(const vector<string> &args) {
 
   if (!_user) {
 	  BOOST_LOG_TRIVIAL(error) << "LIST session has no user";
@@ -184,7 +185,7 @@ void Session::listCmd(const list<string> &args) {
 
 }
 
-void Session::joinCmd(const list<string> &args) {
+void Session::joinCmd(const vector<string> &args) {
 
   if (args.size() < 1) {
 	  BOOST_LOG_TRIVIAL(error) << "JOIN missing channel";
@@ -213,4 +214,20 @@ void Session::joinCmd(const list<string> &args) {
     }
   }
 
+}
+
+void Session::msgCmd(const vector<string> &args) {
+
+  if (args.size() < 2) {
+	  BOOST_LOG_TRIVIAL(error) << "MSG missing channel or message";
+	  return;
+  }
+  
+  boost::shared_ptr<Channel> chan = _server->find_channel(args.front());
+  if (!chan) {
+    BOOST_LOG_TRIVIAL(error) << "channel " << args.front() << " not found";
+    return;
+  }
+  
+  _server->send(_user, chan, args[1].substr(1));
 }

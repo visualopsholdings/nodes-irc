@@ -78,6 +78,21 @@ server.reqSocket.on('message', (msg) => {
       }
     });
   }
+  else if (m.type == "message") {
+    var target = server.findChannelId(m.stream);
+    if (target) {
+      var user = server.findUserId(m.user);
+      if (user) {
+        target.send(user, 'PRIVMSG', [ target.name, `:${m.text}` ]);
+      }
+      else {
+        console.log("unknown user", m.user);
+      }
+    }
+    else {
+      console.log("unknown stream", m.stream);
+    }
+  }
   else if (m.type == "err") {
     console.log("got err", m.msg);
   }

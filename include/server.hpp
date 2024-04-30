@@ -39,10 +39,12 @@ public:
   std::vector<boost::shared_ptr<Channel> >::iterator end_channel();
   void create_channel(const std::string &name, const std::string &id, const std::string &policy);
   boost::shared_ptr<Channel> find_channel_policy(const std::string &policy);
+  boost::shared_ptr<Channel> find_channel_stream(const std::string &stream);
   boost::shared_ptr<User> find_user_id(const std::string &id);
   boost::shared_ptr<User> find_user_nick(const std::string &nick);
   void add_user(boost::shared_ptr<User> user);
   boost::shared_ptr<Session> find_session_for_nick(const std::string &nick);
+  void send(boost::shared_ptr<User> user, boost::shared_ptr<Channel> channel, const std::string &text);
   
   // Prefixable
   const std::string prefix();

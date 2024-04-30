@@ -188,7 +188,7 @@ make && make test || cat /Users/paul/Dev/zmqirc/test/build/Testing/Temporary/Las
 
 ## Current development focus
 
-### Implement in C++
+### Get C++ working for all end to end tests.
 
 ## License
 
@@ -247,5 +247,4 @@ implementation of the proprietary "Visual Ops" server.
 
 ### 30 Apr 2024
 - finish off other users in the stream.
-
-
+- finish off PRIVMSG

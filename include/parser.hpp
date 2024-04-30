@@ -21,7 +21,7 @@ class Parser {
 
 public:
 
-  static std::string parse(const std::string &line, std::list<std::string> *args);
+  static std::string parse(const std::string &line, std::vector<std::string> *args);
     // parse the line, returning the CMD and list of possible arguments.
   
 };

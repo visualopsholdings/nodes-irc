@@ -211,10 +211,67 @@ void Server::policy_users(const std::string &policy) {
 
 }
 
+void Server::send(boost::shared_ptr<User> user, boost::shared_ptr<Channel> channel, const std::string &text) {
+
+	string m = "{ \"type\": \"message\", \"user\": \"" + user->_id + "\", \"stream\": \"" + channel->_id + "\", \"policy\": \"" + channel->_policy + "\", \"text\": \"" + text + "\"}";
+	zmq::message_t msg(m.length());
+	memcpy(msg.data(), m.c_str(), m.length());
+  _req->send(msg);
+
+  // and wait for reply.
+  zmq::message_t reply;
+  _req->recv(&reply);
+  string r((const char *)reply.data(), reply.size());
+  json doc = json::parse(r);
+  boost::optional<json::iterator> type = get(&doc, "type");
+  if (!type) {
+	  BOOST_LOG_TRIVIAL(error) << "no type";
+    return;
+  }
+  if (**type == "message") {
+    boost::optional<json::iterator> stream = get(&doc, "stream");
+    boost::optional<json::iterator> userid = get(&doc, "user");
+    boost::optional<json::iterator> text = get(&doc, "text");
+    if (stream && userid && text) {
+      boost::shared_ptr<Channel> channel = find_channel_stream(**stream);
+      if (channel) {
+        boost::shared_ptr<User> user = find_user_id(**userid);
+        if (user) {
+          channel->send(user.get(), "PRIVMSG", { channel->_name, **text });
+        }
+        else {
+          BOOST_LOG_TRIVIAL(error) << "user not found";
+        }
+      }
+      else {
+        BOOST_LOG_TRIVIAL(error) << "channel not found";
+      }
+    }
+    else {
+      BOOST_LOG_TRIVIAL(error) << "message not complete";
+    }
+  }
+  else {
+	  BOOST_LOG_TRIVIAL(error) << "unknown reply type " << **type;
+  }
+  
+}
+
 boost::shared_ptr<Channel> Server::find_channel_policy(const std::string &policy) {
 
   vector<boost::shared_ptr<Channel> >::iterator i = find_if(_channels.begin(), _channels.end(),
     [&policy](boost::shared_ptr<Channel> &channel) { return channel->_policy == policy; });
+  if (i == _channels.end()) {
+    return 0;
+  }
+  return *i;
+
+}
+
+boost::shared_ptr<Channel> Server::find_channel_stream(const std::string &stream) {
+
+  vector<boost::shared_ptr<Channel> >::iterator i = find_if(_channels.begin(), _channels.end(),
+    [&stream](boost::shared_ptr<Channel> &channel) { return channel->_id == stream; });
   if (i == _channels.end()) {
     return 0;
   }

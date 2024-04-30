@@ -56,11 +56,12 @@ repSocket.on('message', (msg) => {
       return;
     }
     if (m.text == "hello") {
-      pubSocket.send(JSON.stringify({ type: "message", text: "world", stream: "s1", policy: "p1", user: m.user == "u1" ? "u2" : "u1"}));
+      repSocket.send(JSON.stringify({ type: "message", text: "world", stream: "s1", policy: "p1", user: m.user == "u1" ? "u2" : "u1"}));
       return;
     }
     console.log("got", m.text, "from", m.user);
     repSocket.send(JSON.stringify({ type: "ack" }));
+    return;
   }
   if (m.type == "policyusers") {
     if (m.policy != "p1") {

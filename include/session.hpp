@@ -17,16 +17,17 @@
 #include <boost/enable_shared_from_this.hpp>
 #include <boost/asio.hpp>
 #include <boost/function.hpp>
-#include <list>
+#include <vector>
 #include <string>
 #include <map>
+#include <list>
 
 class Server;
 class Channel;
 class User;
 class Prefixable;
 
-typedef boost::function<void (const std::list<std::string> &args)> cmdHandler;
+typedef boost::function<void (const std::vector<std::string> &args)> cmdHandler;
 
 class Session : public boost::enable_shared_from_this<Session> {
 
@@ -60,10 +61,11 @@ private:
   void handle_request();
   
   // command handlers
-  void nickCmd(const std::list<std::string> &args);
-  void userCmd(const std::list<std::string> &args);
-  void listCmd(const std::list<std::string> &args);
-  void joinCmd(const std::list<std::string> &args);
+  void nickCmd(const std::vector<std::string> &args);
+  void userCmd(const std::vector<std::string> &args);
+  void listCmd(const std::vector<std::string> &args);
+  void joinCmd(const std::vector<std::string> &args);
+  void msgCmd(const std::vector<std::string> &args);
 
 };
 
