@@ -2,16 +2,17 @@
 class IRC
 
    def wait_for(msg)
+      result = ""
       while IO.select([@socket], nil, nil, 2) && (line = @socket.recv(50))
-         if line.include? msg
+         result += line
+         if result.include? msg
             puts "matching " + msg
             return true
          else
-            if line.start_with? ":localhost 433"
+            if result.start_with? ":localhost 433"
                puts "user already on channel"
-               return false
             else
-               puts line
+               puts "got " + line
             end
          end
       end

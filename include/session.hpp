@@ -40,7 +40,6 @@ public:
   
   Session(Server *server, boost::asio::io_service& io_service);
 
-  void join(channelPtr channel);
   void send(Prefixable *prefix, const string &cmd, const list<string> &args);
   
 private:

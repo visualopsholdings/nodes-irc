@@ -43,10 +43,6 @@ void Session::start(void) {
 
 }
 
-void Session::join(channelPtr channel) {
-
-}
-
 void Session::handle_read(const boost::system::error_code& error,
 		const size_t bytes_transferred) {
 
@@ -55,7 +51,6 @@ void Session::handle_read(const boost::system::error_code& error,
 		return;
   }
   
-//  _request.handle();
   handle_request();
 
   boost::asio::async_read_until(_socket, _buffer, "\r\n",
@@ -120,27 +115,34 @@ void Session::nickCmd(const vector<string> &args) {
 	  BOOST_LOG_TRIVIAL(error) << "NICK missing nickname";
 	  return;
   }
+  string nick = args.front();
+  BOOST_LOG_TRIVIAL(debug) << "nickname " << nick;
   if (_user) {
-	  if (_user->_nick != args.front()) {
+    BOOST_LOG_TRIVIAL(debug) << "has user with nickname " << _user->_nick;
+	  if (_user->_nick != nick) {
 	    BOOST_LOG_TRIVIAL(error) << "NICK session already has user with different nickname";
 	  }
 	  return;
   }
+  BOOST_LOG_TRIVIAL(debug) << "no user yet";
+  
   // this session has no user yet.
-  userPtr user = find_in<userPtr>(_server->_users, args.front(),
+  userPtr user = find_in<userPtr>(_server->_users, nick,
     [](userPtr &c) { return c->_nick; });
   if (user) {
+    BOOST_LOG_TRIVIAL(debug) << "found user in server " << user->_nick;
     if (_server->find_session_for_nick(user->_nick)) {
 	    BOOST_LOG_TRIVIAL(error) << "NICK server already has different session for this user";
 	    return;
     }
     // this is the session for that user.
+    BOOST_LOG_TRIVIAL(debug) << "setting the session to this user";
     _user = user;
     return;
   }
   
   // create a new user and add it to the server.
-  _user = userPtr(new User(args.front()));
+  _user = userPtr(new User(nick));
   _server->_users.push_back(_user);
 }
 
@@ -199,6 +201,7 @@ void Session::joinCmd(const vector<string> &args) {
     if (chan) {
       chan->join(_user);
       send(_user.get(), "JOIN", { chan->_name, _user->_username, _user->_realname });
+      send(_user.get(), "331", { _user->_nick, chan->_name, ":No topic is set." });
       // other users
       _server->policy_users(chan->_policy);
     }

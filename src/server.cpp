@@ -49,7 +49,6 @@ void Server::run() {
 void Server::start_accept() {
 
   sessionPtr session = sessionPtr(new Session(this, _io_service));
-//	sessionPtr session = Session::create(this, _io_service);
 
 	_acceptor.async_accept(session->_socket,
 			bind(&Server::handle_accept, this, session,
@@ -59,11 +58,13 @@ void Server::start_accept() {
 void Server::handle_accept(sessionPtr session,
 		const boost::system::error_code& error) {
 
-	if (!error) {
-		session->start();
-		_sessions.push_back(session);
-
-	}
+	if (error) {
+	  BOOST_LOG_TRIVIAL(error) << error.message();
+		return;
+  }
+  
+	session->start();
+	_sessions.push_back(session);
 	start_accept();
 }
 
@@ -274,6 +275,7 @@ userPtr Server::find_user_id(const string &id) {
 
 sessionPtr Server::find_session_for_nick(const string &nick) {
 
+  BOOST_LOG_TRIVIAL(debug) << "searching " << _sessions.size() << " sessions";
   return find_in<sessionPtr>(_sessions, nick,
     [](sessionPtr &c) { return c->_user->_nick; });
 
@@ -287,7 +289,10 @@ void Server::create_channel(const string &name, const string &id, const string &
   
   channelPtr channel = find_channel(channame);
   if (channel) {
-    BOOST_LOG_TRIVIAL(error) << "channel already exists";
+    BOOST_LOG_TRIVIAL(info) << "channel " << name << " already exists";
+    if (channel->_id != id || channel->_policy != policy) {
+      BOOST_LOG_TRIVIAL(error) << "channel " << name << " has different id or policy";
+    }
     return;
   }
   channel = channelPtr(new Channel(this, channame, id, policy));
