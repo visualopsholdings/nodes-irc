@@ -14,7 +14,6 @@
 #ifndef H_session
 #define H_session
 
-#include <boost/enable_shared_from_this.hpp>
 #include <boost/asio.hpp>
 #include <boost/function.hpp>
 #include <vector>
@@ -29,15 +28,15 @@ class Prefixable;
 
 typedef boost::function<void (const std::vector<std::string> &args)> cmdHandler;
 
-class Session : public boost::enable_shared_from_this<Session> {
+class Session : public std::enable_shared_from_this<Session> {
 
 public:
   
-  static boost::shared_ptr<Session> create(Server *server,
+  static std::shared_ptr<Session> create(Server *server,
       boost::asio::io_service& io_service);
 
   void start();
-  void join(boost::shared_ptr<Channel> channel);
+  void join(std::shared_ptr<Channel> channel);
   void send(Prefixable *prefix, const std::string &cmd, const std::list<std::string> &args);
   
 private:
@@ -47,7 +46,7 @@ private:
   boost::asio::ip::tcp::socket _socket;
   boost::asio::streambuf _buffer;
   std::map<std::string, cmdHandler> _commands;
-  boost::shared_ptr<User> _user;
+  std::shared_ptr<User> _user;
   
   explicit Session(Server *server, boost::asio::io_service& io_service);
 

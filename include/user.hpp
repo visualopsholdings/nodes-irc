@@ -17,16 +17,15 @@
 #include "prefixable.hpp"
 
 #include <string>
-#include <boost/enable_shared_from_this.hpp>
 
 class Channel;
 
-class User : public boost::enable_shared_from_this<User>, Prefixable {
+class User : public std::enable_shared_from_this<User>, Prefixable {
 
 public:
   ~User();
   
-  static boost::shared_ptr<User> create(const std::string &nick);
+  static std::shared_ptr<User> create(const std::string &nick);
 
   // Prefixable
   const std::string prefix();

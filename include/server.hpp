@@ -18,8 +18,9 @@
 
 #include <zmq.hpp>
 #include <boost/asio.hpp>
-#include <boost/optional.hpp>
 #include <nlohmann/json.hpp>
+
+using json = nlohmann::json;
 
 class Session;
 class Channel;
@@ -34,17 +35,17 @@ public:
   void run();
   void login(const std::string &username);
   void policy_users(const std::string &policy);
-  boost::shared_ptr<Channel> find_channel(const std::string &name);
-  std::vector<boost::shared_ptr<Channel> >::iterator begin_channel();
-  std::vector<boost::shared_ptr<Channel> >::iterator end_channel();
+  std::shared_ptr<Channel> find_channel(const std::string &name);
+  std::vector<std::shared_ptr<Channel> >::iterator begin_channel();
+  std::vector<std::shared_ptr<Channel> >::iterator end_channel();
   void create_channel(const std::string &name, const std::string &id, const std::string &policy);
-  boost::shared_ptr<Channel> find_channel_policy(const std::string &policy);
-  boost::shared_ptr<Channel> find_channel_stream(const std::string &stream);
-  boost::shared_ptr<User> find_user_id(const std::string &id);
-  boost::shared_ptr<User> find_user_nick(const std::string &nick);
-  void add_user(boost::shared_ptr<User> user);
-  boost::shared_ptr<Session> find_session_for_nick(const std::string &nick);
-  void send(boost::shared_ptr<User> user, boost::shared_ptr<Channel> channel, const std::string &text);
+  std::shared_ptr<Channel> find_channel_policy(const std::string &policy);
+  std::shared_ptr<Channel> find_channel_stream(const std::string &stream);
+  std::shared_ptr<User> find_user_id(const std::string &id);
+  std::shared_ptr<User> find_user_nick(const std::string &nick);
+  void add_user(std::shared_ptr<User> user);
+  std::shared_ptr<Session> find_session_for_nick(const std::string &nick);
+  void send(std::shared_ptr<User> user, std::shared_ptr<Channel> channel, const std::string &text);
   
   // Prefixable
   const std::string prefix();
@@ -55,15 +56,15 @@ private:
   boost::asio::ip::tcp::acceptor _acceptor;
   zmq::socket_t *_sub;
   zmq::socket_t *_req;
-  std::vector<boost::shared_ptr<Session> > _sessions;
-  std::vector<boost::shared_ptr<Channel> > _channels;
-  std::vector<boost::shared_ptr<User> > _users;
+  std::vector<std::shared_ptr<Session> > _sessions;
+  std::vector<std::shared_ptr<Channel> > _channels;
+  std::vector<std::shared_ptr<User> > _users;
    
   void start_accept();
-  void handle_accept(boost::shared_ptr<Session> session,
+  void handle_accept(std::shared_ptr<Session> session,
       const boost::system::error_code& error);
-  boost::optional<nlohmann::json::iterator> get(nlohmann::json *json, const std::string &name);
-  boost::shared_ptr<Session> find_session_username(const std::string &username);
+  std::optional<json::iterator> get(json *json, const std::string &name);
+  std::shared_ptr<Session> find_session_username(const std::string &username);
   
 };
 

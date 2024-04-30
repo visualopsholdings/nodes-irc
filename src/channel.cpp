@@ -25,13 +25,13 @@ Channel::Channel(Server *server, const string &name, const string &id, const str
 	_server(server), _name(name), _id(id), _policy(policy) {
 }
 	
-boost::shared_ptr<Channel> Channel::create(Server *server, const string &name, const string &id, const string &policy) {
+shared_ptr<Channel> Channel::create(Server *server, const string &name, const string &id, const string &policy) {
 
-	return boost::shared_ptr<Channel>(new Channel(server, name, id, policy));
+	return shared_ptr<Channel>(new Channel(server, name, id, policy));
 
 }
 
-void Channel::join(boost::shared_ptr<User> user) {
+void Channel::join(shared_ptr<User> user) {
 
   if (find(_users.begin(), _users.end(), user) != _users.end()) {
     BOOST_LOG_TRIVIAL(warning) << "user already joined";
@@ -41,12 +41,12 @@ void Channel::join(boost::shared_ptr<User> user) {
   
 }
 
-boost::shared_ptr<User> Channel::find_user_id(const string &id) {
+shared_ptr<User> Channel::find_user_id(const string &id) {
 
-  vector<boost::shared_ptr<User> >::iterator i = find_if(_users.begin(), _users.end(),
-    [&id](boost::shared_ptr<User> &user) { return user->_id == id; });
+  vector<shared_ptr<User> >::iterator i = find_if(_users.begin(), _users.end(),
+    [&id](shared_ptr<User> &user) { return user->_id == id; });
   if (i == _users.end()) {
-    return boost::shared_ptr<User>();
+    return shared_ptr<User>();
   }
   return *i;
 
@@ -54,8 +54,8 @@ boost::shared_ptr<User> Channel::find_user_id(const string &id) {
 
 void Channel::send(Prefixable *prefix, const std::string &cmd, const std::list<std::string> &args) {
 
-  for (vector<boost::shared_ptr<User> >::iterator i=_users.begin(); i != _users.end(); i++) {
-    boost::shared_ptr<Session> session = _server->find_session_for_nick((*i)->_nick);
+  for (vector<shared_ptr<User> >::iterator i=_users.begin(); i != _users.end(); i++) {
+    shared_ptr<Session> session = _server->find_session_for_nick((*i)->_nick);
     if (session) {
       session->send(prefix, cmd, args);
     }

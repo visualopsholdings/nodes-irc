@@ -20,9 +20,9 @@ User::User(const string &nick) :
 User::~User() {
 }
 
-boost::shared_ptr<User> User::create(const string &nick) {
+shared_ptr<User> User::create(const string &nick) {
 
-	return boost::shared_ptr<User>(new User(nick));
+	return shared_ptr<User>(new User(nick));
 
 }
 

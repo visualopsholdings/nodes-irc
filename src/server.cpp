@@ -23,7 +23,6 @@
 #include <boost/log/trivial.hpp>
 
 using namespace std;
-using json = nlohmann::json;
 
 Server::Server(zmq::socket_t *sub, zmq::socket_t *req) :
 		_acceptor(_io_service),
@@ -50,14 +49,14 @@ void Server::run() {
 
 void Server::start_accept() {
 
-	boost::shared_ptr<Session> session = Session::create(this, _io_service);
+	shared_ptr<Session> session = Session::create(this, _io_service);
 
 	_acceptor.async_accept(session->_socket,
 			boost::bind(&Server::handle_accept, this, session,
 					boost::asio::placeholders::error));
 }
 
-void Server::handle_accept(boost::shared_ptr<Session> session,
+void Server::handle_accept(shared_ptr<Session> session,
 		const boost::system::error_code& error) {
 
 	if (!error) {
@@ -68,11 +67,11 @@ void Server::handle_accept(boost::shared_ptr<Session> session,
 	start_accept();
 }
 
-boost::optional<json::iterator> Server::get(json *json, const string &name) {
+optional<json::iterator> Server::get(json *json, const string &name) {
 
   json::iterator i = json->find(name);
   if (i == json->end()) {
-    return boost::none;
+    return nullopt;
   }
   return i;
   
@@ -90,23 +89,23 @@ void Server::login(const string &username) {
   _req->recv(&reply);
   string r((const char *)reply.data(), reply.size());
   json doc = json::parse(r);
-  boost::optional<json::iterator> type = get(&doc, "type");
+  optional<json::iterator> type = get(&doc, "type");
   if (!type) {
 	  BOOST_LOG_TRIVIAL(error) << "no type";
     return;
   }
   if (**type == "user") {
-    boost::optional<json::iterator> name = get(&doc, "name");
+    optional<json::iterator> name = get(&doc, "name");
     if (!name) {
 	    BOOST_LOG_TRIVIAL(error) << "no name for user";
       return;
     }
-    boost::optional<json::iterator> id = get(&doc, "id");
+    optional<json::iterator> id = get(&doc, "id");
     if (!id) {
 	    BOOST_LOG_TRIVIAL(error) << "no id for user";
       return;
     }
-    boost::shared_ptr<Session> session = find_session_username(**name);
+    shared_ptr<Session> session = find_session_username(**name);
     if (!session) {
 	    BOOST_LOG_TRIVIAL(error) << "no session for " << **name;
       return;
@@ -118,13 +117,13 @@ void Server::login(const string &username) {
     session->send(this, "004", { session->_user->_nick, "ZMQIRC", "1" });
     session->send(this, "MODE", { session->_user->_nick, "+w" });
     
-    boost::optional<json::iterator> streams = get(&doc, "streams");
+    optional<json::iterator> streams = get(&doc, "streams");
     if (streams) {
       if ((**streams).is_array()) {
         for (json::iterator i = (**streams).begin(); i != (**streams).end(); i++) {
-          boost::optional<json::iterator> id = get(&(*i), "id");
-          boost::optional<json::iterator> name = get(&(*i), "name");
-          boost::optional<json::iterator> policy = get(&(*i), "policy");
+          optional<json::iterator> id = get(&(*i), "id");
+          optional<json::iterator> name = get(&(*i), "name");
+          optional<json::iterator> policy = get(&(*i), "policy");
           if (id && name && policy) {
             create_channel(**name, **id, **policy);
           }
@@ -158,31 +157,31 @@ void Server::policy_users(const std::string &policy) {
   _req->recv(&reply);
   string r((const char *)reply.data(), reply.size());
   json doc = json::parse(r);
-  boost::optional<json::iterator> type = get(&doc, "type");
+  optional<json::iterator> type = get(&doc, "type");
   if (!type) {
 	  BOOST_LOG_TRIVIAL(error) << "no type";
     return;
   }
   if (**type == "policyusers") {
-    boost::optional<json::iterator> id = get(&doc, "id");
+    optional<json::iterator> id = get(&doc, "id");
     if (!id) {
 	    BOOST_LOG_TRIVIAL(error) << "no id for policyusers";
       return;
     }
-    boost::shared_ptr<Channel> channel = find_channel_policy(**id);
+    shared_ptr<Channel> channel = find_channel_policy(**id);
     if (!channel) {
 	    BOOST_LOG_TRIVIAL(error) << "no channel for policy " << **id;
       return;
     }
-    boost::optional<json::iterator> users = get(&doc, "users");
+    optional<json::iterator> users = get(&doc, "users");
     if (users) {
       if ((**users).is_array()) {
         for (json::iterator i = (**users).begin(); i != (**users).end(); i++) {
-          boost::optional<json::iterator> id = get(&(*i), "id");
-          boost::optional<json::iterator> name = get(&(*i), "name");
-          boost::optional<json::iterator> fullname = get(&(*i), "fullname");
+          optional<json::iterator> id = get(&(*i), "id");
+          optional<json::iterator> name = get(&(*i), "name");
+          optional<json::iterator> fullname = get(&(*i), "fullname");
           if (id && name && fullname) {
-            boost::shared_ptr<User> user = channel->find_user_id(**id);
+            shared_ptr<User> user = channel->find_user_id(**id);
             if (!user) {
               user = User::create(**name);
               user->_realname = **fullname;
@@ -211,7 +210,7 @@ void Server::policy_users(const std::string &policy) {
 
 }
 
-void Server::send(boost::shared_ptr<User> user, boost::shared_ptr<Channel> channel, const std::string &text) {
+void Server::send(shared_ptr<User> user, shared_ptr<Channel> channel, const std::string &text) {
 
 	string m = "{ \"type\": \"message\", \"user\": \"" + user->_id + "\", \"stream\": \"" + channel->_id + "\", \"policy\": \"" + channel->_policy + "\", \"text\": \"" + text + "\"}";
 	zmq::message_t msg(m.length());
@@ -223,19 +222,19 @@ void Server::send(boost::shared_ptr<User> user, boost::shared_ptr<Channel> chann
   _req->recv(&reply);
   string r((const char *)reply.data(), reply.size());
   json doc = json::parse(r);
-  boost::optional<json::iterator> type = get(&doc, "type");
+  optional<json::iterator> type = get(&doc, "type");
   if (!type) {
 	  BOOST_LOG_TRIVIAL(error) << "no type";
     return;
   }
   if (**type == "message") {
-    boost::optional<json::iterator> stream = get(&doc, "stream");
-    boost::optional<json::iterator> userid = get(&doc, "user");
-    boost::optional<json::iterator> text = get(&doc, "text");
+    optional<json::iterator> stream = get(&doc, "stream");
+    optional<json::iterator> userid = get(&doc, "user");
+    optional<json::iterator> text = get(&doc, "text");
     if (stream && userid && text) {
-      boost::shared_ptr<Channel> channel = find_channel_stream(**stream);
+      shared_ptr<Channel> channel = find_channel_stream(**stream);
       if (channel) {
-        boost::shared_ptr<User> user = find_user_id(**userid);
+        shared_ptr<User> user = find_user_id(**userid);
         if (user) {
           channel->send(user.get(), "PRIVMSG", { channel->_name, **text });
         }
@@ -257,10 +256,10 @@ void Server::send(boost::shared_ptr<User> user, boost::shared_ptr<Channel> chann
   
 }
 
-boost::shared_ptr<Channel> Server::find_channel_policy(const std::string &policy) {
+shared_ptr<Channel> Server::find_channel_policy(const std::string &policy) {
 
-  vector<boost::shared_ptr<Channel> >::iterator i = find_if(_channels.begin(), _channels.end(),
-    [&policy](boost::shared_ptr<Channel> &channel) { return channel->_policy == policy; });
+  vector<shared_ptr<Channel> >::iterator i = find_if(_channels.begin(), _channels.end(),
+    [&policy](shared_ptr<Channel> &channel) { return channel->_policy == policy; });
   if (i == _channels.end()) {
     return 0;
   }
@@ -268,10 +267,10 @@ boost::shared_ptr<Channel> Server::find_channel_policy(const std::string &policy
 
 }
 
-boost::shared_ptr<Channel> Server::find_channel_stream(const std::string &stream) {
+shared_ptr<Channel> Server::find_channel_stream(const std::string &stream) {
 
-  vector<boost::shared_ptr<Channel> >::iterator i = find_if(_channels.begin(), _channels.end(),
-    [&stream](boost::shared_ptr<Channel> &channel) { return channel->_id == stream; });
+  vector<shared_ptr<Channel> >::iterator i = find_if(_channels.begin(), _channels.end(),
+    [&stream](shared_ptr<Channel> &channel) { return channel->_id == stream; });
   if (i == _channels.end()) {
     return 0;
   }
@@ -279,10 +278,10 @@ boost::shared_ptr<Channel> Server::find_channel_stream(const std::string &stream
 
 }
 
-boost::shared_ptr<Channel> Server::find_channel(const std::string &name) {
+shared_ptr<Channel> Server::find_channel(const std::string &name) {
 
-  vector<boost::shared_ptr<Channel> >::iterator i = find_if(_channels.begin(), _channels.end(),
-    [&name](boost::shared_ptr<Channel> &channel) { return channel->_name == name; });
+  vector<shared_ptr<Channel> >::iterator i = find_if(_channels.begin(), _channels.end(),
+    [&name](shared_ptr<Channel> &channel) { return channel->_name == name; });
   if (i == _channels.end()) {
     return 0;
   }
@@ -290,10 +289,10 @@ boost::shared_ptr<Channel> Server::find_channel(const std::string &name) {
 
 }
 
-boost::shared_ptr<Session> Server::find_session_username(const string &username) {
+shared_ptr<Session> Server::find_session_username(const string &username) {
 
-  vector<boost::shared_ptr<Session> >::iterator i = find_if(_sessions.begin(), _sessions.end(),
-    [&username](boost::shared_ptr<Session> &session) { return session->_user->_username == username; });
+  vector<shared_ptr<Session> >::iterator i = find_if(_sessions.begin(), _sessions.end(),
+    [&username](shared_ptr<Session> &session) { return session->_user->_username == username; });
   if (i == _sessions.end()) {
     return 0;
   }
@@ -301,10 +300,10 @@ boost::shared_ptr<Session> Server::find_session_username(const string &username)
   
 }
 
-boost::shared_ptr<User> Server::find_user_id(const string &id) {
+shared_ptr<User> Server::find_user_id(const string &id) {
 
-  vector<boost::shared_ptr<User> >::iterator i = find_if(_users.begin(), _users.end(),
-    [&id](boost::shared_ptr<User> &user) { return user->_id == id; });
+  vector<shared_ptr<User> >::iterator i = find_if(_users.begin(), _users.end(),
+    [&id](shared_ptr<User> &user) { return user->_id == id; });
   if (i == _users.end()) {
     return 0;
   }
@@ -312,10 +311,10 @@ boost::shared_ptr<User> Server::find_user_id(const string &id) {
 
 }
 
-boost::shared_ptr<User> Server::find_user_nick(const std::string &nick) {
+shared_ptr<User> Server::find_user_nick(const std::string &nick) {
 
-  vector<boost::shared_ptr<User> >::iterator i = find_if(_users.begin(), _users.end(),
-    [nick](boost::shared_ptr<User> &user) { return user->_nick == nick; });
+  vector<shared_ptr<User> >::iterator i = find_if(_users.begin(), _users.end(),
+    [nick](shared_ptr<User> &user) { return user->_nick == nick; });
   if (i == _users.end()) {
     return 0;
   }
@@ -323,14 +322,14 @@ boost::shared_ptr<User> Server::find_user_nick(const std::string &nick) {
 
 }
 
-void Server::add_user(boost::shared_ptr<User> user) {
+void Server::add_user(shared_ptr<User> user) {
   _users.push_back(user);
 }
 
-boost::shared_ptr<Session> Server::find_session_for_nick(const std::string &nick) {
+shared_ptr<Session> Server::find_session_for_nick(const std::string &nick) {
 
-  vector<boost::shared_ptr<Session> >::iterator i = find_if(_sessions.begin(), _sessions.end(),
-    [&nick](boost::shared_ptr<Session> &session) { return session->_user->_nick == nick; });
+  vector<shared_ptr<Session> >::iterator i = find_if(_sessions.begin(), _sessions.end(),
+    [&nick](shared_ptr<Session> &session) { return session->_user->_nick == nick; });
   if (i == _sessions.end()) {
     return 0;
   }
@@ -338,11 +337,11 @@ boost::shared_ptr<Session> Server::find_session_for_nick(const std::string &nick
 
 }
 
-vector<boost::shared_ptr<Channel> >::iterator Server::end_channel() {
+vector<shared_ptr<Channel> >::iterator Server::end_channel() {
   return _channels.end();
 }
 
-vector<boost::shared_ptr<Channel> >::iterator Server::begin_channel() {
+vector<shared_ptr<Channel> >::iterator Server::begin_channel() {
   return _channels.begin();
 }
 
@@ -352,7 +351,7 @@ void Server::create_channel(const string &name, const string &id, const string &
   
   BOOST_LOG_TRIVIAL(info) << "create channel " << channame;
   
-  boost::shared_ptr<Channel> channel = find_channel(channame);
+  shared_ptr<Channel> channel = find_channel(channame);
   if (channel) {
     BOOST_LOG_TRIVIAL(error) << "channel already exists";
     return;

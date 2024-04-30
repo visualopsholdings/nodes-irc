@@ -35,9 +35,9 @@ Session::Session(Server *server, boost::asio::io_service& io_service) :
 
 }
 	
-boost::shared_ptr<Session> Session::create(Server *server, boost::asio::io_service& io_service) {
+shared_ptr<Session> Session::create(Server *server, boost::asio::io_service& io_service) {
 
-	return boost::shared_ptr<Session>(new Session(server, io_service));
+	return shared_ptr<Session>(new Session(server, io_service));
 
 }
 
@@ -51,7 +51,7 @@ void Session::start(void) {
 
 }
 
-void Session::join(boost::shared_ptr<Channel> channel) {
+void Session::join(shared_ptr<Channel> channel) {
 
 }
 
@@ -135,7 +135,7 @@ void Session::nickCmd(const vector<string> &args) {
 	  return;
   }
   // this session has no user yet.
-  boost::shared_ptr<User> user = _server->find_user_nick(args.front());
+  shared_ptr<User> user = _server->find_user_nick(args.front());
   if (user) {
     if (_server->find_session_for_nick(user->_nick)) {
 	    BOOST_LOG_TRIVIAL(error) << "NICK server already has different session for this user";
@@ -178,7 +178,7 @@ void Session::listCmd(const vector<string> &args) {
   }
 
   send(_server, "321", { _user->_nick, "Channel", ":Users", "Name" });
-  for (std::vector<boost::shared_ptr<Channel> >::iterator i = _server->begin_channel(); i != _server->end_channel(); i++) {
+  for (std::vector<shared_ptr<Channel> >::iterator i = _server->begin_channel(); i != _server->end_channel(); i++) {
     send(_server, "322", { _user->_nick, (*i)->_name, "0" });
   }
   send(_server, "323", {  _user->_nick, ":End of /LIST" });
@@ -202,7 +202,7 @@ void Session::joinCmd(const vector<string> &args) {
   boost::split(channels, args.front(), boost::is_any_of(","));
   for (list<string>::iterator i=channels.begin(); i != channels.end(); i++) {
     string name = Channel::normalise(*i);
-    boost::shared_ptr<Channel> chan = _server->find_channel(name);
+    shared_ptr<Channel> chan = _server->find_channel(name);
     if (chan) {
       chan->join(_user);
       send(_user.get(), "JOIN", { chan->_name, _user->_username, _user->_realname });
@@ -223,7 +223,7 @@ void Session::msgCmd(const vector<string> &args) {
 	  return;
   }
   
-  boost::shared_ptr<Channel> chan = _server->find_channel(args.front());
+  shared_ptr<Channel> chan = _server->find_channel(args.front());
   if (!chan) {
     BOOST_LOG_TRIVIAL(error) << "channel " << args.front() << " not found";
     return;
