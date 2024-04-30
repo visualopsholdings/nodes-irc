@@ -245,3 +245,7 @@ implementation of the proprietary "Visual Ops" server.
 ### 29 Apr 2024
 - start to implemement users.
 
+### 30 Apr 2024
+- finish off other users in the stream.
+
+

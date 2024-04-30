@@ -16,24 +16,32 @@
 
 #include <string>
 #include <vector>
+#include <list>
 #include <boost/enable_shared_from_this.hpp>
 
 class User;
+class Prefixable;
+class Server;
 
 class Channel : public boost::enable_shared_from_this<Channel> {
 
 public:
 
-  static boost::shared_ptr<Channel> create(const std::string &name, const std::string &id, const std::string &policy);
+  static boost::shared_ptr<Channel> create(Server *server, const std::string &name, const std::string &id, const std::string &policy);
 
   static std::string from_stream_name(const std::string &stream);
   static std::string normalise(const std::string &chan);
   
   void join(boost::shared_ptr<User> user);
+  boost::shared_ptr<User> find_user_id(const std::string &id);
+  void add_user(boost::shared_ptr<User> user);
+  void send(Prefixable *prefix, const std::string &cmd, const std::list<std::string> &args);
   
 private:
   friend class Server;
   friend class Session;
+  
+  Server *_server;
   
   std::string _name;
   std::string _id;
@@ -41,7 +49,7 @@ private:
 
   std::vector<boost::shared_ptr<User> > _users;
   
-  explicit Channel(const std::string &name, const std::string &id, const std::string &policy);
+  explicit Channel(Server *server, const std::string &name, const std::string &id, const std::string &policy);
   
 };
 

@@ -37,6 +37,7 @@ public:
 
   void start();
   void join(boost::shared_ptr<Channel> channel);
+  void send(Prefixable *prefix, const std::string &cmd, const std::list<std::string> &args);
   
 private:
   friend class Server;
@@ -54,7 +55,6 @@ private:
   void handle_write(const boost::system::error_code& error);
 
   void write(const std::string &line);
-  void send(Prefixable *prefix, const std::string &cmd, const std::list<std::string> &args);
   void login(const std::string &username);
   
   void handle_request();

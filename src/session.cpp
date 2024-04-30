@@ -121,7 +121,6 @@ void Session::handle_request() {
   
 }
 
-
 void Session::nickCmd(const list<string> &args) {
 
   if (args.size() < 1) {
@@ -129,13 +128,26 @@ void Session::nickCmd(const list<string> &args) {
 	  return;
   }
   if (_user) {
-	  BOOST_LOG_TRIVIAL(warning) << "NICK session already has user";
-	  _user->_nick = args.front();
+	  if (_user->_nick != args.front()) {
+	    BOOST_LOG_TRIVIAL(error) << "NICK session already has user with different nickname";
+	  }
 	  return;
-	  
   }
-  _user = User::create(args.front());
+  // this session has no user yet.
+  boost::shared_ptr<User> user = _server->find_user_nick(args.front());
+  if (user) {
+    if (_server->find_session_for_nick(user->_nick)) {
+	    BOOST_LOG_TRIVIAL(error) << "NICK server already has different session for this user";
+	    return;
+    }
+    // this is the session for that user.
+    _user = user;
+    return;
+  }
   
+  // create a new user and add it to the server.
+  _user = User::create(args.front());
+  _server->add_user(_user);
 }
 
 void Session::userCmd(const list<string> &args) {
@@ -189,12 +201,12 @@ void Session::joinCmd(const list<string> &args) {
   boost::split(channels, args.front(), boost::is_any_of(","));
   for (list<string>::iterator i=channels.begin(); i != channels.end(); i++) {
     string name = Channel::normalise(*i);
-    vector<boost::shared_ptr<Channel> >::iterator chan = _server->find_channel(name);
-    if (chan != _server->end_channel()) {
-      (*chan)->join(_user);
-      send(_user.get(), "JOIN", { (*chan)->_name, _user->_username, _user->_realname });
+    boost::shared_ptr<Channel> chan = _server->find_channel(name);
+    if (chan) {
+      chan->join(_user);
+      send(_user.get(), "JOIN", { chan->_name, _user->_username, _user->_realname });
       // other users
-      _server->policy_users((*chan)->_policy);
+      _server->policy_users(chan->_policy);
     }
     else {
 	    BOOST_LOG_TRIVIAL(error) << "channel " << name << " not found";

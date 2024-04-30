@@ -34,6 +34,7 @@ public:
 private:
   friend class Server;
   friend class Session;
+  friend class Channel;
   
   explicit User(const std::string &nick);
 
