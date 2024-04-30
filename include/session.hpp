@@ -15,29 +15,35 @@
 #define H_session
 
 #include <boost/asio.hpp>
-#include <boost/function.hpp>
 #include <vector>
 #include <string>
 #include <map>
 #include <list>
 
+using namespace std;
+
 class Server;
 class Channel;
 class User;
 class Prefixable;
+class Session;
 
-typedef boost::function<void (const std::vector<std::string> &args)> cmdHandler;
+typedef shared_ptr<Session> sessionPtr;
+typedef shared_ptr<Channel> channelPtr;
+typedef shared_ptr<User> userPtr;
 
-class Session : public std::enable_shared_from_this<Session> {
+typedef function<void (const vector<string> &args)> cmdHandler;
+
+class Session : public enable_shared_from_this<Session> {
 
 public:
   
-  static std::shared_ptr<Session> create(Server *server,
+  static sessionPtr create(Server *server,
       boost::asio::io_service& io_service);
 
   void start();
-  void join(std::shared_ptr<Channel> channel);
-  void send(Prefixable *prefix, const std::string &cmd, const std::list<std::string> &args);
+  void join(channelPtr channel);
+  void send(Prefixable *prefix, const string &cmd, const list<string> &args);
   
 private:
   friend class Server;
@@ -45,26 +51,26 @@ private:
   Server *_server;
   boost::asio::ip::tcp::socket _socket;
   boost::asio::streambuf _buffer;
-  std::map<std::string, cmdHandler> _commands;
-  std::shared_ptr<User> _user;
+  map<string, cmdHandler> _commands;
+  userPtr _user;
   
   explicit Session(Server *server, boost::asio::io_service& io_service);
 
   void handle_read(const boost::system::error_code& error,
-      const std::size_t bytes_transferred);
+      const size_t bytes_transferred);
   void handle_write(const boost::system::error_code& error);
 
-  void write(const std::string &line);
-  void login(const std::string &username);
+  void write(const string &line);
+  void login(const string &username);
   
   void handle_request();
   
   // command handlers
-  void nickCmd(const std::vector<std::string> &args);
-  void userCmd(const std::vector<std::string> &args);
-  void listCmd(const std::vector<std::string> &args);
-  void joinCmd(const std::vector<std::string> &args);
-  void msgCmd(const std::vector<std::string> &args);
+  void nickCmd(const vector<string> &args);
+  void userCmd(const vector<string> &args);
+  void listCmd(const vector<string> &args);
+  void joinCmd(const vector<string> &args);
+  void msgCmd(const vector<string> &args);
 
 };
 

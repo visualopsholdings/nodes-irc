@@ -17,27 +17,24 @@
 #include "user.hpp"
 
 #include <iostream>
-#include <boost/bind.hpp>
 #include <boost/log/trivial.hpp>
 #include <boost/algorithm/string/join.hpp>
 #include <boost/algorithm/string.hpp>
 
-using namespace std;
-
 Session::Session(Server *server, boost::asio::io_service& io_service) :
-	_server(server), _socket(io_service)/*, _request(this)*/ {
+	_server(server), _socket(io_service) {
 
-  _commands["NICK"] = boost::bind( &Session::nickCmd, this, _1 );
-  _commands["USER"] = boost::bind( &Session::userCmd, this, _1 );
-  _commands["LIST"] = boost::bind( &Session::listCmd, this, _1 );
-  _commands["JOIN"] = boost::bind( &Session::joinCmd, this, _1 );
-  _commands["PRIVMSG"] = boost::bind( &Session::msgCmd, this, _1 );
+  _commands["NICK"] = bind( &Session::nickCmd, this, placeholders::_1 );
+  _commands["USER"] = bind( &Session::userCmd, this, placeholders::_1 );
+  _commands["LIST"] = bind( &Session::listCmd, this, placeholders::_1 );
+  _commands["JOIN"] = bind( &Session::joinCmd, this, placeholders::_1 );
+  _commands["PRIVMSG"] = bind( &Session::msgCmd, this, placeholders::_1 );
 
 }
 	
-shared_ptr<Session> Session::create(Server *server, boost::asio::io_service& io_service) {
+sessionPtr Session::create(Server *server, boost::asio::io_service& io_service) {
 
-	return shared_ptr<Session>(new Session(server, io_service));
+	return sessionPtr(new Session(server, io_service));
 
 }
 
@@ -45,18 +42,18 @@ void Session::start(void) {
 
 	BOOST_LOG_TRIVIAL(info) << "session started ";
 	boost::asio::async_read_until(_socket, _buffer, "\r\n",
-			boost::bind(&Session::handle_read, shared_from_this(),
+			bind(&Session::handle_read, shared_from_this(),
 					boost::asio::placeholders::error,
 					boost::asio::placeholders::bytes_transferred));
 
 }
 
-void Session::join(shared_ptr<Channel> channel) {
+void Session::join(channelPtr channel) {
 
 }
 
 void Session::handle_read(const boost::system::error_code& error,
-		const std::size_t bytes_transferred) {
+		const size_t bytes_transferred) {
 
 	if (error) {
 	  BOOST_LOG_TRIVIAL(error) << error.message();
@@ -67,7 +64,7 @@ void Session::handle_read(const boost::system::error_code& error,
   handle_request();
 
   boost::asio::async_read_until(_socket, _buffer, "\r\n",
-      boost::bind(&Session::handle_read, shared_from_this(),
+      bind(&Session::handle_read, shared_from_this(),
           boost::asio::placeholders::error,
           boost::asio::placeholders::bytes_transferred));
 
@@ -81,15 +78,15 @@ void Session::handle_write(const boost::system::error_code& error) {
 	
 }
 
-void Session::write(const std::string &line) {
+void Session::write(const string &line) {
 
 	boost::asio::async_write(_socket, boost::asio::buffer(line + "\r\n"),
-			boost::bind(&Session::handle_write, shared_from_this(),
+			bind(&Session::handle_write, shared_from_this(),
 					boost::asio::placeholders::error));
 
 }
 
-void Session::send(Prefixable *prefix, const std::string &cmd, const std::list<std::string> &args) {
+void Session::send(Prefixable *prefix, const string &cmd, const list<string> &args) {
   
   write(prefix->prefix() + " " + cmd + " " + boost::algorithm::join(args, " "));
   
@@ -135,7 +132,7 @@ void Session::nickCmd(const vector<string> &args) {
 	  return;
   }
   // this session has no user yet.
-  shared_ptr<User> user = _server->find_user_nick(args.front());
+  userPtr user = _server->find_user_nick(args.front());
   if (user) {
     if (_server->find_session_for_nick(user->_nick)) {
 	    BOOST_LOG_TRIVIAL(error) << "NICK server already has different session for this user";
@@ -178,7 +175,7 @@ void Session::listCmd(const vector<string> &args) {
   }
 
   send(_server, "321", { _user->_nick, "Channel", ":Users", "Name" });
-  for (std::vector<shared_ptr<Channel> >::iterator i = _server->begin_channel(); i != _server->end_channel(); i++) {
+  for (vector<channelPtr >::iterator i = _server->begin_channel(); i != _server->end_channel(); i++) {
     send(_server, "322", { _user->_nick, (*i)->_name, "0" });
   }
   send(_server, "323", {  _user->_nick, ":End of /LIST" });
@@ -202,7 +199,7 @@ void Session::joinCmd(const vector<string> &args) {
   boost::split(channels, args.front(), boost::is_any_of(","));
   for (list<string>::iterator i=channels.begin(); i != channels.end(); i++) {
     string name = Channel::normalise(*i);
-    shared_ptr<Channel> chan = _server->find_channel(name);
+    channelPtr chan = _server->find_channel(name);
     if (chan) {
       chan->join(_user);
       send(_user.get(), "JOIN", { chan->_name, _user->_username, _user->_realname });
@@ -223,7 +220,7 @@ void Session::msgCmd(const vector<string> &args) {
 	  return;
   }
   
-  shared_ptr<Channel> chan = _server->find_channel(args.front());
+  channelPtr chan = _server->find_channel(args.front());
   if (!chan) {
     BOOST_LOG_TRIVIAL(error) << "channel " << args.front() << " not found";
     return;

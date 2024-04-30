@@ -18,29 +18,34 @@
 
 #include <string>
 
-class Channel;
+using namespace std;
 
-class User : public std::enable_shared_from_this<User>, Prefixable {
+class Channel;
+class User;
+
+typedef shared_ptr<User> userPtr;
+
+class User : public enable_shared_from_this<User>, Prefixable {
 
 public:
   ~User();
   
-  static std::shared_ptr<User> create(const std::string &nick);
+  static userPtr create(const string &nick);
 
   // Prefixable
-  const std::string prefix();
+  const string prefix();
 
 private:
   friend class Server;
   friend class Session;
   friend class Channel;
   
-  explicit User(const std::string &nick);
+  explicit User(const string &nick);
 
-  std::string _nick;
-  std::string _username;
-  std::string _realname;
-  std::string _id;
+  string _nick;
+  string _username;
+  string _realname;
+  string _id;
   
 };
 

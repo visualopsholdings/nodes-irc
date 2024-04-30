@@ -17,12 +17,9 @@
 
 #include <iostream>
 #include <boost/asio.hpp>
-#include <boost/bind.hpp>
 #include <boost/thread/thread.hpp>
 #include <boost/chrono/duration.hpp>
 #include <boost/log/trivial.hpp>
-
-using namespace std;
 
 Server::Server(zmq::socket_t *sub, zmq::socket_t *req) :
 		_acceptor(_io_service),
@@ -49,14 +46,14 @@ void Server::run() {
 
 void Server::start_accept() {
 
-	shared_ptr<Session> session = Session::create(this, _io_service);
+	sessionPtr session = Session::create(this, _io_service);
 
 	_acceptor.async_accept(session->_socket,
-			boost::bind(&Server::handle_accept, this, session,
+			bind(&Server::handle_accept, this, session,
 					boost::asio::placeholders::error));
 }
 
-void Server::handle_accept(shared_ptr<Session> session,
+void Server::handle_accept(sessionPtr session,
 		const boost::system::error_code& error) {
 
 	if (!error) {
@@ -105,7 +102,7 @@ void Server::login(const string &username) {
 	    BOOST_LOG_TRIVIAL(error) << "no id for user";
       return;
     }
-    shared_ptr<Session> session = find_session_username(**name);
+    sessionPtr session = find_session_username(**name);
     if (!session) {
 	    BOOST_LOG_TRIVIAL(error) << "no session for " << **name;
       return;
@@ -145,7 +142,7 @@ void Server::login(const string &username) {
   }
 }
 
-void Server::policy_users(const std::string &policy) {
+void Server::policy_users(const string &policy) {
 
 	string m = "{ \"type\": \"policyusers\", \"policy\": \"" + policy + "\"}";
 	zmq::message_t msg(m.length());
@@ -168,7 +165,7 @@ void Server::policy_users(const std::string &policy) {
 	    BOOST_LOG_TRIVIAL(error) << "no id for policyusers";
       return;
     }
-    shared_ptr<Channel> channel = find_channel_policy(**id);
+    channelPtr channel = find_channel_policy(**id);
     if (!channel) {
 	    BOOST_LOG_TRIVIAL(error) << "no channel for policy " << **id;
       return;
@@ -181,7 +178,7 @@ void Server::policy_users(const std::string &policy) {
           optional<json::iterator> name = get(&(*i), "name");
           optional<json::iterator> fullname = get(&(*i), "fullname");
           if (id && name && fullname) {
-            shared_ptr<User> user = channel->find_user_id(**id);
+            userPtr user = channel->find_user_id(**id);
             if (!user) {
               user = User::create(**name);
               user->_realname = **fullname;
@@ -210,7 +207,7 @@ void Server::policy_users(const std::string &policy) {
 
 }
 
-void Server::send(shared_ptr<User> user, shared_ptr<Channel> channel, const std::string &text) {
+void Server::send(userPtr user, channelPtr channel, const string &text) {
 
 	string m = "{ \"type\": \"message\", \"user\": \"" + user->_id + "\", \"stream\": \"" + channel->_id + "\", \"policy\": \"" + channel->_policy + "\", \"text\": \"" + text + "\"}";
 	zmq::message_t msg(m.length());
@@ -232,9 +229,9 @@ void Server::send(shared_ptr<User> user, shared_ptr<Channel> channel, const std:
     optional<json::iterator> userid = get(&doc, "user");
     optional<json::iterator> text = get(&doc, "text");
     if (stream && userid && text) {
-      shared_ptr<Channel> channel = find_channel_stream(**stream);
+      channelPtr channel = find_channel_stream(**stream);
       if (channel) {
-        shared_ptr<User> user = find_user_id(**userid);
+        userPtr user = find_user_id(**userid);
         if (user) {
           channel->send(user.get(), "PRIVMSG", { channel->_name, **text });
         }
@@ -256,10 +253,10 @@ void Server::send(shared_ptr<User> user, shared_ptr<Channel> channel, const std:
   
 }
 
-shared_ptr<Channel> Server::find_channel_policy(const std::string &policy) {
+channelPtr Server::find_channel_policy(const string &policy) {
 
-  vector<shared_ptr<Channel> >::iterator i = find_if(_channels.begin(), _channels.end(),
-    [&policy](shared_ptr<Channel> &channel) { return channel->_policy == policy; });
+  vector<channelPtr >::iterator i = find_if(_channels.begin(), _channels.end(),
+    [&policy](channelPtr &channel) { return channel->_policy == policy; });
   if (i == _channels.end()) {
     return 0;
   }
@@ -267,10 +264,10 @@ shared_ptr<Channel> Server::find_channel_policy(const std::string &policy) {
 
 }
 
-shared_ptr<Channel> Server::find_channel_stream(const std::string &stream) {
+channelPtr Server::find_channel_stream(const string &stream) {
 
-  vector<shared_ptr<Channel> >::iterator i = find_if(_channels.begin(), _channels.end(),
-    [&stream](shared_ptr<Channel> &channel) { return channel->_id == stream; });
+  vector<channelPtr >::iterator i = find_if(_channels.begin(), _channels.end(),
+    [&stream](channelPtr &channel) { return channel->_id == stream; });
   if (i == _channels.end()) {
     return 0;
   }
@@ -278,10 +275,10 @@ shared_ptr<Channel> Server::find_channel_stream(const std::string &stream) {
 
 }
 
-shared_ptr<Channel> Server::find_channel(const std::string &name) {
+channelPtr Server::find_channel(const string &name) {
 
-  vector<shared_ptr<Channel> >::iterator i = find_if(_channels.begin(), _channels.end(),
-    [&name](shared_ptr<Channel> &channel) { return channel->_name == name; });
+  vector<channelPtr >::iterator i = find_if(_channels.begin(), _channels.end(),
+    [&name](channelPtr &channel) { return channel->_name == name; });
   if (i == _channels.end()) {
     return 0;
   }
@@ -289,10 +286,10 @@ shared_ptr<Channel> Server::find_channel(const std::string &name) {
 
 }
 
-shared_ptr<Session> Server::find_session_username(const string &username) {
+sessionPtr Server::find_session_username(const string &username) {
 
-  vector<shared_ptr<Session> >::iterator i = find_if(_sessions.begin(), _sessions.end(),
-    [&username](shared_ptr<Session> &session) { return session->_user->_username == username; });
+  vector<sessionPtr >::iterator i = find_if(_sessions.begin(), _sessions.end(),
+    [&username](sessionPtr &session) { return session->_user->_username == username; });
   if (i == _sessions.end()) {
     return 0;
   }
@@ -300,10 +297,10 @@ shared_ptr<Session> Server::find_session_username(const string &username) {
   
 }
 
-shared_ptr<User> Server::find_user_id(const string &id) {
+userPtr Server::find_user_id(const string &id) {
 
-  vector<shared_ptr<User> >::iterator i = find_if(_users.begin(), _users.end(),
-    [&id](shared_ptr<User> &user) { return user->_id == id; });
+  vector<userPtr >::iterator i = find_if(_users.begin(), _users.end(),
+    [&id](userPtr &user) { return user->_id == id; });
   if (i == _users.end()) {
     return 0;
   }
@@ -311,10 +308,10 @@ shared_ptr<User> Server::find_user_id(const string &id) {
 
 }
 
-shared_ptr<User> Server::find_user_nick(const std::string &nick) {
+userPtr Server::find_user_nick(const string &nick) {
 
-  vector<shared_ptr<User> >::iterator i = find_if(_users.begin(), _users.end(),
-    [nick](shared_ptr<User> &user) { return user->_nick == nick; });
+  vector<userPtr >::iterator i = find_if(_users.begin(), _users.end(),
+    [nick](userPtr &user) { return user->_nick == nick; });
   if (i == _users.end()) {
     return 0;
   }
@@ -322,14 +319,14 @@ shared_ptr<User> Server::find_user_nick(const std::string &nick) {
 
 }
 
-void Server::add_user(shared_ptr<User> user) {
+void Server::add_user(userPtr user) {
   _users.push_back(user);
 }
 
-shared_ptr<Session> Server::find_session_for_nick(const std::string &nick) {
+sessionPtr Server::find_session_for_nick(const string &nick) {
 
-  vector<shared_ptr<Session> >::iterator i = find_if(_sessions.begin(), _sessions.end(),
-    [&nick](shared_ptr<Session> &session) { return session->_user->_nick == nick; });
+  vector<sessionPtr >::iterator i = find_if(_sessions.begin(), _sessions.end(),
+    [&nick](sessionPtr &session) { return session->_user->_nick == nick; });
   if (i == _sessions.end()) {
     return 0;
   }
@@ -337,11 +334,11 @@ shared_ptr<Session> Server::find_session_for_nick(const std::string &nick) {
 
 }
 
-vector<shared_ptr<Channel> >::iterator Server::end_channel() {
+vector<channelPtr >::iterator Server::end_channel() {
   return _channels.end();
 }
 
-vector<shared_ptr<Channel> >::iterator Server::begin_channel() {
+vector<channelPtr >::iterator Server::begin_channel() {
   return _channels.begin();
 }
 
@@ -351,7 +348,7 @@ void Server::create_channel(const string &name, const string &id, const string &
   
   BOOST_LOG_TRIVIAL(info) << "create channel " << channame;
   
-  shared_ptr<Channel> channel = find_channel(channame);
+  channelPtr channel = find_channel(channame);
   if (channel) {
     BOOST_LOG_TRIVIAL(error) << "channel already exists";
     return;
@@ -362,7 +359,7 @@ void Server::create_channel(const string &name, const string &id, const string &
 }
 
 // Prefixable
-const std::string Server::prefix() {
+const string Server::prefix() {
   return ":localhost";
 }
 

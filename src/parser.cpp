@@ -13,8 +13,6 @@
 
 #include <boost/algorithm/string.hpp>
 
-using namespace std;
-
 string Parser::parse(const string &line, vector<string> *args) {
 
   boost::split(*args, line, boost::is_any_of(" "));

@@ -19,19 +19,17 @@
 #include <regex>
 #include <boost/log/trivial.hpp>
 
-using namespace std;
-
 Channel::Channel(Server *server, const string &name, const string &id, const string &policy) :
 	_server(server), _name(name), _id(id), _policy(policy) {
 }
 	
-shared_ptr<Channel> Channel::create(Server *server, const string &name, const string &id, const string &policy) {
+channelPtr Channel::create(Server *server, const string &name, const string &id, const string &policy) {
 
-	return shared_ptr<Channel>(new Channel(server, name, id, policy));
+	return channelPtr(new Channel(server, name, id, policy));
 
 }
 
-void Channel::join(shared_ptr<User> user) {
+void Channel::join(userPtr user) {
 
   if (find(_users.begin(), _users.end(), user) != _users.end()) {
     BOOST_LOG_TRIVIAL(warning) << "user already joined";
@@ -41,21 +39,21 @@ void Channel::join(shared_ptr<User> user) {
   
 }
 
-shared_ptr<User> Channel::find_user_id(const string &id) {
+userPtr Channel::find_user_id(const string &id) {
 
-  vector<shared_ptr<User> >::iterator i = find_if(_users.begin(), _users.end(),
-    [&id](shared_ptr<User> &user) { return user->_id == id; });
+  vector<userPtr >::iterator i = find_if(_users.begin(), _users.end(),
+    [&id](userPtr &user) { return user->_id == id; });
   if (i == _users.end()) {
-    return shared_ptr<User>();
+    return 0;
   }
   return *i;
 
 }
 
-void Channel::send(Prefixable *prefix, const std::string &cmd, const std::list<std::string> &args) {
+void Channel::send(Prefixable *prefix, const string &cmd, const list<string> &args) {
 
-  for (vector<shared_ptr<User> >::iterator i=_users.begin(); i != _users.end(); i++) {
-    shared_ptr<Session> session = _server->find_session_for_nick((*i)->_nick);
+  for (vector<userPtr >::iterator i=_users.begin(); i != _users.end(); i++) {
+    sessionPtr session = _server->find_session_for_nick((*i)->_nick);
     if (session) {
       session->send(prefix, cmd, args);
     }

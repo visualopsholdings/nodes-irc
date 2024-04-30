@@ -17,11 +17,13 @@
 #include <string>
 #include <list>
 
+using namespace std;
+
 class Parser {
 
 public:
 
-  static std::string parse(const std::string &line, std::vector<std::string> *args);
+  static string parse(const string &line, vector<string> *args);
     // parse the line, returning the CMD and list of possible arguments.
   
 };

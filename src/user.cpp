@@ -11,8 +11,6 @@
 
 #include "user.hpp"
 
-using namespace std;
-
 User::User(const string &nick) :
 	_nick(nick) {
 }
@@ -20,9 +18,9 @@ User::User(const string &nick) :
 User::~User() {
 }
 
-shared_ptr<User> User::create(const string &nick) {
+userPtr User::create(const string &nick) {
 
-	return shared_ptr<User>(new User(nick));
+	return userPtr(new User(nick));
 
 }
 
