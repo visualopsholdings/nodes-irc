@@ -40,6 +40,9 @@ public:
   
   Session(Server *server, boost::asio::io_service& io_service);
 
+  // thread safe
+  void set_user_id(const string &id);
+  void send_banner();
   void send(Prefixable *prefix, const string &cmd, const list<string> &args);
   
 private:
@@ -47,27 +50,30 @@ private:
   
   Server *_server;
   boost::asio::ip::tcp::socket _socket;
+  mutex _socket_mutex;  
   boost::asio::streambuf _buffer;
   map<string, cmdHandler> _commands;
   userPtr _user;
+  mutex _user_mutex;  
   
   void start();
-
+  void read();
   void handle_read(const boost::system::error_code& error,
       const size_t bytes_transferred);
-  void handle_write(const boost::system::error_code& error);
-
   void write(const string &line);
-  void login(const string &username);
-  
+  void handle_write(const boost::system::error_code& error);
   void handle_request();
   
   // command handlers
+  void capCmd(const vector<string> &args);
   void nickCmd(const vector<string> &args);
   void userCmd(const vector<string> &args);
   void listCmd(const vector<string> &args);
   void joinCmd(const vector<string> &args);
   void msgCmd(const vector<string> &args);
+  void whoCmd(const vector<string> &args);
+  void modeCmd(const vector<string> &args);
+  void quitCmd(const vector<string> &args);
 
 };
 

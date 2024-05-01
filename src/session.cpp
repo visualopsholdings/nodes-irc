@@ -16,6 +16,7 @@
 #include "channel.hpp"
 #include "user.hpp"
 #include "vecutil.hpp"
+#include "zmqclient.hpp"
 
 #include <iostream>
 #include <boost/log/trivial.hpp>
@@ -25,21 +26,22 @@
 Session::Session(Server *server, boost::asio::io_service& io_service) :
 	_server(server), _socket(io_service) {
 
+  _commands["CAP"] = bind( &Session::capCmd, this, placeholders::_1 );
   _commands["NICK"] = bind( &Session::nickCmd, this, placeholders::_1 );
   _commands["USER"] = bind( &Session::userCmd, this, placeholders::_1 );
   _commands["LIST"] = bind( &Session::listCmd, this, placeholders::_1 );
   _commands["JOIN"] = bind( &Session::joinCmd, this, placeholders::_1 );
   _commands["PRIVMSG"] = bind( &Session::msgCmd, this, placeholders::_1 );
+  _commands["WHO"] = bind( &Session::whoCmd, this, placeholders::_1 );
+  _commands["MODE"] = bind( &Session::modeCmd, this, placeholders::_1 );
+  _commands["QUIT"] = bind( &Session::quitCmd, this, placeholders::_1 );
 
 }
 	
-void Session::start(void) {
+void Session::start() {
 
 	BOOST_LOG_TRIVIAL(info) << "session started ";
-	boost::asio::async_read_until(_socket, _buffer, "\r\n",
-			bind(&Session::handle_read, shared_from_this(),
-					boost::asio::placeholders::error,
-					boost::asio::placeholders::bytes_transferred));
+	read();
 
 }
 
@@ -52,11 +54,7 @@ void Session::handle_read(const boost::system::error_code& error,
   }
   
   handle_request();
-
-  boost::asio::async_read_until(_socket, _buffer, "\r\n",
-      bind(&Session::handle_read, shared_from_this(),
-          boost::asio::placeholders::error,
-          boost::asio::placeholders::bytes_transferred));
+	read();
 
 }
 
@@ -68,6 +66,15 @@ void Session::handle_write(const boost::system::error_code& error) {
 	
 }
 
+void Session::read() {
+
+	boost::asio::async_read_until(_socket, _buffer, "\r\n",
+			bind(&Session::handle_read, shared_from_this(),
+					boost::asio::placeholders::error,
+					boost::asio::placeholders::bytes_transferred));
+
+}
+
 void Session::write(const string &line) {
 
 	boost::asio::async_write(_socket, boost::asio::buffer(line + "\r\n"),
@@ -77,6 +84,9 @@ void Session::write(const string &line) {
 }
 
 void Session::send(Prefixable *prefix, const string &cmd, const list<string> &args) {
+  
+  // thread safe.
+  lock_guard<mutex> guard(_socket_mutex);
   
   write(prefix->prefix() + " " + cmd + " " + boost::algorithm::join(args, " "));
   
@@ -109,6 +119,27 @@ void Session::handle_request() {
   
 }
 
+void Session::set_user_id(const string &id) {
+
+  // thread safe.
+  lock_guard<mutex> guard(_user_mutex);
+  
+  _user->_id = id;
+    
+}
+
+void Session::send_banner() {
+
+  // thread safe.
+  lock_guard<mutex> guard(_user_mutex);
+  
+  send(_server, "001", { _user->_nick, ":Welcome" });
+  send(_server, "002", { _user->_nick, ":Your host is localhost running version 1" });
+  send(_server, "004", { _user->_nick, "ZMQIRC", "1" });
+  send(_server, "MODE", { _user->_nick, "+w" });
+    
+}
+
 void Session::nickCmd(const vector<string> &args) {
 
   if (args.size() < 1) {
@@ -127,8 +158,7 @@ void Session::nickCmd(const vector<string> &args) {
   BOOST_LOG_TRIVIAL(debug) << "no user yet";
   
   // this session has no user yet.
-  userPtr user = find_in<userPtr>(_server->_users, nick,
-    [](userPtr &c) { return c->_nick; });
+  userPtr user = _server->find_user_nick(nick);
   if (user) {
     BOOST_LOG_TRIVIAL(debug) << "found user in server " << user->_nick;
     if (_server->find_session_for_nick(user->_nick)) {
@@ -143,7 +173,7 @@ void Session::nickCmd(const vector<string> &args) {
   
   // create a new user and add it to the server.
   _user = userPtr(new User(nick));
-  _server->_users.push_back(_user);
+  _server->add_user(_user);
 }
 
 void Session::userCmd(const vector<string> &args) {
@@ -160,7 +190,7 @@ void Session::userCmd(const vector<string> &args) {
   
   _user->_username = args.front();
   _user->_realname = args.back();
-  _server->login(_user->_username);
+  _server->_zmq->login(_user->_username);
 
 }
 
@@ -173,8 +203,10 @@ void Session::listCmd(const vector<string> &args) {
   }
 
   send(_server, "321", { _user->_nick, "Channel", ":Users", "Name" });
-  for (vector<channelPtr >::iterator i = _server->_channels.begin(); i != _server->_channels.end(); i++) {
-    send(_server, "322", { _user->_nick, (*i)->_name, "0" });
+  vector<string> names;
+  _server->channel_names(&names);
+  for (auto i : names) {
+    send(_server, "322", { _user->_nick, i, "0" });
   }
   send(_server, "323", {  _user->_nick, ":End of /LIST" });
 
@@ -203,7 +235,7 @@ void Session::joinCmd(const vector<string> &args) {
       send(_user.get(), "JOIN", { chan->_name, _user->_username, _user->_realname });
       send(_user.get(), "331", { _user->_nick, chan->_name, ":No topic is set." });
       // other users
-      _server->policy_users(chan->_policy);
+      _server->_zmq->policy_users(chan->_policy);
     }
     else {
 	    BOOST_LOG_TRIVIAL(error) << "channel " << name << " not found";
@@ -225,5 +257,50 @@ void Session::msgCmd(const vector<string> &args) {
     return;
   }
   
-  _server->send(_user, chan, args[1].substr(1));
+  _server->_zmq->send(_user, chan, args[1].substr(1));
+}
+
+void Session::capCmd(const vector<string> &args) {
+
+  if (args.size() < 1) {
+	  BOOST_LOG_TRIVIAL(error) << "CAP missing caps";
+	  return;
+  }
+  BOOST_LOG_TRIVIAL(info) << "CAP not used";
+  
+}
+
+void Session::whoCmd(const vector<string> &args) {
+
+  if (args.size() < 1) {
+	  BOOST_LOG_TRIVIAL(error) << "WHO missing channel";
+	  return;
+  }
+  BOOST_LOG_TRIVIAL(info) << "WHO not used";
+  
+}
+
+void Session::modeCmd(const vector<string> &args) {
+
+  if (args.size() < 1) {
+	  BOOST_LOG_TRIVIAL(error) << "MODE missing channel";
+	  return;
+  }
+  BOOST_LOG_TRIVIAL(info) << "MODE not used";
+  
+}
+
+void Session::quitCmd(const vector<string> &args) {
+
+  if (args.size() < 1) {
+	  BOOST_LOG_TRIVIAL(error) << "QUIT missing reason";
+	  return;
+  }
+	BOOST_LOG_TRIVIAL(info) << "QUIT because " << args.front();
+	if (!_user) {
+	  BOOST_LOG_TRIVIAL(warning) << "QUIT ignored because no user yet";
+	  return;
+	}
+  _server->remove_session(shared_from_this());
+  
 }

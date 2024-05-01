@@ -248,3 +248,6 @@ implementation of the proprietary "Visual Ops" server.
 ### 30 Apr 2024
 - finish off other users in the stream.
 - finish off PRIVMSG
+
+### 1 May 2024
+- Get ZMQ working in background thread to handle messages correctly.

@@ -35,8 +35,8 @@ set(BOOSTLIBS ${Boost_CHRONO_LIBRARY} ${Boost_THREAD_LIBRARY} ${Boost_PROGRAM_OP
 
 include_directories(include)
 
-add_executable(ZMQIRC src/zmqirc.cpp src/server.cpp src/session.cpp src/parser.cpp src/channel.cpp src/user.cpp)
-  target_link_libraries(ZMQIRC zmq ${BOOSTLIBS})
+add_executable(ZMQIRC src/zmqirc.cpp src/server.cpp src/zmqclient.cpp src/session.cpp src/parser.cpp src/channel.cpp src/user.cpp)
+  target_link_libraries(ZMQIRC ${LIBS} ${BOOSTLIBS})
 
 add_executable(TestParser test/testparser.cpp src/parser.cpp)
   target_link_libraries(TestParser ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})

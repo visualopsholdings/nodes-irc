@@ -19,7 +19,11 @@ User::User(const string &id, const string &nick, const string &realname) :
   _id(id), _nick(nick), _realname(realname) {
 }
 
-const string User::prefix() {
+string User::id() {
+  return _id;
+}
+
+string User::prefix() {
   // TBD: construct this properly!!!!
   return ":" + _nick + "!" + _username + "@" + _nick;
 }

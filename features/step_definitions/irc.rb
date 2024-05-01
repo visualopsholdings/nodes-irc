@@ -12,7 +12,7 @@ class IRC
             if result.start_with? ":localhost 433"
                puts "user already on channel"
             else
-               puts "got " + line
+#               puts "got " + line
             end
          end
       end

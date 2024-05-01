@@ -17,6 +17,7 @@
 #include <string>
 #include <vector>
 #include <list>
+#include <mutex>
 
 using namespace std;
 
@@ -34,13 +35,19 @@ public:
 
   Channel(Server *server, const string &name, const string &id, const string &policy);
   
-  void join(userPtr user);
+  string id();
+  string policy();
+
   userPtr find_user_id(const string &id);
   void send(Prefixable *prefix, const string &cmd, const list<string> &args);
+
+  // thread safe
+  void join(userPtr user);
+  void send_message(userPtr user, const string &text);
   
 private:
-   friend class Server;
-   friend class Session;
+  friend class Server;
+  friend class Session;
   
   Server *_server;
   
@@ -49,7 +56,7 @@ private:
   string _policy;
 
   vector<userPtr > _users;
-  
+  mutex _users_mutex;  
   
 };
 

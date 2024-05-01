@@ -20,7 +20,7 @@ class Prefixable {
 
 public:
 
-  virtual const std::string prefix() = 0;
+  virtual std::string prefix() = 0;
   
 };
 

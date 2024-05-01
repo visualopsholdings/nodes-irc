@@ -18,18 +18,18 @@
 
 #include <zmq.hpp>
 #include <boost/asio.hpp>
-#include <nlohmann/json.hpp>
 
-using json = nlohmann::json;
 using namespace std;
 
 class Session;
 class Channel;
 class User;
+class ZMQClient;
 
 typedef shared_ptr<User> userPtr;
 typedef shared_ptr<Channel> channelPtr;
 typedef shared_ptr<Session> sessionPtr;
+typedef shared_ptr<ZMQClient> zmqClientPtr;
 
 class Server : public Prefixable {
 
@@ -39,32 +39,38 @@ public:
   
   void run();
   userPtr find_user_id(const string &id);
+  userPtr find_user_nick(const string &nick);
   sessionPtr find_session_for_nick(const string &nick);
-  void send(userPtr user, channelPtr channel, const string &text);
+  sessionPtr find_session_for_username(const string &username);
+  channelPtr find_channel_policy(const string &policy);
+  channelPtr find_channel_stream(const string &stream);
+  void channel_names(vector<string> *names);
+  channelPtr find_channel(const string &name);
+  void remove_session(sessionPtr session);
   
+  // thread safe
+  void create_channel(const string &name, const string &id, const string &policy);
+  void add_user(userPtr user);
+    
   // Prefixable
-  const string prefix();
+  string prefix();
+
+  zmqClientPtr _zmq;
 
 private:
-  friend class Session;
-  
+
   boost::asio::io_service _io_service;
   boost::asio::ip::tcp::acceptor _acceptor;
-  zmq::socket_t *_sub;
-  zmq::socket_t *_req;
   vector<sessionPtr > _sessions;
   vector<channelPtr > _channels;
+  mutex _channels_mutex;
   vector<userPtr > _users;
+  mutex _users_mutex;
    
   void start_accept();
   void handle_accept(sessionPtr session,
       const boost::system::error_code& error);
-  optional<json::iterator> get(json *json, const string &name);
-  void login(const string &username);
-  void policy_users(const string &policy);
-  channelPtr find_channel(const string &name);
-  void create_channel(const string &name, const string &id, const string &policy);
-    
+  
 };
 
 #endif // H_server

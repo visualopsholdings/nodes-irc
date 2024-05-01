@@ -20,7 +20,7 @@ var self = this;
 repSocket.on('message', (msg) => {
 
   var m = JSON.parse(msg);
-  logger.log(m);
+  logger.log("zmqchat got", m);
   
   if (m.type == "login") {
     if (m.username == "tracy") {
