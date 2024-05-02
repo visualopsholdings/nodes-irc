@@ -24,11 +24,15 @@ int main(int argc, char *argv[]) {
 
   int subPort;
   int reqPort;
+  string ip;
+  int port;
 
   po::options_description desc("Allowed options");
   desc.add_options()
     ("subPort", po::value<int>(&subPort)->default_value(8093), "ZMQ Sub port.")
     ("reqPort", po::value<int>(&reqPort)->default_value(8094), "ZMQ Req port.")
+    ("ip", po::value<string>(&ip)->default_value("127.0.0.1"), "IP address.")
+    ("port", po::value<int>(&port)->default_value(6667), "IRC port.")
     ("help", "produce help message")
     ;
   po::positional_options_description p;
@@ -55,7 +59,7 @@ int main(int argc, char *argv[]) {
   req.connect("tcp://127.0.0.1:" + to_string(reqPort));
   cout << "Connect to ZMQ as Local REQ on " << reqPort << endl;
   
-  Server server(&sub, &req);
+  Server server(&sub, &req, ip, to_string(port));
   server.run();
 
 }

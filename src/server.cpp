@@ -22,14 +22,14 @@
 #include <boost/asio.hpp>
 #include <boost/log/trivial.hpp>
 
-Server::Server(zmq::socket_t *sub, zmq::socket_t *req) :
+Server::Server(zmq::socket_t *sub, zmq::socket_t *req, const string &ip, const string &port) :
 		_acceptor(_io_service) {
 		
 	_zmq = zmqClientPtr(new ZMQClient(this, sub, req));
   _zmq->run();
 	
 	boost::asio::ip::tcp::resolver resolver(_io_service);
-	boost::asio::ip::tcp::resolver::query query("localhost", "6667");
+	boost::asio::ip::tcp::resolver::query query(ip, port);
 	boost::asio::ip::tcp::endpoint endpoint = *resolver.resolve(query);
 	_acceptor.open(endpoint.protocol());
 	_acceptor.set_option(boost::asio::ip::tcp::acceptor::reuse_address(true));
