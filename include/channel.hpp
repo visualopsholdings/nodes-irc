@@ -18,6 +18,7 @@
 #include <vector>
 #include <list>
 #include <mutex>
+#include <memory>
 
 using namespace std;
 
