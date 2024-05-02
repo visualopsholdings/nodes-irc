@@ -29,7 +29,7 @@ Server::Server(zmq::socket_t *sub, zmq::socket_t *req) :
   _zmq->run();
 	
 	boost::asio::ip::tcp::resolver resolver(_io_service);
-	boost::asio::ip::tcp::resolver::query query("127.0.0.1", "6667");
+	boost::asio::ip::tcp::resolver::query query("localhost", "6667");
 	boost::asio::ip::tcp::endpoint endpoint = *resolver.resolve(query);
 	_acceptor.open(endpoint.protocol());
 	_acceptor.set_option(boost::asio::ip::tcp::acceptor::reuse_address(true));
