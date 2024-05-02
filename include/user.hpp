@@ -17,6 +17,7 @@
 #include "prefixable.hpp"
 
 #include <string>
+#include <memory>
 
 using namespace std;
 
