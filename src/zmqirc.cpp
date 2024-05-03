@@ -15,6 +15,7 @@
 
 #include <iostream>
 #include <boost/program_options.hpp> 
+#include <boost/log/trivial.hpp>
 
 namespace po = boost::program_options;
 
@@ -53,11 +54,11 @@ int main(int argc, char *argv[]) {
   zmq::socket_t sub(context, ZMQ_SUB);
   sub.connect("tcp://127.0.0.1:" + to_string(subPort));
   sub.setsockopt(ZMQ_SUBSCRIBE, "");
-  cout << "Connect to ZMQ as Local SUB on " << subPort << endl;
+	BOOST_LOG_TRIVIAL(info) << "Connect to ZMQ as Local SUB on " << subPort;
 
   zmq::socket_t req(context, ZMQ_REQ);
   req.connect("tcp://127.0.0.1:" + to_string(reqPort));
-  cout << "Connect to ZMQ as Local REQ on " << reqPort << endl;
+	BOOST_LOG_TRIVIAL(info) << "Connect to ZMQ as Local REQ on " << reqPort << endl;
   
   Server server(&sub, &req, ip, to_string(port));
   server.run();
