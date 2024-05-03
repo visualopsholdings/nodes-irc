@@ -28,6 +28,7 @@ Server::Server(zmq::socket_t *sub, zmq::socket_t *req, const string &ip, const s
 	_zmq = zmqClientPtr(new ZMQClient(this, sub, req));
   _zmq->run();
 	
+	BOOST_LOG_TRIVIAL(info) << "resolving " << ip << ":" << port;
 	boost::asio::ip::tcp::resolver resolver(_io_service);
 	boost::asio::ip::tcp::resolver::query query(ip, port);
 	boost::asio::ip::tcp::endpoint endpoint = *resolver.resolve(query);
@@ -47,6 +48,8 @@ void Server::run() {
 }
 
 void Server::start_accept() {
+
+	BOOST_LOG_TRIVIAL(info) << "accepting.";
 
   sessionPtr session = sessionPtr(new Session(this, _io_service));
 

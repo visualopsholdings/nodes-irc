@@ -58,7 +58,7 @@ int main(int argc, char *argv[]) {
 
   zmq::socket_t req(context, ZMQ_REQ);
   req.connect("tcp://127.0.0.1:" + to_string(reqPort));
-	BOOST_LOG_TRIVIAL(info) << "Connect to ZMQ as Local REQ on " << reqPort << endl;
+	BOOST_LOG_TRIVIAL(info) << "Connect to ZMQ as Local REQ on " << reqPort;
   
   Server server(&sub, &req, ip, to_string(port));
   server.run();
