@@ -32,7 +32,6 @@ int main(int argc, char *argv[]) {
   desc.add_options()
     ("subPort", po::value<int>(&subPort)->default_value(8093), "ZMQ Sub port.")
     ("reqPort", po::value<int>(&reqPort)->default_value(8094), "ZMQ Req port.")
-    ("ip", po::value<string>(&ip)->default_value("127.0.0.1"), "IP address.")
     ("port", po::value<int>(&port)->default_value(6667), "IRC port.")
     ("help", "produce help message")
     ;
@@ -60,7 +59,7 @@ int main(int argc, char *argv[]) {
   req.connect("tcp://127.0.0.1:" + to_string(reqPort));
 	BOOST_LOG_TRIVIAL(info) << "Connect to ZMQ as Local REQ on " << reqPort;
   
-  Server server(&sub, &req, ip, port);
+  Server server(&sub, &req, port);
   server.run();
 
 }
