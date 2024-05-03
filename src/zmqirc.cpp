@@ -60,7 +60,7 @@ int main(int argc, char *argv[]) {
   req.connect("tcp://127.0.0.1:" + to_string(reqPort));
 	BOOST_LOG_TRIVIAL(info) << "Connect to ZMQ as Local REQ on " << reqPort;
   
-  Server server(&sub, &req, ip, to_string(port));
+  Server server(&sub, &req, ip, port);
   server.run();
 
 }
