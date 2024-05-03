@@ -32,7 +32,8 @@ Server::Server(zmq::socket_t *sub, zmq::socket_t *req, const string &ip, const s
 	boost::asio::ip::tcp::resolver resolver(_io_service);
 	boost::asio::ip::tcp::resolver::query query(ip, port);
 	boost::asio::ip::tcp::endpoint endpoint = *resolver.resolve(query);
-	_acceptor.open(endpoint.protocol());
+	BOOST_LOG_TRIVIAL(info) << "endpoint " << endpoint;
+	_acceptor.open(boost::asio::ip::tcp::v4());
 	_acceptor.set_option(boost::asio::ip::tcp::acceptor::reuse_address(true));
 	_acceptor.bind(endpoint);
 	_acceptor.listen();
