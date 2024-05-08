@@ -2,11 +2,17 @@
 # 
 # Build the project
 
-if [ ! -d "build" ];
+if [ ! -d "zmqirc" ];
 then
-  mkdir build
+  echo "zmqirc project missing."
+  exit 1
 fi
-pushd build
+
+if [ ! -d "zmqirc/build" ];
+then
+  mkdir zmqirc/build
+fi
+pushd zmqirc/build
 cmake ..
 make
 make test
