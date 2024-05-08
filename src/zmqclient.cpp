@@ -59,7 +59,11 @@ void ZMQClient::receive() {
         BOOST_LOG_TRIVIAL(debug) << "got _req message";
         zmq::message_t reply;
         try {
+#if CPPZMQ_VERSION == ZMQ_MAKE_VERSION(4, 3, 1)
+          _req->recv(&reply);
+#else
           auto res = _req->recv(reply, zmq::recv_flags::none);
+#endif
           handle_reply(reply, &_reqmessages);
         }
         catch (...) {
@@ -70,7 +74,11 @@ void ZMQClient::receive() {
         BOOST_LOG_TRIVIAL(debug) << "got _sub message";
         zmq::message_t reply;
         try {
-          auto res = _sub->recv(reply, zmq::recv_flags::none);
+#if CPPZMQ_VERSION == ZMQ_MAKE_VERSION(4, 3, 1)
+          _req->recv(&reply);
+#else
+          auto res = _req->recv(reply, zmq::recv_flags::none);
+#endif
           handle_reply(reply, &_submessages);
         }
         catch (...) {
@@ -109,7 +117,11 @@ bool ZMQClient::trySend(const string &m) {
 	zmq::message_t msg(m.length());
 	memcpy(msg.data(), m.c_str(), m.length());
   try {
+#if CPPZMQ_VERSION == ZMQ_MAKE_VERSION(4, 3, 1)
+    _req->send(msg);
+#else
     _req->send(msg, zmq::send_flags::none);
+#endif
     return true;
   }
   catch (...) {

@@ -8,8 +8,8 @@ ServiceManager.define_service 'nodes' do |s|
 end
 
 ServiceManager.define_service 'irc' do |s|
-   s.start_cmd = 'cd nodejs; ./local-irc.sh'
-#   s.start_cmd = 'build/ZMQIRC'
+#   s.start_cmd = 'cd nodejs; ./local-irc.sh'
+   s.start_cmd = 'build/ZMQIRC --subPort=8093 --reqPort=8094'
    s.loaded_cue = /Local REQ/
    s.cwd = Dir.pwd
    s.pid_file = 'irc.pid'

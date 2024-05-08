@@ -52,10 +52,12 @@ int main(int argc, char *argv[]) {
   zmq::context_t context (1);
   zmq::socket_t sub(context, ZMQ_SUB);
   sub.connect("tcp://127.0.0.1:" + to_string(subPort));
+#if CPPZMQ_VERSION == ZMQ_MAKE_VERSION(4, 3, 1)  
+  sub.setsockopt(ZMQ_SUBSCRIBE, "");
+#else
   sub.set(zmq::sockopt::subscribe, "");
-//  sub.setsockopt(ZMQ_SUBSCRIBE, "");
 	BOOST_LOG_TRIVIAL(info) << "Connect to ZMQ as Local SUB on " << subPort;
-
+#endif
   zmq::socket_t req(context, ZMQ_REQ);
   req.connect("tcp://127.0.0.1:" + to_string(reqPort));
 	BOOST_LOG_TRIVIAL(info) << "Connect to ZMQ as Local REQ on " << reqPort;
