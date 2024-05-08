@@ -12,7 +12,7 @@
 cmake_minimum_required(VERSION 3.5)
 
 project (zmqirc)
-  find_package(Boost COMPONENTS program_options filesystem unit_test_framework chrono thread log_setup log REQUIRED)
+  find_package(Boost 1.85.0 COMPONENTS program_options filesystem unit_test_framework chrono thread log_setup log REQUIRED)
   find_package(cppzmq)
   add_definitions(-DBOOST_ALL_DYN_LINK) 
   enable_testing()

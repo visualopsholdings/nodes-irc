@@ -231,11 +231,11 @@
 				AAAAEsAAABwBAAAAAAAAENAAAAQAAAAAAAAA
 				</data>
 				<key>FileURL</key>
-				<string>file:///Users/paul/Dev/zmqirc/node/</string>
+				<string>file:///Users/paul/Dev/zmqirc/nodejs/</string>
 				<key>HasSecurityScope</key>
 				<true/>
 				<key>RelativePath</key>
-				<string>./node</string>
+				<string>./nodejs</string>
 				<key>TypeID</key>
 				<string>_CFileLocator</string>
 				<key>Version</key>

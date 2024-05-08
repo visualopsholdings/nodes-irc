@@ -182,7 +182,8 @@ sudo apt-get -y install g++ gcc make cmake
 
 The build the prequesites we need:
 
-For convenience.
+For convenience, do all these inside a folder you can remove, they take a lot of disk space
+but aren't used once instsalled.
 
 ```
 mkdir working
@@ -203,17 +204,27 @@ as root user:
 ./b2 install threading=multi link=shared
 ```
 
-ZMQ Stuff.
+ZMQ and JSON Stuff.
 
 ```
-git clone https://github.com/zeromq/libzmq.git
-cd libzmq
-mkdir build
-cd build
-cmake ..
+wget https://download.libsodium.org/libsodium/releases/libsodium-1.0.19-stable.tar.gz  
+tar xzf libsodium-1.0.19-stable.tar.gz
+cd libsodium-stable
+./configure
+make 
+sudo make install
+sudo ldconfig
+cd ..
+
+wget https://github.com/zeromq/libzmq/releases/download/v4.3.5/zeromq-4.3.5.tar.gz
+tar xzf zeromq-4.3.5.tar.gz
+cd zeromq-4.3.5
+./configure
 make
 sudo make install
-cd ../..
+sudo ldconfig
+cd ..
+cd ..
 
 git clone https://github.com/zeromq/cppzmq
 cd cppzmq
