@@ -247,12 +247,6 @@ On reboot, Visual ops will look for the start script file and run it up.
 Make sure that port 6667 is punched through yoru firewall and you can connect to your Visual Ops
 server and chat that way.
 
-This is a modified version of:
-
-## Current development focus
-
-### Get C++ working for all end to end tests.
-
 ## License
 
 ZMQIRC is licensed under [version 3 of the GNU General Public License] contained in LICENSE.
@@ -278,7 +272,6 @@ ZMQIRC is licensed under [version 3 of the GNU General Public License] contained
 ### End to end testing
 
 - https://cucumber.io/
-
 
 ### JSON for C++
 
