@@ -63,8 +63,8 @@ userPtr Channel::find_user_id(const string &id) {
 
 void Channel::send(Prefixable *prefix, const string &cmd, const list<string> &args) {
 
-  for (vector<userPtr >::iterator i=_users.begin(); i != _users.end(); i++) {
-    sessionPtr session = _server->find_session_for_nick((*i)->_nick);
+  for (auto i: _users) {
+    sessionPtr session = _server->find_session_for_nick(i->_nick);
     if (session) {
       session->send(prefix, cmd, args);
     }

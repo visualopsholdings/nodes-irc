@@ -196,10 +196,10 @@ void ZMQClient::userMsg(json *doc) {
   optional<json::iterator> streams = get(doc, "streams");
   if (streams) {
     if ((**streams).is_array()) {
-      for (json::iterator i = (**streams).begin(); i != (**streams).end(); i++) {
-        optional<json::iterator> id = get(&(*i), "id");
-        optional<json::iterator> name = get(&(*i), "name");
-        optional<json::iterator> policy = get(&(*i), "policy");
+      for (auto i: (**streams)) {
+        optional<json::iterator> id = get(&i, "id");
+        optional<json::iterator> name = get(&i, "name");
+        optional<json::iterator> policy = get(&i, "policy");
         if (id && name && policy) {
           _server->create_channel(**name, **id, **policy);
         }
@@ -232,10 +232,10 @@ void ZMQClient::policyUsersMsg(json *doc) {
   optional<json::iterator> users = get(doc, "users");
   if (users) {
     if ((**users).is_array()) {
-      for (json::iterator i = (**users).begin(); i != (**users).end(); i++) {
-        optional<json::iterator> id = get(&(*i), "id");
-        optional<json::iterator> name = get(&(*i), "name");
-        optional<json::iterator> fullname = get(&(*i), "fullname");
+      for (auto i: (**users)) {
+        optional<json::iterator> id = get(&i, "id");
+        optional<json::iterator> name = get(&i, "name");
+        optional<json::iterator> fullname = get(&i, "fullname");
         if (id && name && fullname) {
           userPtr user = channel->find_user_id(**id);
           if (!user) {

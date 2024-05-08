@@ -161,8 +161,8 @@ void Server::channel_names(vector<string> *names) {
   // thread safe.
   lock_guard<mutex> guard(_channels_mutex);
   
-  for (vector<channelPtr >::iterator i = _channels.begin(); i != _channels.end(); i++) {
-    names->push_back((*i)->_name);
+  for (auto i: _channels) {
+    names->push_back(i->_name);
   }
   
 }
