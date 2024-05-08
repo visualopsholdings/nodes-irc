@@ -58,7 +58,7 @@ void ZMQClient::receive() {
         BOOST_LOG_TRIVIAL(debug) << "got _req message";
         zmq::message_t reply;
         try {
-          _req->recv(reply, zmq::send_flags::none);
+          _req->recv(reply, zmq::recv_flags::none);
           handle_reply(reply, &_reqmessages);
         }
         catch (...) {
@@ -69,7 +69,7 @@ void ZMQClient::receive() {
         BOOST_LOG_TRIVIAL(debug) << "got _sub message";
         zmq::message_t reply;
         try {
-          _sub->recv(reply, zmq::send_flags::none);
+          _sub->recv(reply, zmq::recv_flags::none);
           handle_reply(reply, &_submessages);
         }
         catch (...) {
