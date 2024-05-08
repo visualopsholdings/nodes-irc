@@ -244,7 +244,7 @@ $ zmqirc/scripts/start.sh
 
 On reboot, Visual ops will look for the start script file and run it up.
 
-Make sure that port 6667 is punched through yoru firewall and you can connect to your Visual Ops
+Make sure that port 6667 is punched through your firewall and you can connect to your Visual Ops
 server and chat that way.
 
 ## License
