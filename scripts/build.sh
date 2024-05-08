@@ -2,7 +2,7 @@
 # 
 # Build the project
 
-if [ ! -d build];
+if [ ! -d "build" ];
 then
   mkdir build
 fi
