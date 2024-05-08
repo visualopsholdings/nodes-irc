@@ -6,7 +6,8 @@ if [ ! -d build];
 then
   mkdir build
 fi
-cd build
+pushd build
 cmake ..
 make
 make test
+popd
