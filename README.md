@@ -8,29 +8,6 @@ This is a companion project to:
 
 https://github.com/visualopsholdings/zmqchat
 
-## Reference version using nodejs
-
-A reference version of what we are aiming for exists in "nodejs".
-
-To use it with Visual Ops:
-
-```
-$ git clone https://github.com/visualopsholdings/zmqirc.git
-$ cd zmqirc/nodejs
-$ npm install
-$ forever start --killSignal=SIGINT irc.js 3000
-```
-
-On reboot, Visual ops will look for the irc.js file and correctly start it up so it really
-just needs to exist in "zmqirc/nodejs".
-
-Make sure that port 6667 is punched through yoru firewall and you can connect to your Visual Ops
-server and chat that way.
-
-This is a modified version of:
-
-https://github.com/song940/node-irc
-
 ## Protocol
 
 The protocol used to talk to ZMQChat is sending stringified JSON over 2 ZMQ message queues.
@@ -142,33 +119,7 @@ This is received on the REQ socket when a a bad request has happened
 }
 ```
 
-## Testing
-
-The end to end tests use cucumber (Ruby), to get that going:
-
-```
-$ bundle install
-$ bundle exec cucumber
-```
-
-This will run up a dummy "ZMQChat" with some dummy data and run end to end tests
-against the IRC client.
-
-You can find the actual tests in "features".
-
-To run a single test:
-
-```
-bundle exec cucumber -n "More than one user can connect and login"
-```
-
-To turn on logging for the old NodeJS while you run the tests:
-
-```
-export NODE_DEBUG=ircs:*
-```
-
-## C++ Development
+## Building
 
 The development process for all of this code used a normal Linux environment with the BOOST
 libraries and a C++ compiler.
@@ -180,7 +131,7 @@ sudo apt-get update
 sudo apt-get -y install g++ gcc make cmake
 ```
 
-The build the prequesites we need:
+### Prerequisites
 
 For convenience, do all these inside a folder you can remove, they take a lot of disk space
 but aren't used once instsalled.
@@ -257,11 +208,46 @@ make
 make test
 ```
 
-To run all the tests. And show failures.
+To run all the unit tests. And show failures.
 
 ```
 make && make test || cat /Users/paul/Dev/zmqirc/test/build/Testing/Temporary/LastTest.log
 ```
+
+## Testing
+
+The end to end tests use cucumber (Ruby), to get that going:
+
+```
+$ bundle install
+$ bundle exec cucumber
+```
+
+This will run up a dummy "ZMQChat" with some dummy data and run end to end tests
+against the IRC client.
+
+You can find the actual tests in "features".
+
+To run a single test:
+
+```
+bundle exec cucumber -n "More than one user can connect and login"
+```
+
+## Installation in Visual Ops
+
+```
+$ git clone https://github.com/visualopsholdings/zmqirc.git
+$ zmqirc/scripts/build.sh
+$ zmqirc/scripts/start.sh
+```
+
+On reboot, Visual ops will look for the start script file and run it up.
+
+Make sure that port 6667 is punched through yoru firewall and you can connect to your Visual Ops
+server and chat that way.
+
+This is a modified version of:
 
 ## Current development focus
 
@@ -328,3 +314,7 @@ implementation of the proprietary "Visual Ops" server.
 
 ### 1 May 2024
 - Get ZMQ working in background thread to handle messages correctly.
+
+### 8 May 2024
+- FInish initial C++ implementation running in Visual Ops
+
