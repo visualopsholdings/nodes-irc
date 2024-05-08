@@ -42,7 +42,7 @@ int main(int argc, char *argv[]) {
           options(desc).positional(p).run(), vm);
   po::notify(vm);   
 
-  cout << "ZMQIRC 0.1, 16-Apr-2024." << endl;
+  cout << "ZMQIRC 1.0, 8-May-2024." << endl;
 
   if (vm.count("help")) {
     cout << desc << endl;
