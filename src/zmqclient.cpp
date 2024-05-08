@@ -69,7 +69,7 @@ void ZMQClient::receive() {
         BOOST_LOG_TRIVIAL(debug) << "got _sub message";
          zmq::message_t reply;
         try {
-          _sub->recv(&reply);
+          _sub->recv(&reply, zmq::send_flags::none);
           handle_reply(reply, &_submessages);
         }
         catch (...) {
@@ -108,7 +108,7 @@ bool ZMQClient::trySend(const string &m) {
 	zmq::message_t msg(m.length());
 	memcpy(msg.data(), m.c_str(), m.length());
   try {
-    _req->send(msg);
+    _req->send(msg, zmq::send_flags::none);
     return true;
   }
   catch (...) {
