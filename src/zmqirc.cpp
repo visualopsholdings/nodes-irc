@@ -30,8 +30,8 @@ int main(int argc, char *argv[]) {
 
   po::options_description desc("Allowed options");
   desc.add_options()
-    ("subPort", po::value<int>(&subPort)->default_value(8093), "ZMQ Sub port.")
-    ("reqPort", po::value<int>(&reqPort)->default_value(8094), "ZMQ Req port.")
+    ("subPort", po::value<int>(&subPort)->default_value(3012), "ZMQ Sub port.")
+    ("reqPort", po::value<int>(&reqPort)->default_value(3013), "ZMQ Req port.")
     ("port", po::value<int>(&port)->default_value(6667), "IRC port.")
     ("help", "produce help message")
     ;
