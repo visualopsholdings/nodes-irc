@@ -244,8 +244,12 @@ $ zmqirc/scripts/start.sh
 
 On reboot, Visual ops will look for the start script file and run it up.
 
-Make sure that port 6667 is punched through your firewall and you can connect to your Visual Ops
+Make sure that port 6667 is punched through yoiur firewall and you can connect to your Visual Ops
 server and chat that way.
+
+## Current development focus
+
+### Ditch nodejs altogether. It's used for the test version of zmqchat in end to end testing.
 
 ## License
 
@@ -272,6 +276,7 @@ ZMQIRC is licensed under [version 3 of the GNU General Public License] contained
 ### End to end testing
 
 - https://cucumber.io/
+
 
 ### JSON for C++
 
