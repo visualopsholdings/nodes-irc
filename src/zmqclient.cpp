@@ -68,7 +68,6 @@ void ZMQClient::receive() {
         }
         catch (zmq::error_t &e) {
           BOOST_LOG_TRIVIAL(warning) << "got exc with _req recv" << e.what() << "(" << e.num() << ")";
-//	        this_thread::sleep_for(chrono::milliseconds(20));
         }
       }
       if (items[1].revents & ZMQ_POLLIN) {
@@ -76,15 +75,14 @@ void ZMQClient::receive() {
         zmq::message_t reply;
         try {
 #if CPPZMQ_VERSION == ZMQ_MAKE_VERSION(4, 3, 1)
-          _req->recv(&reply);
+          _sub->recv(&reply);
 #else
-          auto res = _req->recv(reply, zmq::recv_flags::none);
+          auto res = _sub->recv(reply, zmq::recv_flags::none);
 #endif
           handle_reply(reply, &_submessages);
         }
         catch (zmq::error_t &e) {
           BOOST_LOG_TRIVIAL(warning) << "got exc with _sub recv " << e.what() << "(" << e.num() << ")";
-//	        this_thread::sleep_for(chrono::milliseconds(20));
         }
       }
     }
