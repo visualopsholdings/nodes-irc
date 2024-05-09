@@ -48,7 +48,7 @@ void ZMQClient::receive() {
         { *_req, 0, ZMQ_POLLIN, 0 },
         { *_sub, 0, ZMQ_POLLIN, 0 }
     };
-    const std::chrono::milliseconds timeout{100};
+    const std::chrono::milliseconds timeout{500};
     while (1) {
     
 //      BOOST_LOG_TRIVIAL(debug) << "polling for messages";
@@ -68,6 +68,7 @@ void ZMQClient::receive() {
         }
         catch (...) {
           BOOST_LOG_TRIVIAL(warning) << "got exc with _req recv";
+	        this_thread::sleep_for(chrono::milliseconds(20));
         }
       }
       if (items[1].revents & ZMQ_POLLIN) {
@@ -83,6 +84,7 @@ void ZMQClient::receive() {
         }
         catch (...) {
           BOOST_LOG_TRIVIAL(warning) << "got exc with _sub recv";
+	        this_thread::sleep_for(chrono::milliseconds(20));
         }
       }
     }
