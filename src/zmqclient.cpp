@@ -67,7 +67,7 @@ void ZMQClient::receive() {
           handle_reply(reply, &_reqmessages);
         }
         catch (zmq::error_t &e) {
-          BOOST_LOG_TRIVIAL(warning) << "got exc with _req recv" << e.what();
+          BOOST_LOG_TRIVIAL(warning) << "got exc with _req recv" << e.what() << "(" << e.num() << ")";
 //	        this_thread::sleep_for(chrono::milliseconds(20));
         }
       }
@@ -83,7 +83,7 @@ void ZMQClient::receive() {
           handle_reply(reply, &_submessages);
         }
         catch (zmq::error_t &e) {
-          BOOST_LOG_TRIVIAL(warning) << "got exc with _sub recv " << e.what();
+          BOOST_LOG_TRIVIAL(warning) << "got exc with _sub recv " << e.what() << "(" << e.num() << ")";
 //	        this_thread::sleep_for(chrono::milliseconds(20));
         }
       }
