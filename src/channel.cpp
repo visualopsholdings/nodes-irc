@@ -50,7 +50,7 @@ void Channel::send_message(userPtr user, const string &text) {
   // thread safe.
   lock_guard<mutex> guard(_users_mutex);
   
-  send(user.get(), "PRIVMSG", { _name, text });
+  send(user.get(), "PRIVMSG", { _name, ":" + text });
   
 }
 
