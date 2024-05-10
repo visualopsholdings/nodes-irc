@@ -13,6 +13,10 @@
 
 #include <iostream>
 #include <boost/log/trivial.hpp>
+#include <boost/log/expressions.hpp>
+#include <boost/log/support/date_time.hpp>
+#include <boost/log/utility/setup/console.hpp>
+#include <boost/log/utility/setup/common_attributes.hpp>
 #include <zmq.hpp>
 #include <nlohmann/json.hpp>
 #include <vector>
@@ -33,7 +37,17 @@ int main(int argc, char *argv[]) {
   int pubPort = 3012;
   int repPort = 3013;
 
-  cout << "ZMQCHAT (Test) 0.1, 10-May-2024." << endl;
+//  boost::log::core::get()->set_filter(boost::log::trivial::severity >= boost::log::trivial::debug);
+  boost::log::core::get()->set_filter(boost::log::trivial::severity >= boost::log::trivial::info);
+  boost::log::formatter logFmt =
+         boost::log::expressions::format("%1%\t[%2%]\t%3%")
+        %  boost::log::expressions::format_date_time<boost::posix_time::ptime>("TimeStamp", "%Y-%m-%d %H:%M:%S.%f") 
+        %  boost::log::expressions::attr< boost::log::trivial::severity_level>("Severity")
+        %  boost::log::expressions::smessage;
+  boost::log::add_common_attributes();
+  boost::log::add_console_log(clog)->set_formatter(logFmt);
+
+  BOOST_LOG_TRIVIAL(info) << "ZMQCHAT (Test) 0.1, 10-May-2024.";
 
   zmq::context_t context (1);
 

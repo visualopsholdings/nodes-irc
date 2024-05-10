@@ -16,6 +16,10 @@
 #include <iostream>
 #include <boost/program_options.hpp> 
 #include <boost/log/trivial.hpp>
+#include <boost/log/expressions.hpp>
+#include <boost/log/support/date_time.hpp>
+#include <boost/log/utility/setup/console.hpp>
+#include <boost/log/utility/setup/common_attributes.hpp>
 
 namespace po = boost::program_options;
 
@@ -41,7 +45,17 @@ int main(int argc, char *argv[]) {
           options(desc).positional(p).run(), vm);
   po::notify(vm);   
 
-  cout << "ZMQIRC 1.0, 8-May-2024." << endl;
+//  boost::log::core::get()->set_filter(boost::log::trivial::severity >= boost::log::trivial::debug);
+  boost::log::core::get()->set_filter(boost::log::trivial::severity >= boost::log::trivial::info);
+  boost::log::formatter logFmt =
+         boost::log::expressions::format("%1%\t[%2%]\t%3%")
+        %  boost::log::expressions::format_date_time<boost::posix_time::ptime>("TimeStamp", "%Y-%m-%d %H:%M:%S.%f") 
+        %  boost::log::expressions::attr< boost::log::trivial::severity_level>("Severity")
+        %  boost::log::expressions::smessage;
+  boost::log::add_common_attributes();
+  boost::log::add_console_log(clog)->set_formatter(logFmt);
+
+  BOOST_LOG_TRIVIAL(info) << "ZMQIRC 1.0, 8-May-2024.";
 
   if (vm.count("help")) {
     cout << desc << endl;
