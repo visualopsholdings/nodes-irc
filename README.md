@@ -8,6 +8,19 @@ This is a companion project to:
 
 https://github.com/visualopsholdings/zmqchat
 
+Visual Ops is a proprietary (closed source) system that runs on very low end hardware
+like T4G's in AWS, or on a Raspberry Pi 4/5.
+
+This "plugin" can run on a Visual Ops server and provide simple IRC access to the server.
+
+An Open Source version of Visual Ops called "ZMQChat" is being developed, but for now at least
+this small part of the server, the IRC protocol is available to build and use.
+
+If you would like access to the Visual Ops software available as an image download after we get to know 
+you.
+
+Visit https://info.visualops.com/ for more info.
+
 ## Protocol
 
 The protocol used to talk to ZMQChat is sending stringified JSON over 2 ZMQ message queues.
