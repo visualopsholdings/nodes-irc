@@ -30,8 +30,8 @@ void send(zmq::socket_t *socket, const string &m);
 
 int main(int argc, char *argv[]) {
 
-  int pubPort = 8093;
-  int repPort = 8094;
+  int pubPort = 3012;
+  int repPort = 3013;
 
   cout << "ZMQCHAT (Test) 0.1, 10-May-2024." << endl;
 

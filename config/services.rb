@@ -8,7 +8,7 @@ ServiceManager.define_service 'nodes' do |s|
 end
 
 ServiceManager.define_service 'irc' do |s|
-   s.start_cmd = 'build/ZMQIRC --subPort=8093 --reqPort=8094'
+   s.start_cmd = 'build/ZMQIRC'
    s.loaded_cue = /Local REQ/
    s.cwd = Dir.pwd
    s.pid_file = 'irc.pid'
