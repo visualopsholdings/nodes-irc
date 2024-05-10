@@ -25,7 +25,6 @@ int main(int argc, char *argv[]) {
 
   int subPort;
   int reqPort;
-  string ip;
   int port;
 
   po::options_description desc("Allowed options");

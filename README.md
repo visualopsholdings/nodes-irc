@@ -249,7 +249,7 @@ server and chat that way.
 
 ## Current development focus
 
-### Ditch nodejs altogether. It's used for the test version of zmqchat in end to end testing.
+### Fix bugs when integrating with a real Visual Ops server
 
 ## License
 
@@ -276,7 +276,6 @@ ZMQIRC is licensed under [version 3 of the GNU General Public License] contained
 ### End to end testing
 
 - https://cucumber.io/
-
 
 ### JSON for C++
 
@@ -315,4 +314,7 @@ implementation of the proprietary "Visual Ops" server.
 
 ### 8 May 2024
 - FInish initial C++ implementation running in Visual Ops
+
+### 10 May 2024
+- Rewrite zmqchat test program in C++. Get rid of nodejs.
 
