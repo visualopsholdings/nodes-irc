@@ -16,8 +16,8 @@ This "plugin" can run on a Visual Ops server and provide simple IRC access to th
 An Open Source version of Visual Ops called "ZMQChat" is being developed, but for now at least
 this small part of the server, the IRC protocol is available to build and use.
 
-If you would like access to the Visual Ops software available as an image download after we get to know 
-you.
+If you would like access to the Visual Ops software it is available as an image download 
+after we get to know you.
 
 Visit https://info.visualops.com/ for more info.
 
