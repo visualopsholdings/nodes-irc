@@ -262,7 +262,8 @@ server and chat that way.
 
 ## Current development focus
 
-### Fix bugs when integrating with a real Visual Ops server
+### SSL
+### using the Visual Ops security token to login
 
 ## License
 
