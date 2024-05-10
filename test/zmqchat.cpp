@@ -22,7 +22,6 @@ using namespace std;
 using json = nlohmann::json;
 
 typedef function<void (json *json, zmq::socket_t *socket)> msgHandler;
-void handle_reply(const zmq::message_t &reply, map<string, msgHandler> *handlers, zmq::socket_t *socket);
 void loginMsg(json *json, zmq::socket_t *socket);
 void policyUsersMsg(json *json, zmq::socket_t *socket);
 void messageMsg(json *json, zmq::socket_t *socket);
@@ -37,6 +36,7 @@ int main(int argc, char *argv[]) {
   cout << "ZMQCHAT (Test) 0.1, 10-May-2024." << endl;
 
   zmq::context_t context (1);
+
   zmq::socket_t pub(context, ZMQ_PUB);
   pub.bind("tcp://127.0.0.1:" + to_string(pubPort));
 	BOOST_LOG_TRIVIAL(info) << "Connect to ZMQ as Local PUB on " << pubPort;
@@ -44,26 +44,24 @@ int main(int argc, char *argv[]) {
   zmq::socket_t rep(context, ZMQ_REP);
   rep.bind("tcp://127.0.0.1:" + to_string(repPort));
 	BOOST_LOG_TRIVIAL(info) << "Connect to ZMQ as Local REP on " << repPort;
-  
-  map<string, msgHandler> repmessages;
-  repmessages["login"] = bind(&loginMsg, placeholders::_1, placeholders::_2);
-  repmessages["policyusers"] = bind(&policyUsersMsg, placeholders::_1, placeholders::_2 );
-  repmessages["message"] = bind(&messageMsg, placeholders::_1, placeholders::_2);
-  map<string, msgHandler> pubmessages;
+
+  map<string, msgHandler> handlers;
+  handlers["login"] = bind(&loginMsg, placeholders::_1, placeholders::_2);
+  handlers["policyusers"] = bind(&policyUsersMsg, placeholders::_1, placeholders::_2 );
+  handlers["message"] = bind(&messageMsg, placeholders::_1, placeholders::_2);
 
   zmq::pollitem_t items [] = {
-      { rep, 0, ZMQ_POLLIN, 0 },
-      { pub, 0, ZMQ_POLLIN, 0 }
+      { rep, 0, ZMQ_POLLIN, 0 }
   };
   const std::chrono::milliseconds timeout{500};
   while (1) {
   
 //      BOOST_LOG_TRIVIAL(debug) << "polling for messages";
     zmq::message_t message;
-    zmq::poll(&items[0], 2, timeout);
+    zmq::poll(&items[0], 1, timeout);
   
     if (items[0].revents & ZMQ_POLLIN) {
-      BOOST_LOG_TRIVIAL(debug) << "got _req message";
+      BOOST_LOG_TRIVIAL(debug) << "got rep message";
       zmq::message_t reply;
       try {
 #if CPPZMQ_VERSION == ZMQ_MAKE_VERSION(4, 3, 1)
@@ -71,25 +69,27 @@ int main(int argc, char *argv[]) {
 #else
         auto res = rep.recv(reply, zmq::recv_flags::none);
 #endif
-        handle_reply(reply, &repmessages, &rep);
+        // convert to JSON
+        string r((const char *)reply.data(), reply.size());
+        json doc = json::parse(r);
+
+        BOOST_LOG_TRIVIAL(debug) << "got reply " << doc;
+
+        // switch the handler based on the message type.
+        optional<json::iterator> type = get(&doc, "type");
+        if (!type) {
+          BOOST_LOG_TRIVIAL(error) << "no type";
+          continue;
+        }
+        map<string, msgHandler>::iterator handler = handlers.find(**type);
+        if (handler == handlers.end()) {
+          BOOST_LOG_TRIVIAL(error) << "unknown reply type " << **type;
+          continue;
+        }
+        handler->second(&doc, &rep);
       }
       catch (zmq::error_t &e) {
-        BOOST_LOG_TRIVIAL(warning) << "got exc with _req recv" << e.what() << "(" << e.num() << ")";
-      }
-    }
-    if (items[1].revents & ZMQ_POLLIN) {
-      BOOST_LOG_TRIVIAL(debug) << "got _sub message";
-      zmq::message_t reply;
-      try {
-#if CPPZMQ_VERSION == ZMQ_MAKE_VERSION(4, 3, 1)
-        pub.recv(&reply);
-#else
-        auto res = pub.recv(reply, zmq::recv_flags::none);
-#endif
-        handle_reply(reply, &pubmessages, &pub);
-      }
-      catch (zmq::error_t &e) {
-        BOOST_LOG_TRIVIAL(warning) << "got exc with _sub recv " << e.what() << "(" << e.num() << ")";
+        BOOST_LOG_TRIVIAL(warning) << "got exc with rep recv" << e.what() << "(" << e.num() << ")";
       }
     }
   }
@@ -190,34 +190,12 @@ void messageMsg(json *json, zmq::socket_t *socket) {
   }
   if (**text == "hello") {
     send(socket, jobj({ jnvps("type", "message"), jnvps("text", "world"), 
-      jnvps("stream", "s1"), jnvps("policy", "p1"), jnvps("user", (string)**user == "u1" ? "u2": "u1")}));
+      jnvps("stream", "s1"), jnvps("policy", "p1"), 
+      jnvps("user", (string)**user == "u1" ? "u2": "u1")}));
       return;
   }
   BOOST_LOG_TRIVIAL(info) << "got " << **text << " from " << **user;
   send(socket, jobj({ jnvps("type", "ack") }));
-
-}
-
-void handle_reply(const zmq::message_t &reply, map<string, msgHandler> *handlers, zmq::socket_t *socket) {
-
-  // convert to JSON
-  string r((const char *)reply.data(), reply.size());
-  json doc = json::parse(r);
-
-  BOOST_LOG_TRIVIAL(debug) << "got reply " << doc;
-
-  // switch the handler based on the message type.
-  optional<json::iterator> type = get(&doc, "type");
-  if (!type) {
-    BOOST_LOG_TRIVIAL(error) << "no type";
-    return;
-  }
-  map<string, msgHandler>::iterator handler = handlers->find(**type);
-  if (handler == handlers->end()) {
-    BOOST_LOG_TRIVIAL(error) << "unknown reply type " << **type;
-    return;
-  }
-  handler->second(&doc, socket);
 
 }
 
