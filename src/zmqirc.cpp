@@ -30,12 +30,14 @@ int main(int argc, char *argv[]) {
   int subPort;
   int reqPort;
   int port;
+  string logLevel;
 
   po::options_description desc("Allowed options");
   desc.add_options()
     ("subPort", po::value<int>(&subPort)->default_value(3012), "ZMQ Sub port.")
     ("reqPort", po::value<int>(&reqPort)->default_value(3013), "ZMQ Req port.")
     ("port", po::value<int>(&port)->default_value(6667), "IRC port.")
+    ("logLevel", po::value<string>(&logLevel)->default_value("info"), "Logging level [trace, debug, warn, info].")
     ("help", "produce help message")
     ;
   po::positional_options_description p;
@@ -45,9 +47,19 @@ int main(int argc, char *argv[]) {
           options(desc).positional(p).run(), vm);
   po::notify(vm);   
 
-//  boost::log::core::get()->set_filter(boost::log::trivial::severity >= boost::log::trivial::trace);
-//  boost::log::core::get()->set_filter(boost::log::trivial::severity >= boost::log::trivial::debug);
-  boost::log::core::get()->set_filter(boost::log::trivial::severity >= boost::log::trivial::info);
+  if (logLevel == "trace") {
+    boost::log::core::get()->set_filter(boost::log::trivial::severity >= boost::log::trivial::trace);
+  }
+  else if (logLevel == "debug") {
+    boost::log::core::get()->set_filter(boost::log::trivial::severity >= boost::log::trivial::debug);
+  }
+  else if (logLevel == "warn") {
+    boost::log::core::get()->set_filter(boost::log::trivial::severity >= boost::log::trivial::warning);
+  }
+  else {
+    boost::log::core::get()->set_filter(boost::log::trivial::severity >= boost::log::trivial::info);
+  }
+
   boost::log::formatter logFmt =
          boost::log::expressions::format("%1%\t[%2%]\t%3%")
         %  boost::log::expressions::format_date_time<boost::posix_time::ptime>("TimeStamp", "%Y-%m-%d %H:%M:%S.%f") 

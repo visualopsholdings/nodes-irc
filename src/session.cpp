@@ -259,7 +259,7 @@ void Session::msgCmd(const vector<string> &args) {
     return;
   }
   
-  _server->_zmq->send(_user, chan, args[1].substr(1));
+  _server->_zmq->send(_user, chan, args[1]);
 }
 
 void Session::capCmd(const vector<string> &args) {
