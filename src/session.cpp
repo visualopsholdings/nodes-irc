@@ -105,6 +105,8 @@ void Session::handle_request() {
   // Erase \r at the end
   line.erase(line.size()-1, 1);
   
+  BOOST_LOG_TRIVIAL(trace) << line;
+
   // parse the command
   vector<string> args;
   string cmd = Parser::parse(line, &args);
@@ -189,7 +191,7 @@ void Session::userCmd(const vector<string> &args) {
   }
   
   _user->_username = args.front();
-  _user->_realname = args.back();
+  _user->_realname = ":" + args.back();
   _server->_zmq->login(_user->_username);
 
 }

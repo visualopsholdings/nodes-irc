@@ -16,9 +16,28 @@
 
 string Parser::parse(const string &line, vector<string> *args) {
 
-  boost::split(*args, line, boost::is_any_of(" "));
+  // find ":"
+  vector<string> parts;
+  boost::split(parts, line, boost::is_any_of(":"));
+  if (parts.size() == 0) {
+    return "";
+  }
+  boost::trim(parts[0]);
+  
+  boost::split(*args, parts[0], boost::is_any_of(" "));
   string cmd = args->front();
   args->erase(args->begin());
+  
+  switch (parts.size()) {
+    case 1: break;
+    case 2:
+      args->push_back(parts[1]);
+      break;
+    default:
+      // TBD: handle more than 1 ":"
+      args->push_back("extra colons");
+  }
+  
   return cmd;
   
 }

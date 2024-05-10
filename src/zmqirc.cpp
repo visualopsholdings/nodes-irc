@@ -45,6 +45,7 @@ int main(int argc, char *argv[]) {
           options(desc).positional(p).run(), vm);
   po::notify(vm);   
 
+//  boost::log::core::get()->set_filter(boost::log::trivial::severity >= boost::log::trivial::trace);
 //  boost::log::core::get()->set_filter(boost::log::trivial::severity >= boost::log::trivial::debug);
   boost::log::core::get()->set_filter(boost::log::trivial::severity >= boost::log::trivial::info);
   boost::log::formatter logFmt =

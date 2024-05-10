@@ -224,7 +224,7 @@ make test
 To run all the unit tests. And show failures.
 
 ```
-make && make test || cat /Users/paul/Dev/zmqirc/test/build/Testing/Temporary/LastTest.log
+make && make test || cat Testing/Temporary/LastTest.log 
 ```
 
 ## Testing
