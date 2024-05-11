@@ -11,7 +11,8 @@
 
 #include "server.hpp"
 
-#include "session.hpp"
+#include "tcpsession.hpp"
+#include "sslsession.hpp"
 #include "channel.hpp"
 #include "user.hpp"
 #include "parser.hpp"
@@ -22,8 +23,8 @@
 #include <boost/asio.hpp>
 #include <boost/log/trivial.hpp>
 
-Server::Server(zmq::socket_t *sub, zmq::socket_t *req, int port) :
-		_acceptor(_io_service) {
+Server::Server(zmq::socket_t *sub, zmq::socket_t *req, int port, bool ssl) :
+		_ssl(ssl), _acceptor(_io_service) {
 		
 	_zmq = zmqClientPtr(new ZMQClient(this, sub, req));
   _zmq->run();
@@ -48,9 +49,9 @@ void Server::start_accept() {
 
 	BOOST_LOG_TRIVIAL(info) << "accepting.";
 
-  sessionPtr session = sessionPtr(new Session(this, _io_service));
+  sessionPtr session = sessionPtr(new TCPSession(this, _io_service));
 
-	_acceptor.async_accept(session->_socket,
+	_acceptor.async_accept(session->socket(),
 			bind(&Server::handle_accept, this, session,
 					boost::asio::placeholders::error));
 }

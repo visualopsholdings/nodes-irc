@@ -31,13 +31,15 @@ int main(int argc, char *argv[]) {
   int reqPort;
   int port;
   string logLevel;
-
+  bool ssl;
+  
   po::options_description desc("Allowed options");
   desc.add_options()
     ("subPort", po::value<int>(&subPort)->default_value(3012), "ZMQ Sub port.")
     ("reqPort", po::value<int>(&reqPort)->default_value(3013), "ZMQ Req port.")
     ("port", po::value<int>(&port)->default_value(6667), "IRC port.")
     ("logLevel", po::value<string>(&logLevel)->default_value("info"), "Logging level [trace, debug, warn, info].")
+    ("ssl", po::value<bool>(&ssl)->default_value(false), "Use SSL.")
     ("help", "produce help message")
     ;
   po::positional_options_description p;
@@ -88,7 +90,7 @@ int main(int argc, char *argv[]) {
   req.connect("tcp://127.0.0.1:" + to_string(reqPort));
 	BOOST_LOG_TRIVIAL(info) << "Connect to ZMQ as Local REQ on " << reqPort;
   
-  Server server(&sub, &req, port);
+  Server server(&sub, &req, port, ssl);
   server.run();
 
 }

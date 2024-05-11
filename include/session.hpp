@@ -39,29 +39,33 @@ class Session : public enable_shared_from_this<Session> {
 public:
   
   Session(Server *server, boost::asio::io_service& io_service);
-
+  virtual ~Session() {};
+  
   // thread safe
   void set_user_id(const string &id);
   void send_banner();
   void send(Prefixable *prefix, const string &cmd, const list<string> &args);
   
+  virtual boost::asio::basic_socket<boost::asio::ip::tcp, boost::asio::any_io_executor> &socket() = 0;
+  virtual void read() = 0;
+  virtual void write(const string &line) = 0;
+
+protected:
+  boost::asio::streambuf _buffer;
+   
+  void handle_read(const boost::system::error_code& error, const size_t bytes_transferred);
+  void handle_write(const boost::system::error_code& error);
+
 private:
   friend class Server;
   
   Server *_server;
-  boost::asio::ip::tcp::socket _socket;
   mutex _socket_mutex;  
-  boost::asio::streambuf _buffer;
   map<string, cmdHandler> _commands;
   userPtr _user;
   mutex _user_mutex;  
   
   void start();
-  void read();
-  void handle_read(const boost::system::error_code& error,
-      const size_t bytes_transferred);
-  void write(const string &line);
-  void handle_write(const boost::system::error_code& error);
   void handle_request();
   
   // command handlers

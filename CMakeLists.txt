@@ -13,7 +13,8 @@ cmake_minimum_required(VERSION 3.5)
 
 project (zmqirc)
   find_package(Boost 1.85.0 COMPONENTS program_options filesystem unit_test_framework chrono thread log_setup log REQUIRED)
-  find_package(cppzmq)
+  find_package(cppzmq REQUIRED)
+  find_package(OpenSSL REQUIRED)
   add_definitions(-DBOOST_ALL_DYN_LINK) 
   enable_testing()
 
@@ -21,7 +22,7 @@ set(CMAKE_BUILD_TYPE Debug)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-set(LIBS zmq)
+set(LIBS zmq ${OPENSSL_LIBRARIES})
 
 if (UNIX AND NOT APPLE)
   add_definitions(-funwind-tables) 
@@ -34,8 +35,9 @@ set(BOOSTLIBS ${Boost_CHRONO_LIBRARY} ${Boost_THREAD_LIBRARY} ${Boost_PROGRAM_OP
       ${Boost_FILESYSTEM_LIBRARY} ${Boost_LOG_SETUP_LIBRARY} ${Boost_LOG_LIBRARY} )
 
 include_directories(include)
+include_directories(${OPENSSL_INCLUDE_DIR})
 
-add_executable(ZMQIRC src/zmqirc.cpp src/server.cpp src/zmqclient.cpp src/session.cpp src/parser.cpp src/channel.cpp src/user.cpp)
+add_executable(ZMQIRC src/zmqirc.cpp src/server.cpp src/zmqclient.cpp src/session.cpp src/parser.cpp src/channel.cpp src/user.cpp src/tcpsession.cpp src/sslsession.cpp)
   target_link_libraries(ZMQIRC ${LIBS} ${BOOSTLIBS})
 
 add_executable(ZMQCHAT test/zmqchat.cpp)

@@ -24,7 +24,7 @@
 #include <boost/algorithm/string.hpp>
 
 Session::Session(Server *server, boost::asio::io_service& io_service) :
-	_server(server), _socket(io_service) {
+	_server(server) {
 
   _commands["CAP"] = bind( &Session::capCmd, this, placeholders::_1 );
   _commands["NICK"] = bind( &Session::nickCmd, this, placeholders::_1 );
@@ -64,23 +64,6 @@ void Session::handle_write(const boost::system::error_code& error) {
 	  BOOST_LOG_TRIVIAL(error) << error.message();
 	}
 	
-}
-
-void Session::read() {
-
-	boost::asio::async_read_until(_socket, _buffer, "\r\n",
-			bind(&Session::handle_read, shared_from_this(),
-					boost::asio::placeholders::error,
-					boost::asio::placeholders::bytes_transferred));
-
-}
-
-void Session::write(const string &line) {
-
-	boost::asio::async_write(_socket, boost::asio::buffer(line + "\r\n"),
-			bind(&Session::handle_write, shared_from_this(),
-					boost::asio::placeholders::error));
-
 }
 
 void Session::send(Prefixable *prefix, const string &cmd, const list<string> &args) {

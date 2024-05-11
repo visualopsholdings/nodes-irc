@@ -34,7 +34,7 @@ typedef shared_ptr<ZMQClient> zmqClientPtr;
 class Server : public Prefixable {
 
 public:
-  Server(zmq::socket_t *sub, zmq::socket_t *req, int port);
+  Server(zmq::socket_t *sub, zmq::socket_t *req, int port, bool ssl);
   ~Server();
   
   void run();
@@ -66,7 +66,8 @@ private:
   mutex _channels_mutex;
   vector<userPtr > _users;
   mutex _users_mutex;
-   
+  bool _ssl;
+     
   void start_accept();
   void handle_accept(sessionPtr session,
       const boost::system::error_code& error);
