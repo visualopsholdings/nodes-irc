@@ -46,6 +46,7 @@ public:
   void send_banner();
   void send(Prefixable *prefix, const string &cmd, const list<string> &args);
   
+  virtual void start();
   virtual boost::asio::basic_socket<boost::asio::ip::tcp, boost::asio::any_io_executor> &socket() = 0;
   virtual void read() = 0;
   virtual void write(const string &line) = 0;
@@ -65,7 +66,6 @@ private:
   userPtr _user;
   mutex _user_mutex;  
   
-  void start();
   void handle_request();
   
   // command handlers

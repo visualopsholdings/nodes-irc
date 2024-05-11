@@ -11,6 +11,8 @@
 
 #include "sslsession.hpp"
 
+#include <boost/bind.hpp>
+
 SSLSession::SSLSession(Server *server, boost::asio::io_service& io_service, boost::asio::ssl::context& context) :
 	Session(server, io_service), _socket(io_service, context) {
 
@@ -18,6 +20,25 @@ SSLSession::SSLSession(Server *server, boost::asio::io_service& io_service, boos
 
 boost::asio::basic_socket<boost::asio::ip::tcp, boost::asio::any_io_executor> &SSLSession::socket() {
   return _socket.lowest_layer();
+}
+
+void SSLSession::start() {
+
+  _socket.async_handshake(boost::asio::ssl::stream_base::server,
+    bind(&SSLSession::handle_handshake, this,
+      boost::asio::placeholders::error));
+
+}
+
+void SSLSession::handle_handshake(const boost::system::error_code& error) {
+
+  if (error) {
+    // TBD: error
+    return;
+  }
+
+  Session::start();
+  
 }
 
 void SSLSession::read() {

@@ -28,12 +28,16 @@ public:
   SSLSession(Server *server, boost::asio::io_service& io_service, boost::asio::ssl::context& context);
   virtual ~SSLSession() {};
 
+  virtual void start();
   virtual boost::asio::basic_socket<boost::asio::ip::tcp, boost::asio::any_io_executor> &socket();
   virtual void read();
   virtual void write(const string &line);
 
 protected:
   ssl_socket _socket;
+
+private:
+  void handle_handshake(const boost::system::error_code& error);
 
 };
 
