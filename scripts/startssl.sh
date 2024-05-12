@@ -22,7 +22,7 @@ then
   export LD_LIBRARY_PATH
 fi
 
-sudo ./zmqirc/build/ZMQIRC --port=9999 \
+sudo ./zmqirc/build/ZMQIRC --logLevel=trace --port=9999 \
   --chainFile=$KEYDIR/fullchain.pem \
   --certFile=$KEYDIR/privkey.pem \
   > zmqirc.log 2>&1 &
