@@ -249,10 +249,19 @@ bundle exec cucumber -n "More than one user can connect and login"
 
 ## Installation in Visual Ops
 
+You use the same SSL certs that visualops has, which are in /etc/letsencrypt/live/mydomain, so 
+edit zmqirc/scripts/start.sh and set it to that folder.
+
+Once built, to start it on a Visual Ops server:
+
 ```
-$ git clone https://github.com/visualopsholdings/zmqirc.git
-$ zmqirc/scripts/build.sh
 $ zmqirc/scripts/start.sh
+```
+
+To stop it:
+
+```
+$ zmqirc/scripts/stop.sh
 ```
 
 On reboot, Visual ops will look for the start script file and run it up.
@@ -262,7 +271,6 @@ server and chat that way.
 
 ## Current development focus
 
-### SSL
 ### using the Visual Ops security token to login
 
 ## License
@@ -332,3 +340,5 @@ implementation of the proprietary "Visual Ops" server.
 ### 10 May 2024
 - Rewrite zmqchat test program in C++. Get rid of nodejs.
 
+### 12 May
+- SSL support
