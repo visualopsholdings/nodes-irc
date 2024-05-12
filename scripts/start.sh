@@ -7,7 +7,7 @@ KEYDIR=/etc/letsencrypt/live/mydomain
 
 if [ ! -d $KEYDIR ];
 then
-  echo "You need to edit your key directory above!"
+  echo "You need to edit your key directory in $0!"
   exit 1
 fi
 
