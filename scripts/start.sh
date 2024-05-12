@@ -15,4 +15,10 @@ then
   export LD_LIBRARY_PATH
 fi
 
-./zmqirc/build/ZMQIRC > zmqirc.log 2>&1 &
+./zmqirc/build/ZMQIRC \
+  > zmqirc.log 2>&1 &
+
+#./zmqirc/build/ZMQIRC --port=9999 \
+# --chainFile=/etc/letsencrypt/live/irc.visualops.com/fullchain.pem \
+# --certFile=/etc/letsencrypt/live/irc.visualops.com/privkey.pem \
+# > zmqirc.log 2>&1 &
