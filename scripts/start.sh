@@ -20,14 +20,20 @@ fi
 if [ -d zmqirc/lib ];
 then
   # for those machines that have local libs on them
-  LD_LIBRARY_PATH=/home/visualops/zmqirc/lib
-  export LD_LIBRARY_PATH
+  sudo LD_LIBRARY_PATH=/home/visualops/zmqirc/lib ./zmqirc/build/ZMQIRC \
+    --chainFile=$KEYDIR/fullchain.pem \
+    --certFile=$KEYDIR/privkey.pem \
+    > zmqirc.log 2>&1 &
+    
+# when running without sudo
+#   LD_LIBRARY_PATH=/home/visualops/zmqirc/lib
+#   export LD_LIBRARY_PATH
+else
+  sudo ./zmqirc/build/ZMQIRC \
+    --chainFile=$KEYDIR/fullchain.pem \
+    --certFile=$KEYDIR/privkey.pem \
+    > zmqirc.log 2>&1 &
 fi
-
-sudo ./zmqirc/build/ZMQIRC \
-  --chainFile=$KEYDIR/fullchain.pem \
-  --certFile=$KEYDIR/privkey.pem \
-  > zmqirc.log 2>&1 &
 
 # to run without SSL, comment out the above and just used this.
 # BUT DONT!!!!
