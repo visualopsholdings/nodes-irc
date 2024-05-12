@@ -68,7 +68,8 @@ private:
   vector<userPtr > _users;
   mutex _users_mutex;
   boost::asio::ssl::context _context;
-     
+  bool _ssl;
+  
   void start_accept();
   void handle_accept(sessionPtr session,
       const boost::system::error_code& error);

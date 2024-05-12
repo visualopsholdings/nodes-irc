@@ -23,7 +23,7 @@
 #include <boost/log/trivial.hpp>
 
 Server::Server(zmq::socket_t *sub, zmq::socket_t *req, int port, const string &certFile, const string &chainFile) :
-    _context(boost::asio::ssl::context::method::tlsv13), _acceptor(_io_service) {
+    _context(boost::asio::ssl::context::method::tlsv13), _acceptor(_io_service), _ssl(false) {
 		
 	_zmq = zmqClientPtr(new ZMQClient(this, sub, req));
   _zmq->run();
@@ -37,6 +37,7 @@ Server::Server(zmq::socket_t *sub, zmq::socket_t *req, int port, const string &c
   if (!certFile.empty() && !chainFile.empty()) {
 	  BOOST_LOG_TRIVIAL(info) << "using SSL.";
     SSLSession::setup(&_context, chainFile, certFile);
+    _ssl = true;
   }
   
 	start_accept();
@@ -53,7 +54,13 @@ void Server::start_accept() {
 
 	BOOST_LOG_TRIVIAL(info) << "accepting.";
 
-  sessionPtr session = sessionPtr(new TCPSession(this, _io_service));
+  sessionPtr session;
+  if (_ssl) {
+    session.reset(new SSLSession(this, _io_service, _context));
+  }
+  else {
+    session.reset(new TCPSession(this, _io_service));
+  }
 
 	_acceptor.async_accept(session->socket(),
 			bind(&Server::handle_accept, this, session,
