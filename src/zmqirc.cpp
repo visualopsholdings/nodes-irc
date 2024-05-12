@@ -27,6 +27,8 @@ using namespace std;
 
 int main(int argc, char *argv[]) {
 
+  string version = "ZMQIRC 1.0, 12-May-2024.";
+
   int subPort;
   int reqPort;
   int port;
@@ -72,7 +74,7 @@ int main(int argc, char *argv[]) {
   boost::log::add_common_attributes();
   boost::log::add_console_log(clog)->set_formatter(logFmt);
 
-  BOOST_LOG_TRIVIAL(info) << "ZMQIRC 1.0, 8-May-2024.";
+  BOOST_LOG_TRIVIAL(info) << version;
 
   if (vm.count("help")) {
     cout << desc << endl;
@@ -92,7 +94,7 @@ int main(int argc, char *argv[]) {
   req.connect("tcp://127.0.0.1:" + to_string(reqPort));
 	BOOST_LOG_TRIVIAL(info) << "Connect to ZMQ as Local REQ on " << reqPort;
   
-  Server server(&sub, &req, port, certFile, chainFile);
+  Server server(version, &sub, &req, port, certFile, chainFile);
   server.run();
 
 }

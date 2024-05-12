@@ -120,7 +120,7 @@ void Session::send_banner() {
   
   send(_server, "001", { _user->_nick, ":Welcome" });
   send(_server, "002", { _user->_nick, ":Your host is localhost running version 1" });
-  send(_server, "004", { _user->_nick, "ZMQIRC", "1" });
+  send(_server, "004", { _user->_nick, _server->_version });
   send(_server, "MODE", { _user->_nick, "+w" });
     
 }

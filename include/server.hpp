@@ -35,7 +35,7 @@ typedef shared_ptr<ZMQClient> zmqClientPtr;
 class Server : public Prefixable {
 
 public:
-  Server(zmq::socket_t *sub, zmq::socket_t *req, int port, const string &certFile, const string &chainFile);
+  Server(const string &version, zmq::socket_t *sub, zmq::socket_t *req, int port, const string &certFile, const string &chainFile);
   ~Server();
   
   void run();
@@ -57,6 +57,7 @@ public:
   string prefix();
 
   zmqClientPtr _zmq;
+  string _version;
 
 private:
 
