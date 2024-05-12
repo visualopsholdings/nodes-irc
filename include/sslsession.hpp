@@ -33,6 +33,8 @@ public:
   virtual void read();
   virtual void write(const string &line);
 
+  static void setup(boost::asio::ssl::context *context, const string &chain, const string &cert);
+  
 protected:
   ssl_socket _socket;
 

@@ -18,6 +18,7 @@
 
 #include <zmq.hpp>
 #include <boost/asio.hpp>
+#include <boost/asio/ssl.hpp>
 
 using namespace std;
 
@@ -34,7 +35,7 @@ typedef shared_ptr<ZMQClient> zmqClientPtr;
 class Server : public Prefixable {
 
 public:
-  Server(zmq::socket_t *sub, zmq::socket_t *req, int port, bool ssl);
+  Server(zmq::socket_t *sub, zmq::socket_t *req, int port, const string &certFile, const string &chainFile);
   ~Server();
   
   void run();
@@ -66,7 +67,7 @@ private:
   mutex _channels_mutex;
   vector<userPtr > _users;
   mutex _users_mutex;
-  bool _ssl;
+  boost::asio::ssl::context _context;
      
   void start_accept();
   void handle_accept(sessionPtr session,

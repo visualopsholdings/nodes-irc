@@ -31,7 +31,8 @@ int main(int argc, char *argv[]) {
   int reqPort;
   int port;
   string logLevel;
-  bool ssl;
+  string chainFile;
+  string certFile;
   
   po::options_description desc("Allowed options");
   desc.add_options()
@@ -39,7 +40,8 @@ int main(int argc, char *argv[]) {
     ("reqPort", po::value<int>(&reqPort)->default_value(3013), "ZMQ Req port.")
     ("port", po::value<int>(&port)->default_value(6667), "IRC port.")
     ("logLevel", po::value<string>(&logLevel)->default_value("info"), "Logging level [trace, debug, warn, info].")
-    ("ssl", po::value<bool>(&ssl)->default_value(false), "Use SSL.")
+    ("chainFile", po::value<string>(&chainFile)->default_value(""), "Use SSL, this is the CERT file for the chain.")
+    ("certFile", po::value<string>(&certFile)->default_value(""), "Use SSL, this is the CERT file.")
     ("help", "produce help message")
     ;
   po::positional_options_description p;
@@ -90,7 +92,7 @@ int main(int argc, char *argv[]) {
   req.connect("tcp://127.0.0.1:" + to_string(reqPort));
 	BOOST_LOG_TRIVIAL(info) << "Connect to ZMQ as Local REQ on " << reqPort;
   
-  Server server(&sub, &req, port, ssl);
+  Server server(&sub, &req, port, certFile, chainFile);
   server.run();
 
 }

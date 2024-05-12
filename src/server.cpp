@@ -20,11 +20,10 @@
 #include "zmqclient.hpp"
 
 #include <iostream>
-#include <boost/asio.hpp>
 #include <boost/log/trivial.hpp>
 
-Server::Server(zmq::socket_t *sub, zmq::socket_t *req, int port, bool ssl) :
-		_ssl(ssl), _acceptor(_io_service) {
+Server::Server(zmq::socket_t *sub, zmq::socket_t *req, int port, const string &certFile, const string &chainFile) :
+    _context(boost::asio::ssl::context::method::tlsv13), _acceptor(_io_service) {
 		
 	_zmq = zmqClientPtr(new ZMQClient(this, sub, req));
   _zmq->run();
@@ -35,6 +34,11 @@ Server::Server(zmq::socket_t *sub, zmq::socket_t *req, int port, bool ssl) :
 	_acceptor.bind(endpoint);
 	_acceptor.listen();
 
+  if (!certFile.empty() && !chainFile.empty()) {
+	  BOOST_LOG_TRIVIAL(info) << "using SSL.";
+    SSLSession::setup(&_context, chainFile, certFile);
+  }
+  
 	start_accept();
 }
 
