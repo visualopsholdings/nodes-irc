@@ -2,6 +2,13 @@
 # 
 # Start ZMQIRC with SSL support.
 
+if [ "$#" -ne 1 ]; then
+	echo "usage: $0 KeyDir"
+	exit 1
+fi
+
+KEYDIR=$1
+
 if [ ! -f "zmqirc/build/ZMQIRC" ];
 then
   echo "Need to build project first"
@@ -16,6 +23,6 @@ then
 fi
 
 sudo ./zmqirc/build/ZMQIRC --port=9999 \
-  --chainFile=/etc/letsencrypt/live/irc.visualops.com/fullchain.pem \
-  --certFile=/etc/letsencrypt/live/irc.visualops.com/privkey.pem \
+  --chainFile=$KEYDIR/fullchain.pem \
+  --certFile=$KEYDIR/privkey.pem \
   > zmqirc.log 2>&1 &
