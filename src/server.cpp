@@ -52,7 +52,7 @@ void Server::run() {
 
 void Server::start_accept() {
 
-	BOOST_LOG_TRIVIAL(info) << "accepting.";
+	BOOST_LOG_TRIVIAL(info) << "accepting...";
 
   sessionPtr session;
   if (_ssl) {
@@ -75,6 +75,8 @@ void Server::handle_accept(sessionPtr session,
 		return;
   }
   
+	BOOST_LOG_TRIVIAL(info) << "accepted.";
+
 	session->start();
 	_sessions.push_back(session);
 	start_accept();
