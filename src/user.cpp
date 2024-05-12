@@ -11,10 +11,6 @@
 
 #include "user.hpp"
 
-User::User(const string &nick) :
-	_nick(nick) {
-}
-
 User::User(const string &id, const string &nick, const string &realname) : 
   _id(id), _nick(nick), _realname(realname) {
 }
@@ -25,5 +21,5 @@ string User::id() {
 
 string User::prefix() {
   // TBD: construct this properly!!!!
-  return ":" + _nick + "!" + _username + "@" + _nick;
+  return ":" + _nick + "!" + _nick + "@" + _nick;
 }

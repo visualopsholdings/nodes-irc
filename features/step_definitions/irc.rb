@@ -9,11 +9,7 @@ class IRC
             puts "matching " + msg
             return true
          else
-            if result.start_with? ":localhost 433"
-               puts "user already on channel"
-            else
-#               puts "got " + line
-            end
+#           puts "got " + line
          end
       end
       puts "finished waiting"
@@ -37,20 +33,9 @@ class IRC
       write(text)
    end
 
-   def user(server, name)
+   def pass(name)
 
-      write("USER")
-      arg(name)
-      arg(name)
-      arg(server)
-      arg(":" + name)
-      endline
-
-   end
-
-   def nick(name)
-
-      write("NICK")
+      write("PASS")
       arg(name)
       endline
 

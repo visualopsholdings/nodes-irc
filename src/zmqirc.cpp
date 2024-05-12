@@ -88,8 +88,9 @@ int main(int argc, char *argv[]) {
   sub.setsockopt(ZMQ_SUBSCRIBE, "");
 #else
   sub.set(zmq::sockopt::subscribe, "");
-	BOOST_LOG_TRIVIAL(info) << "Connect to ZMQ as Local SUB on " << subPort;
 #endif
+	BOOST_LOG_TRIVIAL(info) << "Connect to ZMQ as Local SUB on " << subPort;
+
   zmq::socket_t req(context, ZMQ_REQ);
   req.connect("tcp://127.0.0.1:" + to_string(reqPort));
 	BOOST_LOG_TRIVIAL(info) << "Connect to ZMQ as Local REQ on " << reqPort;

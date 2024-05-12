@@ -37,7 +37,9 @@ set(BOOSTLIBS ${Boost_CHRONO_LIBRARY} ${Boost_THREAD_LIBRARY} ${Boost_PROGRAM_OP
 include_directories(include)
 include_directories(${OPENSSL_INCLUDE_DIR})
 
-add_executable(ZMQIRC src/zmqirc.cpp src/server.cpp src/zmqclient.cpp src/session.cpp src/parser.cpp src/channel.cpp src/user.cpp src/tcpsession.cpp src/sslsession.cpp)
+add_executable(ZMQIRC src/zmqirc.cpp src/server.cpp src/zmqclient.cpp src/session.cpp 
+                      src/commands.cpp src/parser.cpp src/channel.cpp src/user.cpp 
+                      src/tcpsession.cpp src/sslsession.cpp)
   target_link_libraries(ZMQIRC ${LIBS} ${BOOSTLIBS})
 
 add_executable(ZMQCHAT test/zmqchat.cpp)

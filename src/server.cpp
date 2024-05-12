@@ -77,8 +77,11 @@ void Server::handle_accept(sessionPtr session,
   
 	BOOST_LOG_TRIVIAL(info) << "accepted.";
 
-	session->start();
 	_sessions.push_back(session);
+  stringstream ss;
+  ss << _sessions.size();
+	session->set_id(ss.str());
+	session->start();
 	start_accept();
 }
 
@@ -155,10 +158,11 @@ userPtr Server::find_user_nick(const string &nick) {
 
 }
 
-sessionPtr Server::find_session_for_username(const string &username) {
+sessionPtr Server::find_session(const string &id) {
 
-  return find_in<sessionPtr>(_sessions, username,
-    [](sessionPtr &c) { return c->_user->_username; });
+  BOOST_LOG_TRIVIAL(debug) << "searching " << _sessions.size() << " sessions";
+  return find_in<sessionPtr>(_sessions, id,
+    [](sessionPtr &c) { return c->_id; });
 
 }
 

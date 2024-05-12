@@ -41,8 +41,8 @@ public:
   void run();
   userPtr find_user_id(const string &id);
   userPtr find_user_nick(const string &nick);
+  sessionPtr find_session(const string &sessionid);
   sessionPtr find_session_for_nick(const string &nick);
-  sessionPtr find_session_for_username(const string &username);
   channelPtr find_channel_policy(const string &policy);
   channelPtr find_channel_stream(const string &stream);
   void channel_names(vector<string> *names);

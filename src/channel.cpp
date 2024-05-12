@@ -41,7 +41,8 @@ void Channel::join(userPtr user) {
     return;
   }
   _users.push_back(user);
-  send(user.get(), "JOIN", { _name, user->_username, user->_realname });
+  // users username is the same as the nickname.
+  send(user.get(), "JOIN", { _name, user->_nick, user->_realname });
   
 }
 

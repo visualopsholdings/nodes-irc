@@ -9,7 +9,7 @@ end
 
 ServiceManager.define_service 'irc' do |s|
    s.start_cmd = 'build/ZMQIRC'
-   s.loaded_cue = /Local REQ/
+   s.loaded_cue = /accepting.../
    s.cwd = Dir.pwd
    s.pid_file = 'irc.pid'
 end

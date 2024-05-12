@@ -20,15 +20,13 @@
 
 #include <iostream>
 #include <boost/log/trivial.hpp>
-#include <boost/algorithm/string/join.hpp>
 #include <boost/algorithm/string.hpp>
 
 Session::Session(Server *server, boost::asio::io_service& io_service) :
 	_server(server) {
 
   _commands["CAP"] = bind( &Session::capCmd, this, placeholders::_1 );
-  _commands["NICK"] = bind( &Session::nickCmd, this, placeholders::_1 );
-  _commands["USER"] = bind( &Session::userCmd, this, placeholders::_1 );
+  _commands["PASS"] = bind( &Session::passCmd, this, placeholders::_1 );
   _commands["LIST"] = bind( &Session::listCmd, this, placeholders::_1 );
   _commands["JOIN"] = bind( &Session::joinCmd, this, placeholders::_1 );
   _commands["PRIVMSG"] = bind( &Session::msgCmd, this, placeholders::_1 );
@@ -38,6 +36,12 @@ Session::Session(Server *server, boost::asio::io_service& io_service) :
 
 }
 	
+void Session::set_id(const string &id) {
+
+  _id = id;
+    
+}
+
 void Session::start() {
 
 	BOOST_LOG_TRIVIAL(info) << "session started ";
@@ -104,13 +108,18 @@ void Session::handle_request() {
   
 }
 
-void Session::set_user_id(const string &id) {
+void Session::set_user_details(const string &id, const string &name, const string &fullname) {
 
   // thread safe.
   lock_guard<mutex> guard(_user_mutex);
   
-  _user->_id = id;
-    
+  if (_user) {
+    BOOST_LOG_TRIVIAL(error) << "User already exists.";
+	  return;
+  }
+
+  _user = userPtr(new User(id, name, ":" + fullname));
+  _server->add_user(_user);
 }
 
 void Session::send_banner() {
@@ -125,167 +134,3 @@ void Session::send_banner() {
     
 }
 
-void Session::nickCmd(const vector<string> &args) {
-
-  if (args.size() < 1) {
-	  BOOST_LOG_TRIVIAL(error) << "NICK missing nickname";
-	  return;
-  }
-  string nick = args.front();
-  BOOST_LOG_TRIVIAL(debug) << "nickname " << nick;
-  if (_user) {
-    BOOST_LOG_TRIVIAL(debug) << "has user with nickname " << _user->_nick;
-	  if (_user->_nick != nick) {
-	    BOOST_LOG_TRIVIAL(error) << "NICK session already has user with different nickname";
-	  }
-	  return;
-  }
-  BOOST_LOG_TRIVIAL(debug) << "no user yet";
-  
-  // this session has no user yet.
-  userPtr user = _server->find_user_nick(nick);
-  if (user) {
-    BOOST_LOG_TRIVIAL(debug) << "found user in server " << user->_nick;
-    if (_server->find_session_for_nick(user->_nick)) {
-	    BOOST_LOG_TRIVIAL(error) << "NICK server already has different session for this user";
-	    return;
-    }
-    // this is the session for that user.
-    BOOST_LOG_TRIVIAL(debug) << "setting the session to this user";
-    _user = user;
-    return;
-  }
-  
-  // create a new user and add it to the server.
-  _user = userPtr(new User(nick));
-  _server->add_user(_user);
-}
-
-void Session::userCmd(const vector<string> &args) {
-
-  if (args.size() < 1) {
-	  BOOST_LOG_TRIVIAL(error) << "USER missing username";
-	  return;
-  }
-  if (!_user) {
-	  BOOST_LOG_TRIVIAL(error) << "USER session has no user";
-	  return;
-	  
-  }
-  
-  _user->_username = args.front();
-  _user->_realname = ":" + args.back();
-  _server->_zmq->login(_user->_username);
-
-}
-
-void Session::listCmd(const vector<string> &args) {
-
-  if (!_user) {
-	  BOOST_LOG_TRIVIAL(error) << "LIST session has no user";
-	  return;
-	  
-  }
-
-  send(_server, "321", { _user->_nick, "Channel", ":Users", "Name" });
-  vector<string> names;
-  _server->channel_names(&names);
-  for (auto i : names) {
-    send(_server, "322", { _user->_nick, i, "0" });
-  }
-  send(_server, "323", {  _user->_nick, ":End of /LIST" });
-
-}
-
-void Session::joinCmd(const vector<string> &args) {
-
-  if (args.size() < 1) {
-	  BOOST_LOG_TRIVIAL(error) << "JOIN missing channel";
-	  return;
-  }
-  if (!_user) {
-	  BOOST_LOG_TRIVIAL(error) << "JOIN session has no user";
-	  return;
-	  
-  }
-  
-	BOOST_LOG_TRIVIAL(debug) << "JOIN channels " << args.front();
-  list<string> channels;
-  boost::split(channels, args.front(), boost::is_any_of(","));
-  for (list<string>::iterator i=channels.begin(); i != channels.end(); i++) {
-    string name = Parser::normalise(*i);
-    channelPtr chan = _server->find_channel(name);
-    if (chan) {
-      chan->join(_user);
-      send(_user.get(), "JOIN", { chan->_name, _user->_username, _user->_realname });
-      send(_user.get(), "331", { _user->_nick, chan->_name, ":No topic is set." });
-      // other users
-      _server->_zmq->policy_users(chan->_policy);
-    }
-    else {
-	    BOOST_LOG_TRIVIAL(error) << "channel " << name << " not found";
-    }
-  }
-
-}
-
-void Session::msgCmd(const vector<string> &args) {
-
-  if (args.size() < 2) {
-	  BOOST_LOG_TRIVIAL(error) << "MSG missing channel or message";
-	  return;
-  }
-  
-  channelPtr chan = _server->find_channel(args.front());
-  if (!chan) {
-    BOOST_LOG_TRIVIAL(error) << "channel " << args.front() << " not found";
-    return;
-  }
-  
-  _server->_zmq->send(_user, chan, args[1]);
-}
-
-void Session::capCmd(const vector<string> &args) {
-
-  if (args.size() < 1) {
-	  BOOST_LOG_TRIVIAL(error) << "CAP missing caps";
-	  return;
-  }
-  BOOST_LOG_TRIVIAL(info) << "CAP not used";
-  
-}
-
-void Session::whoCmd(const vector<string> &args) {
-
-  if (args.size() < 1) {
-	  BOOST_LOG_TRIVIAL(error) << "WHO missing channel";
-	  return;
-  }
-  BOOST_LOG_TRIVIAL(info) << "WHO not used";
-  
-}
-
-void Session::modeCmd(const vector<string> &args) {
-
-  if (args.size() < 1) {
-	  BOOST_LOG_TRIVIAL(error) << "MODE missing channel";
-	  return;
-  }
-  BOOST_LOG_TRIVIAL(info) << "MODE not used";
-  
-}
-
-void Session::quitCmd(const vector<string> &args) {
-
-  if (args.size() < 1) {
-	  BOOST_LOG_TRIVIAL(error) << "QUIT missing reason";
-	  return;
-  }
-	BOOST_LOG_TRIVIAL(info) << "QUIT because " << args.front();
-	if (!_user) {
-	  BOOST_LOG_TRIVIAL(warning) << "QUIT ignored because no user yet";
-	  return;
-	}
-  _server->remove_session(shared_from_this());
-  
-}

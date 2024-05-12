@@ -124,21 +124,26 @@ string jarray(const string &name, const vector<string> &objs) {
 
 void loginMsg(json *json, zmq::socket_t *socket) {
 
-  optional<json::iterator> username = get(json, "username");
-  if (!username) {
-    BOOST_LOG_TRIVIAL(error) << "no username";
+  optional<json::iterator> session = get(json, "session");
+  if (!session) {
+    BOOST_LOG_TRIVIAL(error) << "no session";
     return;
   }
-  if (**username == "tracy") {
-    send(socket, jobj({ jnvps("type", "user"), jnvps("id", "u1"), jnvps("name", "tracy"), 
+  optional<json::iterator> password = get(json, "password");
+  if (!password) {
+    BOOST_LOG_TRIVIAL(error) << "no password";
+    return;
+  }
+  if (**password == "tracy") {
+    send(socket, jobj({ jnvps("type", "user"), jnvps("session", **session), jnvps("id", "u1"), jnvps("name", "tracy"), jnvps("fullname", "Tracy"), 
         jarray("streams", { 
           jobj({ jnvps("name", "My Conversation"),  jnvps("id", "s1"),  jnvps("id", "s1"),  jnvps("policy", "p1")})
         })
       }));
     return;
   }
-  if (**username == "leanne") {
-    send(socket, jobj({ jnvps("type", "user"), jnvps("id", "u2"), jnvps("name", "leanne"), 
+  if (**password == "leanne") {
+    send(socket, jobj({ jnvps("type", "user"), jnvps("session", **session), jnvps("id", "u2"), jnvps("name", "leanne"), jnvps("fullname", "Leanne"), 
         jarray("streams", { 
           jobj({ jnvps("name", "My Conversation"),  jnvps("id", "s1"),  jnvps("id", "s1"),  jnvps("policy", "p1")})
         })

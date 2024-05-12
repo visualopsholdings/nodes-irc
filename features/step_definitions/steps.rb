@@ -3,8 +3,7 @@ When('she connects to localhost as {string}') do |name|
 
    @irc = IRC.new()
    @irc.connect("localhost", 6667)
-   @irc.nick(name)   
-   @irc.user("localhost", name)
+   @irc.pass(name)
    if !@irc.wait_for(name + " +w")
       fail("Got error")
    end

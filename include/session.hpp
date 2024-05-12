@@ -41,8 +41,10 @@ public:
   Session(Server *server, boost::asio::io_service& io_service);
   virtual ~Session() {};
   
+  void set_id(const string &id);
+
   // thread safe
-  void set_user_id(const string &id);
+  void set_user_details(const string &id, const string &name, const string &fullname);
   void send_banner();
   void send(Prefixable *prefix, const string &cmd, const list<string> &args);
   
@@ -60,6 +62,7 @@ protected:
 private:
   friend class Server;
   
+  string _id;
   Server *_server;
   mutex _socket_mutex;  
   map<string, cmdHandler> _commands;
@@ -70,8 +73,7 @@ private:
   
   // command handlers
   void capCmd(const vector<string> &args);
-  void nickCmd(const vector<string> &args);
-  void userCmd(const vector<string> &args);
+  void passCmd(const vector<string> &args);
   void listCmd(const vector<string> &args);
   void joinCmd(const vector<string> &args);
   void msgCmd(const vector<string> &args);

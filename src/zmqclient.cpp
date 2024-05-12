@@ -144,9 +144,9 @@ void ZMQClient::send(const string &m) {
 
 }
 
-void ZMQClient::login(const string &username) {
+void ZMQClient::login(const string &session, const string &password) {
   
-	send("{ \"type\": \"login\", \"username\": \"" + username + "\"}");
+	send("{ \"type\": \"login\", \"session\": \"" + session + "\", \"password\": \"" + password + "\"}");
 
 }
 
@@ -174,23 +174,34 @@ optional<json::iterator> ZMQClient::get(json *json, const string &name) {
 
 void ZMQClient::userMsg(json *doc) {
 
-  optional<json::iterator> name = get(doc, "name");
-  if (!name) {
-    BOOST_LOG_TRIVIAL(error) << "no name for user";
+  optional<json::iterator> sessionid = get(doc, "session");
+  if (!sessionid) {
+    BOOST_LOG_TRIVIAL(error) << "no session for user";
     return;
   }
+  
+  sessionPtr session = _server->find_session(**sessionid);
+  if (!session) {
+    BOOST_LOG_TRIVIAL(error) << "no session " << **sessionid;
+    return;
+  }
+  
   optional<json::iterator> id = get(doc, "id");
   if (!id) {
     BOOST_LOG_TRIVIAL(error) << "no id for user";
     return;
   }
-  
-  sessionPtr session = _server->find_session_for_username(**name);
-  if (!session) {
-    BOOST_LOG_TRIVIAL(error) << "no session for " << **name;
+  optional<json::iterator> name = get(doc, "name");
+  if (!name) {
+    BOOST_LOG_TRIVIAL(error) << "no name for user";
     return;
   }
-  session->set_user_id(**id);
+  optional<json::iterator> fullname = get(doc, "fullname");
+  if (!fullname) {
+    BOOST_LOG_TRIVIAL(error) << "no fullname for user";
+    return;
+  }
+  session->set_user_details(**id, **name, **fullname);
   session->send_banner();
   
   optional<json::iterator> streams = get(doc, "streams");

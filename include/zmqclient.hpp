@@ -36,7 +36,7 @@ public:
   ZMQClient(Server *server, zmq::socket_t *sub, zmq::socket_t *req);
   
   void run();
-  void login(const string &username);
+  void login(const string &session, const string &password);
   void policy_users(const string &policy);
   void send(userPtr user, channelPtr channel, const string &text);
   

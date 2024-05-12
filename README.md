@@ -21,11 +21,36 @@ after we get to know you.
 
 Visit https://info.visualops.com/ for more info.
 
+All the places that mention "Visual Ops", could be interchanged with "ZMQChat".
+
 ## Protocol
 
 The protocol used to talk to ZMQChat is sending stringified JSON over 2 ZMQ message queues.
 
-### ZMQ sockets
+### Supported IRC commands
+
+#### PASS [password]
+
+Sends the "login" command below, you can pass your VID here which is all that is needed by 
+Visual Ops to return your nickname and your real name.
+
+#### LIST
+
+List all channels (streams in Visual Ops)
+
+#### JOIN
+
+Join a particular channel.
+
+#### QUIT
+
+Log off the server.
+
+#### PRIVMSG
+
+Send a message to the server.
+
+### ZMQ messages
 
 A SUB socket on port tcp://127.0.0.1:3012 which is used to receive new messages from other nodes
 and users locally connected to this node.
@@ -41,18 +66,23 @@ system such as login etc.
 ```
 { 
   "type": "login", 
-  "username": "username" 
+  "session": "internal session id",
+  "password": "password" 
 }
 ```
 
 This will be processed by the Visual Ops system and it will return:
 
+The session id, is just turned around for convenience. It isn't used by Visual Ops.
+
 ```
 { 
   "type": "user", 
   "name": "tracy",
+  "fullname": "Tracy",
   "id": "user guid",
-  streams: [
+  "session": "internal session id",
+  "streams": [
     {
       "name": "Conversation 1",
       "stream": "stream guid",
