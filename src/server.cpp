@@ -23,7 +23,7 @@
 #include <boost/log/trivial.hpp>
 
 Server::Server(zmq::socket_t *sub, zmq::socket_t *req, int port, const string &certFile, const string &chainFile) :
-    _context(boost::asio::ssl::context::method::tlsv13), _acceptor(_io_service), _ssl(false) {
+    _context(boost::asio::ssl::context::method::sslv23), _acceptor(_io_service), _ssl(false) {
 		
 	_zmq = zmqClientPtr(new ZMQClient(this, sub, req));
   _zmq->run();
