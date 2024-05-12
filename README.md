@@ -73,8 +73,6 @@ system such as login etc.
 
 This will be processed by the Visual Ops system and it will return:
 
-The session id, is just turned around for convenience. It isn't used by Visual Ops.
-
 ```
 { 
   "type": "user", 
@@ -92,6 +90,8 @@ The session id, is just turned around for convenience. It isn't used by Visual O
 }
 ```
 
+The session id, is just turned around for convenience. It isn't used by Visual Ops.
+
 #### Policy users
 
 Since the Visual Ops (and the ZMQChat system) is persistent, when you join a stream, you can query the 
@@ -100,7 +100,7 @@ users in that stream by the stream policy and join those users too.
 ```
 { 
   "type": "policyusers", 
-  "polict": "stream policy guid" 
+  "policy": "stream policy guid" 
 }
 ```
 
@@ -111,7 +111,7 @@ This will be processed by the Visual Ops system and it will return:
   "type": "user", 
   "name": "policyusers",
   "id": "stream policy guid",
-  users: [
+  "users": [
     {
       "name": "tracy",
       "fullname": "Tracy",
