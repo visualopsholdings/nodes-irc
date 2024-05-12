@@ -1,6 +1,6 @@
 #!/bin/bash
 # 
-# Start ZMQIRC
+# Start ZMQIRC with SSL support.
 
 if [ ! -f "zmqirc/build/ZMQIRC" ];
 then
@@ -15,5 +15,7 @@ then
   export LD_LIBRARY_PATH
 fi
 
-./zmqirc/build/ZMQIRC \
+sudo ./zmqirc/build/ZMQIRC --port=9999 \
+  --chainFile=/etc/letsencrypt/live/irc.visualops.com/fullchain.pem \
+  --certFile=/etc/letsencrypt/live/irc.visualops.com/privkey.pem \
   > zmqirc.log 2>&1 &
