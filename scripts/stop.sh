@@ -4,7 +4,7 @@
 
 LIST=`ps -ef | grep "ZMQIRC" | grep -v grep | awk '{print $2}'`
 if [ ! -z "$LIST" ]; then
-	kill -9 $LIST
+	sudo kill -9 $LIST
 fi
 
 exit 0
