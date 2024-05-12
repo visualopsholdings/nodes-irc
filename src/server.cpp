@@ -35,7 +35,6 @@ Server::Server(zmq::socket_t *sub, zmq::socket_t *req, int port, const string &c
 	_acceptor.listen();
 
   if (!certFile.empty() && !chainFile.empty()) {
-	  BOOST_LOG_TRIVIAL(info) << "using SSL.";
     SSLSession::setup(&_context, chainFile, certFile);
     _ssl = true;
   }
@@ -56,6 +55,7 @@ void Server::start_accept() {
 
   sessionPtr session;
   if (_ssl) {
+	  BOOST_LOG_TRIVIAL(info) << "using SSL session.";
     session.reset(new SSLSession(this, _io_service, _context));
   }
   else {
