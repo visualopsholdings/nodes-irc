@@ -3,7 +3,7 @@
 # Start ZMQIRC
 
 # set the directly with your letsencrypt keys here. Usually matches your domain.
-KEYDIR=/etc/letsencrypt/live/mydomain
+KEYDIR=/etc/letsencrypt/live/yourdomain
 
 if [ ! -d $KEYDIR ];
 then
