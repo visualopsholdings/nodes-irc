@@ -199,11 +199,11 @@ void Server::create_channel(const string &name, const string &id, const string &
     }
     return;
   }
-  channel = channelPtr(new Channel(this, channame, id, policy));
+  
   {
     // thread safe.
-    lock_guard<mutex> guard(_channels_mutex); 
-    _channels.push_back(channel);
+    lock_guard<mutex> guard(_channels_mutex);
+    _channels.push_back(new Channel(this, channame, id, policy));
   }
   
 }
