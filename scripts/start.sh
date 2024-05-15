@@ -21,6 +21,7 @@ if [ -d zmqirc/lib ];
 then
   # for those machines that have local libs on them
   sudo LD_LIBRARY_PATH=/home/visualops/zmqirc/lib ./zmqirc/build/ZMQIRC \
+    -- logLevel=trace \
     --chainFile=$KEYDIR/fullchain.pem \
     --certFile=$KEYDIR/privkey.pem \
     > zmqirc.log 2>&1 &
