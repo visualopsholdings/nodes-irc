@@ -30,6 +30,7 @@ then
 #   export LD_LIBRARY_PATH
 else
   sudo ./zmqirc/build/ZMQIRC \
+    -- logLevel=trace \
     --chainFile=$KEYDIR/fullchain.pem \
     --certFile=$KEYDIR/privkey.pem \
     > zmqirc.log 2>&1 &
