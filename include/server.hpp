@@ -74,6 +74,7 @@ private:
   void start_accept();
   void handle_accept(sessionPtr session,
       const boost::system::error_code& error);
+  void new_channel(const string &channame, const string &id, const string &policy);
   
 };
 

@@ -185,6 +185,14 @@ void Server::channel_names(vector<string> *names) {
   
 }
 
+void Server::new_channel(const string &channame, const string &id, const string &policy) {
+
+  // thread safe.
+  lock_guard<mutex> guard(_channels_mutex);
+  
+  _channels.push_back(channelPtr(new Channel(this, channame, id, policy)));
+}
+
 void Server::create_channel(const string &name, const string &id, const string &policy) {
 
   string channame = Parser::from_stream_name(name);
@@ -200,11 +208,7 @@ void Server::create_channel(const string &name, const string &id, const string &
     return;
   }
   
-  {
-    // thread safe.
-    lock_guard<mutex> guard(_channels_mutex);
-    _channels.push_back(channelPtr(new Channel(this, channame, id, policy)));
-  }
+  new_channel(channame, id, policy);
   
 }
 
