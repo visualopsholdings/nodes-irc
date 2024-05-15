@@ -69,7 +69,7 @@ void SSLSession::write(const string &line) {
 
 	BOOST_LOG_TRIVIAL(trace) << "writing " << line;
 
-	boost::asio::async_write(_socket, boost::asio::buffer(line + "\r\n\r\n"),
+	boost::asio::async_write(_socket, boost::asio::buffer(line + "\r\n"),
 			bind(&SSLSession::handle_write, shared_from_this(),
 					boost::asio::placeholders::error));
 
