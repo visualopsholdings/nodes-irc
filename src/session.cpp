@@ -71,11 +71,28 @@ void Session::handle_write(const boost::system::error_code& error) {
 }
 
 void Session::send(Prefixable *prefix, const string &cmd, const list<string> &args) {
+
+  write(prefix->prefix() + " " + cmd + " " + boost::algorithm::join(args, " "));
+
+}
+
+void Session::send1(Prefixable *prefix, const string &cmd, const list<string> &args) {
   
   // thread safe.
-//  lock_guard<mutex> guard(_socket_mutex);
+  lock_guard<mutex> guard(_socket_mutex);
   
-  write(prefix->prefix() + " " + cmd + " " + boost::algorithm::join(args, " "));
+  send(prefix, cmd, args);
+  
+}
+
+void Session::send(Prefixable *prefix, itemsType &items) {
+  
+  // thread safe.
+  lock_guard<mutex> guard(_socket_mutex);
+  
+  for (auto i: items) {
+    send(prefix, i.first, i.second);
+  }
   
 }
 
@@ -127,10 +144,12 @@ void Session::send_banner() {
   // thread safe.
   lock_guard<mutex> guard(_user_mutex);
   
-  send(_server, "001", { _user->_nick, ":Welcome" });
-  send(_server, "002", { _user->_nick, ":Your host is localhost running version 1" });
-  send(_server, "004", { _user->_nick, _server->_version });
-  send(_server, "MODE", { _user->_nick, "+w" });
+  itemsType items;
+  items.push_back({ "001", { _user->_nick, ":Welcome" } });
+  items.push_back({ "002", { _user->_nick, ":Your host is localhost running version 1" } });
+  items.push_back({ "004", { _user->_nick, _server->_version } });
+  items.push_back({ "MODE", { _user->_nick, "+w" } });
+  send(_server, items);
     
 }
 

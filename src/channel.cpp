@@ -67,7 +67,7 @@ void Channel::send(Prefixable *prefix, const string &cmd, const list<string> &ar
   for (auto i: _users) {
     sessionPtr session = _server->find_session_for_nick(i->_nick);
     if (session) {
-      session->send(prefix, cmd, args);
+      session->send1(prefix, cmd, args);
     }
   }
 }

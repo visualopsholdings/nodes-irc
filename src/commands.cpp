@@ -34,12 +34,14 @@ void Session::listCmd(const vector<string> &args) {
 
 	BOOST_LOG_TRIVIAL(trace) << "got " << names.size() << " names";
 
-  send(_server, "321", { _user->_nick, "Channel", ":Users", "Name" });
+  itemsType items;
+  items.push_back({ "321", { _user->_nick, "Channel", ":Users", "Name" } });
   for (auto i : names) {
-    send(_server, "322", { _user->_nick, i, "0" });
+    items.push_back({  "322", { _user->_nick, i, "0" } });
   }
-  send(_server, "323", {  _user->_nick, ":End of /LIST" });
-
+  items.push_back({ "323", {  _user->_nick, ":End of /LIST" } });
+  send(_server, items);
+  
 	BOOST_LOG_TRIVIAL(trace) << "end of list";
 }
 
@@ -64,8 +66,10 @@ void Session::joinCmd(const vector<string> &args) {
     if (chan) {
       chan->join(_user);
       // username and nick name are the same.
-      send(_user.get(), "JOIN", { chan->_name, _user->_nick, _user->_realname });
-      send(_user.get(), "331", { _user->_nick, chan->_name, ":No topic is set." });
+      itemsType items;
+      items.push_back({ "JOIN", { chan->_name, _user->_nick, _user->_realname } });
+      items.push_back({ "331", { _user->_nick, chan->_name, ":No topic is set." } });
+      send(_server, items);
       // other users
       _server->_zmq->policy_users(chan->_policy);
     }
