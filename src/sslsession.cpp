@@ -24,13 +24,12 @@ boost::asio::basic_socket<boost::asio::ip::tcp, boost::asio::any_io_executor> &S
 
 void SSLSession::setup(boost::asio::ssl::context *context, const string &chain, const string &cert) {
 
-//     context->set_options(
-//         boost::asio::ssl::context::default_workarounds
-//         | boost::asio::ssl::context::no_sslv2
-//         | boost::asio::ssl::context::single_dh_use);
-//    context->set_password_callback(boost::bind(&server::get_password, this));
-    context->use_certificate_chain_file(chain);
-    context->use_private_key_file(cert, boost::asio::ssl::context::pem);
+  context->set_options(
+    boost::asio::ssl::context::default_workarounds
+    | boost::asio::ssl::context::no_sslv2
+  );
+  context->use_certificate_chain_file(chain);
+  context->use_private_key_file(cert, boost::asio::ssl::context::pem);
 
 }
 
