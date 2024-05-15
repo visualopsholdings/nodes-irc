@@ -17,9 +17,6 @@
 SSLSession::SSLSession(Server *server, boost::asio::io_service& io_service, boost::asio::ssl::context& context) :
 	Session(server, io_service), _socket(io_service, context) {
 
-  boost::asio::ip::tcp::no_delay option(true);
-  _socket.lowest_layer().set_option(option);
-  
 }
 
 boost::asio::basic_socket<boost::asio::ip::tcp, boost::asio::any_io_executor> &SSLSession::socket() {
@@ -72,7 +69,7 @@ void SSLSession::write(const string &line) {
 
 	BOOST_LOG_TRIVIAL(trace) << "writing " << line;
 
-	boost::asio::async_write(_socket, boost::asio::buffer(line + "\r\n"),
+	boost::asio::async_write(_socket, boost::asio::buffer(line + "\r\n\r\n"),
 			bind(&SSLSession::handle_write, shared_from_this(),
 					boost::asio::placeholders::error));
 
