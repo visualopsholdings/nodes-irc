@@ -25,6 +25,7 @@ ZMQClient::ZMQClient(Server *server, zmq::socket_t *sub, zmq::socket_t *req) :
 
   // expect these as replies
   _reqmessages["user"] = bind( &ZMQClient::userMsg, this, placeholders::_1 );
+  _reqmessages["streams"] = bind( &ZMQClient::streamsMsg, this, placeholders::_1 );
   _reqmessages["policyusers"] = bind( &ZMQClient::policyUsersMsg, this, placeholders::_1 );
   _reqmessages["message"] = bind( &ZMQClient::messageMsg, this, placeholders::_1 );
   _reqmessages["ack"] = bind( &ZMQClient::ackMsg, this, placeholders::_1 );
@@ -150,6 +151,12 @@ void ZMQClient::login(const string &session, const string &password) {
 
 }
 
+void ZMQClient::streams(const string &user) {
+  
+	send("{ \"type\": \"streams\", \"user\": \"" + user + "\"}");
+
+}
+
 void ZMQClient::policy_users(const string &policy) {
 
 	send("{ \"type\": \"policyusers\", \"policy\": \"" + policy + "\"}");
@@ -204,6 +211,34 @@ void ZMQClient::userMsg(json *doc) {
   session->set_user_details(**id, **name, **fullname);
   session->send_banner();
   
+  streams(**id);
+//   optional<json::iterator> streams = get(doc, "streams");
+//   if (streams) {
+//     if ((**streams).is_array()) {
+//       for (auto i: (**streams)) {
+//         optional<json::iterator> id = get(&i, "id");
+//         optional<json::iterator> name = get(&i, "name");
+//         optional<json::iterator> policy = get(&i, "policy");
+//         if (id && name && policy) {
+//           _server->create_channel(**name, **id, **policy);
+//         }
+//         else {
+//           BOOST_LOG_TRIVIAL(error) << "stream not complete";
+//         }
+//       }
+//     }
+//     else {
+//       BOOST_LOG_TRIVIAL(error) << "streams not array";
+//     }
+//   }
+//   else {
+//       BOOST_LOG_TRIVIAL(error) << "missing streams";
+//   }
+
+}
+
+void ZMQClient::streamsMsg(json *doc) {
+
   optional<json::iterator> streams = get(doc, "streams");
   if (streams) {
     if ((**streams).is_array()) {
@@ -226,6 +261,7 @@ void ZMQClient::userMsg(json *doc) {
   else {
       BOOST_LOG_TRIVIAL(error) << "missing streams";
   }
+
 }
 
 void ZMQClient::policyUsersMsg(json *doc) {

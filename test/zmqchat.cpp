@@ -27,6 +27,7 @@ using json = nlohmann::json;
 
 typedef function<void (json *json, zmq::socket_t *socket)> msgHandler;
 void loginMsg(json *json, zmq::socket_t *socket);
+void streamsMsg(json *json, zmq::socket_t *socket);
 void policyUsersMsg(json *json, zmq::socket_t *socket);
 void messageMsg(json *json, zmq::socket_t *socket);
 optional<json::iterator> get(json *json, const string &name);
@@ -61,6 +62,7 @@ int main(int argc, char *argv[]) {
 
   map<string, msgHandler> handlers;
   handlers["login"] = bind(&loginMsg, placeholders::_1, placeholders::_2);
+  handlers["streams"] = bind(&streamsMsg, placeholders::_1, placeholders::_2);
   handlers["policyusers"] = bind(&policyUsersMsg, placeholders::_1, placeholders::_2 );
   handlers["message"] = bind(&messageMsg, placeholders::_1, placeholders::_2);
 
@@ -135,22 +137,30 @@ void loginMsg(json *json, zmq::socket_t *socket) {
     return;
   }
   if (**password == "tracy") {
-    send(socket, jobj({ jnvps("type", "user"), jnvps("session", **session), jnvps("id", "u1"), jnvps("name", "tracy"), jnvps("fullname", "Tracy"), 
-        jarray("streams", { 
-          jobj({ jnvps("name", "My Conversation"),  jnvps("id", "s1"),  jnvps("id", "s1"),  jnvps("policy", "p1")})
-        })
-      }));
+    send(socket, jobj({ jnvps("type", "user"), jnvps("session", **session), jnvps("id", "u1"), jnvps("name", "tracy"), jnvps("fullname", "Tracy")}));
     return;
   }
   if (**password == "leanne") {
-    send(socket, jobj({ jnvps("type", "user"), jnvps("session", **session), jnvps("id", "u2"), jnvps("name", "leanne"), jnvps("fullname", "Leanne"), 
-        jarray("streams", { 
-          jobj({ jnvps("name", "My Conversation"),  jnvps("id", "s1"),  jnvps("id", "s1"),  jnvps("policy", "p1")})
-        })
-      }));
+    send(socket, jobj({ jnvps("type", "user"), jnvps("session", **session), jnvps("id", "u2"), jnvps("name", "leanne"), jnvps("fullname", "Leanne")}));
     return;
   }
   send(socket, jobj({ jnvps("type", "err"),  jnvps("msg", "User not found") }));
+}
+
+void streamsMsg(json *json, zmq::socket_t *socket) {
+
+  optional<json::iterator> user = get(json, "user");
+  if (!user) {
+    BOOST_LOG_TRIVIAL(error) << "no user";
+    return;
+  }
+  
+  send(socket, jobj({ jnvps("type", "streams"), jnvps("user", **user), 
+      jarray("streams", { 
+        jobj({ jnvps("name", "My Conversation"),  jnvps("id", "s1"),  jnvps("id", "s1"),  jnvps("policy", "p1")})
+      })
+    }));
+
 }
 
 void policyUsersMsg(json *json, zmq::socket_t *socket) {

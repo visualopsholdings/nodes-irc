@@ -37,6 +37,7 @@ public:
   
   void run();
   void login(const string &session, const string &password);
+  void streams(const string &user);
   void policy_users(const string &policy);
   void send(userPtr user, channelPtr channel, const string &text);
   
@@ -56,6 +57,7 @@ private:
   
   // msg handlers
   void userMsg(json *);
+  void streamsMsg(json *);
   void policyUsersMsg(json *);
   void messageMsg(json *);
   void ackMsg(json *);
