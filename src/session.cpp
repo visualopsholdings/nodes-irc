@@ -91,7 +91,6 @@ void Session::send(Prefixable *prefix, itemsType &items) {
   lock_guard<mutex> guard(_socket_mutex);
   
   for (auto i: items) {
-	  BOOST_LOG_TRIVIAL(trace) << "sending " << i.first << " with " << i.second.size() << " args";
     send(prefix, i.first, i.second);
   }
   
