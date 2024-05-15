@@ -79,7 +79,7 @@ void Session::send(Prefixable *prefix, const string &cmd, const list<string> &ar
 void Session::send1(Prefixable *prefix, const string &cmd, const list<string> &args) {
   
   // thread safe.
-  lock_guard<mutex> guard(_socket_mutex);
+//  lock_guard<mutex> guard(_socket_mutex);
   
   send(prefix, cmd, args);
   
@@ -88,7 +88,7 @@ void Session::send1(Prefixable *prefix, const string &cmd, const list<string> &a
 void Session::send(Prefixable *prefix, itemsType &items) {
   
   // thread safe.
-  lock_guard<mutex> guard(_socket_mutex);
+//  lock_guard<mutex> guard(_socket_mutex);
   
   for (auto i: items) {
     send(prefix, i.first, i.second);
