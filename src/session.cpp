@@ -73,7 +73,7 @@ void Session::handle_write(const boost::system::error_code& error) {
 void Session::send(Prefixable *prefix, const string &cmd, const list<string> &args) {
   
   // thread safe.
-  lock_guard<mutex> guard(_socket_mutex);
+//  lock_guard<mutex> guard(_socket_mutex);
   
   write(prefix->prefix() + " " + cmd + " " + boost::algorithm::join(args, " "));
   

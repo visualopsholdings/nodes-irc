@@ -182,8 +182,8 @@ sessionPtr Server::find_session_for_nick(const string &nick) {
 
 void Server::channel_names(vector<string> *names) {
 
-//   // thread safe.
-//   lock_guard<mutex> guard(_channels_mutex);
+  // thread safe.
+  lock_guard<mutex> guard(_channels_mutex);
   
   for (auto i: _channels) {
     names->push_back(i->_name);
