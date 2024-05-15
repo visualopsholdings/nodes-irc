@@ -29,9 +29,10 @@ void Session::listCmd(const vector<string> &args) {
 	  
   }
 
-  send(_server, "321", { _user->_nick, "Channel", ":Users", "Name" });
   vector<string> names;
   _server->channel_names(&names);
+
+  send(_server, "321", { _user->_nick, "Channel", ":Users", "Name" });
   for (auto i : names) {
     send(_server, "322", { _user->_nick, i, "0" });
   }
