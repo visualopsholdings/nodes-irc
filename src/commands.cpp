@@ -40,6 +40,7 @@ void Session::listCmd(const vector<string> &args) {
   }
   send(_server, "323", {  _user->_nick, ":End of /LIST" });
 
+	BOOST_LOG_TRIVIAL(trace) << "end of list";
 }
 
 void Session::joinCmd(const vector<string> &args) {
