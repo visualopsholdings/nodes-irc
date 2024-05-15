@@ -118,13 +118,19 @@ channelPtr Server::find_channel_policy(const string &policy) {
 
 }
 
+channelPtr Server::find_channel_(const string &name) {
+
+  return find_in<channelPtr>(_channels, name,
+    [](channelPtr &c) { return c->_name; });
+
+}
+
 channelPtr Server::find_channel(const string &name) {
 
   // thread safe.
   lock_guard<mutex> guard(_channels_mutex);
   
-  return find_in<channelPtr>(_channels, name,
-    [](channelPtr &c) { return c->_name; });
+  return find_channel_(name);
 
 }
 
@@ -185,21 +191,16 @@ void Server::channel_names(vector<string> *names) {
   
 }
 
-void Server::new_channel(const string &channame, const string &id, const string &policy) {
+void Server::create_channel(const string &name, const string &id, const string &policy) {
 
   // thread safe.
   lock_guard<mutex> guard(_channels_mutex);
   
-  _channels.push_back(channelPtr(new Channel(this, channame, id, policy)));
-}
-
-void Server::create_channel(const string &name, const string &id, const string &policy) {
-
   string channame = Parser::from_stream_name(name);
   
   BOOST_LOG_TRIVIAL(info) << "create channel " << channame;
   
-  channelPtr channel = find_channel(channame);
+  channelPtr channel = find_channel_(channame);
   if (channel) {
     BOOST_LOG_TRIVIAL(info) << "channel " << name << " already exists";
     if (channel->_id != id || channel->_policy != policy) {
@@ -208,7 +209,7 @@ void Server::create_channel(const string &name, const string &id, const string &
     return;
   }
   
-  new_channel(channame, id, policy);
+  _channels.push_back(channelPtr(new Channel(this, channame, id, policy)));
   
 }
 

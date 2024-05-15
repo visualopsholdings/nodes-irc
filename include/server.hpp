@@ -43,15 +43,15 @@ public:
   userPtr find_user_nick(const string &nick);
   sessionPtr find_session(const string &sessionid);
   sessionPtr find_session_for_nick(const string &nick);
-  channelPtr find_channel_policy(const string &policy);
-  channelPtr find_channel_stream(const string &stream);
-  void channel_names(vector<string> *names);
-  channelPtr find_channel(const string &name);
   void remove_session(sessionPtr session);
   
   // thread safe
   void create_channel(const string &name, const string &id, const string &policy);
   void add_user(userPtr user);
+  void channel_names(vector<string> *names);
+  channelPtr find_channel(const string &name);
+  channelPtr find_channel_policy(const string &policy);
+  channelPtr find_channel_stream(const string &stream);
     
   // Prefixable
   string prefix();
@@ -74,7 +74,7 @@ private:
   void start_accept();
   void handle_accept(sessionPtr session,
       const boost::system::error_code& error);
-  void new_channel(const string &channame, const string &id, const string &policy);
+  channelPtr find_channel_(const string &name);
   
 };
 
