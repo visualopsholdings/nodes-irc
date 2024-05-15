@@ -12,10 +12,14 @@
 #include "sslsession.hpp"
 
 #include <boost/log/trivial.hpp>
+#include <ostream>
 
 SSLSession::SSLSession(Server *server, boost::asio::io_service& io_service, boost::asio::ssl::context& context) :
 	Session(server, io_service), _socket(io_service, context) {
 
+  boost::asio::ip::tcp::no_delay option(true);
+  _socket.lowest_layer().set_option(option);
+  
 }
 
 boost::asio::basic_socket<boost::asio::ip::tcp, boost::asio::any_io_executor> &SSLSession::socket() {
