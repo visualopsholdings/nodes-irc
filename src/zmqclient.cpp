@@ -212,28 +212,6 @@ void ZMQClient::userMsg(json *doc) {
   session->send_banner();
   
   streams(**id);
-//   optional<json::iterator> streams = get(doc, "streams");
-//   if (streams) {
-//     if ((**streams).is_array()) {
-//       for (auto i: (**streams)) {
-//         optional<json::iterator> id = get(&i, "id");
-//         optional<json::iterator> name = get(&i, "name");
-//         optional<json::iterator> policy = get(&i, "policy");
-//         if (id && name && policy) {
-//           _server->create_channel(**name, **id, **policy);
-//         }
-//         else {
-//           BOOST_LOG_TRIVIAL(error) << "stream not complete";
-//         }
-//       }
-//     }
-//     else {
-//       BOOST_LOG_TRIVIAL(error) << "streams not array";
-//     }
-//   }
-//   else {
-//       BOOST_LOG_TRIVIAL(error) << "missing streams";
-//   }
 
 }
 

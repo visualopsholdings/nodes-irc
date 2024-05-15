@@ -54,7 +54,6 @@ void Session::joinCmd(const vector<string> &args) {
   if (!_user) {
 	  BOOST_LOG_TRIVIAL(error) << "JOIN session has no user";
 	  return;
-	  
   }
   
 	BOOST_LOG_TRIVIAL(debug) << "JOIN channels " << args.front();

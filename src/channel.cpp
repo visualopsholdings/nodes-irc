@@ -34,7 +34,7 @@ string Channel::policy() {
 void Channel::join(userPtr user) {
 
   // thread safe.
-  lock_guard<mutex> guard(_users_mutex);
+//  lock_guard<mutex> guard(_users_mutex);
   
   if (find(_users.begin(), _users.end(), user) != _users.end()) {
     BOOST_LOG_TRIVIAL(warning) << "user already joined";
@@ -49,7 +49,7 @@ void Channel::join(userPtr user) {
 void Channel::send_message(userPtr user, const string &text) {
   
   // thread safe.
-  lock_guard<mutex> guard(_users_mutex);
+//  lock_guard<mutex> guard(_users_mutex);
   
   send(user.get(), "PRIVMSG", { _name, ":" + text });
   

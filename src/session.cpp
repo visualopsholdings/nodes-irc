@@ -79,7 +79,7 @@ void Session::send(Prefixable *prefix, const string &cmd, const list<string> &ar
 void Session::send1(Prefixable *prefix, const string &cmd, const list<string> &args) {
   
   // thread safe.
-  lock_guard<mutex> guard(_socket_mutex);
+//  lock_guard<mutex> guard(_socket_mutex);
   
   send(prefix, cmd, args);
   
@@ -88,7 +88,7 @@ void Session::send1(Prefixable *prefix, const string &cmd, const list<string> &a
 void Session::send(Prefixable *prefix, itemsType &items) {
   
   // thread safe.
-  lock_guard<mutex> guard(_socket_mutex);
+//  lock_guard<mutex> guard(_socket_mutex);
   
   for (auto i: items) {
     send(prefix, i.first, i.second);
@@ -128,7 +128,7 @@ void Session::handle_request() {
 void Session::set_user_details(const string &id, const string &name, const string &fullname) {
 
   // thread safe.
-  lock_guard<mutex> guard(_user_mutex);
+//  lock_guard<mutex> guard(_user_mutex);
   
   if (_user) {
     BOOST_LOG_TRIVIAL(error) << "User already exists.";
@@ -142,7 +142,7 @@ void Session::set_user_details(const string &id, const string &name, const strin
 void Session::send_banner() {
 
   // thread safe.
-  lock_guard<mutex> guard(_user_mutex);
+//  lock_guard<mutex> guard(_user_mutex);
   
   itemsType items;
   items.push_back({ "001", { _user->_nick, ":Welcome" } });
