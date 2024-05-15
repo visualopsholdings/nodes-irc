@@ -88,7 +88,7 @@ void Server::handle_accept(sessionPtr session,
 void Server::add_user(userPtr user) {
 
   // thread safe.
-//  lock_guard<mutex> guard(_users_mutex);
+  lock_guard<mutex> guard(_users_mutex);
   
   _users.push_back(user);
 }
@@ -111,7 +111,7 @@ void Server::remove_session(sessionPtr session) {
 channelPtr Server::find_channel_policy(const string &policy) {
 
   // thread safe.
-//  lock_guard<mutex> guard(_channels_mutex);
+  lock_guard<mutex> guard(_channels_mutex);
   
   return find_in<channelPtr>(_channels, policy,
       [](channelPtr &c) { return c->_policy; });
@@ -128,7 +128,7 @@ channelPtr Server::find_channel_(const string &name) {
 channelPtr Server::find_channel(const string &name) {
 
   // thread safe.
-//  lock_guard<mutex> guard(_channels_mutex);
+  lock_guard<mutex> guard(_channels_mutex);
   
   return find_channel_(name);
 
@@ -137,7 +137,7 @@ channelPtr Server::find_channel(const string &name) {
 channelPtr Server::find_channel_stream(const string &stream) {
 
   // thread safe.
-//  lock_guard<mutex> guard(_channels_mutex);
+  lock_guard<mutex> guard(_channels_mutex);
   
   return find_in<channelPtr>(_channels, stream,
     [](channelPtr &c) { return c->_id; });
@@ -147,7 +147,7 @@ channelPtr Server::find_channel_stream(const string &stream) {
 userPtr Server::find_user_id(const string &id) {
 
   // thread safe.
-//  lock_guard<mutex> guard(_users_mutex);
+  lock_guard<mutex> guard(_users_mutex);
   
   return find_in<userPtr>(_users, id,
     [](userPtr &c) { return c->_id; });
@@ -157,7 +157,7 @@ userPtr Server::find_user_id(const string &id) {
 userPtr Server::find_user_nick(const string &nick) {
 
   // thread safe.
-//  lock_guard<mutex> guard(_users_mutex);
+  lock_guard<mutex> guard(_users_mutex);
   
   return find_in<userPtr>(_users, nick,
     [](userPtr &c) { return c->_nick; });
@@ -183,7 +183,7 @@ sessionPtr Server::find_session_for_nick(const string &nick) {
 void Server::channel_names(vector<string> *names) {
 
   // thread safe.
-//  lock_guard<mutex> guard(_channels_mutex);
+  lock_guard<mutex> guard(_channels_mutex);
   
   for (auto i: _channels) {
     names->push_back(i->_name);
@@ -194,7 +194,7 @@ void Server::channel_names(vector<string> *names) {
 void Server::create_channel(const string &name, const string &id, const string &policy) {
 
   // thread safe.
-//  lock_guard<mutex> guard(_channels_mutex);
+  lock_guard<mutex> guard(_channels_mutex);
   
   string channame = Parser::from_stream_name(name);
   
