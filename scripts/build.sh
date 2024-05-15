@@ -13,6 +13,7 @@ then
   mkdir zmqirc/build
 fi
 pushd zmqirc/build
+git pull
 cmake ..
 make
 make test
