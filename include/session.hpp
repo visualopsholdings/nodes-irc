@@ -48,7 +48,6 @@ public:
   void set_user_details(const string &id, const string &name, const string &fullname);
   void send_banner();
   void send(Prefixable *prefix, itemsType &items);
-  void send1(Prefixable *prefix, const string &cmd, const list<string> &args);
   
   virtual void start();
   virtual boost::asio::basic_socket<boost::asio::ip::tcp, boost::asio::any_io_executor> &socket() = 0;
@@ -72,7 +71,6 @@ private:
   mutex _user_mutex;  
   
   void handle_request();
-  void send(Prefixable *prefix, const string &cmd, const list<string> &args);
   
   // command handlers
   void capCmd(const vector<string> &args);

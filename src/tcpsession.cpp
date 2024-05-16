@@ -29,9 +29,9 @@ void TCPSession::read() {
 
 }
 
-void TCPSession::write(const string &line) {
+void TCPSession::write(const string &data) {
 
-	boost::asio::async_write(_socket, boost::asio::buffer(line + "\r\n"),
+	boost::asio::async_write(_socket, boost::asio::buffer(data),
 			bind(&TCPSession::handle_write, shared_from_this(),
 					boost::asio::placeholders::error));
 

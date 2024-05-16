@@ -70,29 +70,16 @@ void Session::handle_write(const boost::system::error_code& error) {
 	
 }
 
-void Session::send(Prefixable *prefix, const string &cmd, const list<string> &args) {
-
-  write(prefix->prefix() + " " + cmd + " " + boost::algorithm::join(args, " "));
-
-}
-
-void Session::send1(Prefixable *prefix, const string &cmd, const list<string> &args) {
-  
-  // thread safe.
-  lock_guard<mutex> guard(_socket_mutex);
-  
-  send(prefix, cmd, args);
-  
-}
-
 void Session::send(Prefixable *prefix, itemsType &items) {
   
   // thread safe.
   lock_guard<mutex> guard(_socket_mutex);
   
+  string data;
   for (auto i: items) {
-    send(prefix, i.first, i.second);
+    data += prefix->prefix() + " " + i.first + " " + boost::algorithm::join(i.second, " ") + "\r\n";
   }
+  write(data);
   
 }
 

@@ -41,6 +41,7 @@ void Channel::join(userPtr user) {
     return;
   }
   _users.push_back(user);
+  
   // users username is the same as the nickname.
   send(user.get(), "JOIN", { _name, user->_nick, user->_realname });
   
@@ -64,10 +65,13 @@ userPtr Channel::find_user_id(const string &id) {
 
 void Channel::send(Prefixable *prefix, const string &cmd, const list<string> &args) {
 
+  itemsType items;
+  items.push_back({ cmd, args });
+  
   for (auto i: _users) {
     sessionPtr session = _server->find_session_for_nick(i->_nick);
     if (session) {
-      session->send1(prefix, cmd, args);
+      session->send(prefix, items);
     }
   }
 }

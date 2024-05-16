@@ -372,3 +372,6 @@ implementation of the proprietary "Visual Ops" server.
 
 ### 12 May
 - SSL support
+
+### 16 May
+- Solve "LIST" deadlock problem in SSL.
