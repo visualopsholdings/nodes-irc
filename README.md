@@ -79,7 +79,27 @@ This will be processed by the Visual Ops system and it will return:
   "name": "tracy",
   "fullname": "Tracy",
   "id": "user guid",
-  "session": "internal session id",
+  "session": "internal session id"
+}
+```
+
+The session id, is just turned around for convenience. It isn't used by Visual Ops.
+
+#### Streams
+
+```
+{ 
+  "type": "streams", 
+  "user": "user guid",
+}
+```
+
+This will be processed by the Visual Ops system and it will return:
+
+```
+{ 
+  "type": "streams", 
+  "user": "user guid",
   "streams": [
     {
       "name": "Conversation 1",
@@ -89,8 +109,6 @@ This will be processed by the Visual Ops system and it will return:
   ]
 }
 ```
-
-The session id, is just turned around for convenience. It isn't used by Visual Ops.
 
 #### Policy users
 
