@@ -301,7 +301,7 @@ server and chat that way.
 
 ## Current development focus
 
-### using the Visual Ops security token to login
+### Remove need to embed SSL cert path in start script.
 
 ## License
 
