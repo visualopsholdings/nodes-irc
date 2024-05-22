@@ -2,15 +2,6 @@
 # 
 # Start ZMQIRC
 
-# set the directly with your letsencrypt keys here. Usually matches your domain.
-KEYDIR=/etc/letsencrypt/live/yourdomain
-
-if [ ! -d $KEYDIR ];
-then
-  echo "You need to edit your key directory in $0!"
-  exit 1
-fi
-
 if [ ! -f "zmqirc/build/ZMQIRC" ];
 then
   echo "Need to build project first"
@@ -22,8 +13,6 @@ then
   # for those machines that have local libs on them
   sudo LD_LIBRARY_PATH=/home/visualops/zmqirc/lib ./zmqirc/build/ZMQIRC \
     --logLevel=trace \
-    --chainFile=$KEYDIR/fullchain.pem \
-    --certFile=$KEYDIR/privkey.pem \
     > zmqirc.log 2>&1 &
     
 # when running without sudo
@@ -32,8 +21,6 @@ then
 else
   sudo ./zmqirc/build/ZMQIRC \
     --logLevel=trace \
-    --chainFile=$KEYDIR/fullchain.pem \
-    --certFile=$KEYDIR/privkey.pem \
     > zmqirc.log 2>&1 &
 fi
 

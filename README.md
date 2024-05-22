@@ -61,6 +61,27 @@ system such as login etc.
 
 ### JSON formats
 
+#### Certs
+
+```
+{ 
+  "type": "certs"
+}
+```
+
+This will be processed by the Visual Ops system and it will return:
+
+```
+{ 
+  "type": "certs", 
+  "ssl": true,
+  "cettFile": "xxxx",
+  "chainFile": "yyy"
+}
+```
+
+The session id, is just turned around for convenience. It isn't used by Visual Ops.
+
 #### Login
 
 ```
@@ -246,15 +267,6 @@ cmake ..
 make
 sudo make install
 cd ../..
-
-git clone https://github.com/nlohmann/json
-cd json
-mkdir build
-cd build
-cmake ..
-make
-sudo make install
-cd ../..
 ```
 
 Now this project:
@@ -346,10 +358,6 @@ ZMQIRC is licensed under [version 3 of the GNU General Public License] contained
 ### End to end testing
 
 - https://cucumber.io/
-
-### JSON for C++
-
-- https://github.com/nlohmann/json
 
 ## Change Log
 

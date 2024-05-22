@@ -16,7 +16,6 @@
 
 #include "prefixable.hpp"
 
-#include <zmq.hpp>
 #include <boost/asio.hpp>
 #include <boost/asio/ssl.hpp>
 
@@ -35,10 +34,12 @@ typedef shared_ptr<ZMQClient> zmqClientPtr;
 class Server : public Prefixable {
 
 public:
-  Server(const string &version, zmq::socket_t *sub, zmq::socket_t *req, int port, const string &certFile, const string &chainFile);
+  Server(const string &version, int sub, int req, int port);
   ~Server();
   
+  void start();
   void run();
+  void run(const string &certFile, const string &chainFile);
   userPtr find_user_id(const string &id);
   userPtr find_user_nick(const string &nick);
   sessionPtr find_session(const string &sessionid);

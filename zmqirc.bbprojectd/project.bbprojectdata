@@ -141,11 +141,11 @@
 				BAAAAAAAAAA=
 				</data>
 				<key>FileURL</key>
-				<string>file:///Users/paul/Dev/zmqirc/node/features/Gemfile</string>
+				<string>file:///Users/paul/Dev/zmqirc/Gemfile</string>
 				<key>HasSecurityScope</key>
 				<true/>
 				<key>RelativePath</key>
-				<string>./node/features/Gemfile</string>
+				<string>./Gemfile</string>
 				<key>TypeID</key>
 				<string>_CFileLocator</string>
 				<key>Version</key>

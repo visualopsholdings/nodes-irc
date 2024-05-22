@@ -15,11 +15,12 @@
 #define H_zmqclient
 
 #include <string>
-#include <nlohmann/json.hpp>
+#include <map>
+#include <boost/json.hpp>
 #include <zmq.hpp>
 
 using namespace std;
-using json = nlohmann::json;
+using json = boost::json::value;
 
 class Server;
 class User;
@@ -27,35 +28,39 @@ class Channel;
 
 typedef shared_ptr<User> userPtr;
 typedef shared_ptr<Channel> channelPtr;
-
 typedef function<void (json *)> msgHandler;
 
 class ZMQClient : public enable_shared_from_this<ZMQClient> {
 
 public:
-  ZMQClient(Server *server, zmq::socket_t *sub, zmq::socket_t *req);
+  ZMQClient(Server *server, int sub, int req);
   
   void run();
+  void certs();
   void login(const string &session, const string &password);
   void streams(const string &user);
   void policy_users(const string &policy);
   void send(userPtr user, channelPtr channel, const string &text);
+  void receive1();
   
 private:
   Server *_server;
-  zmq::socket_t *_sub;
-  zmq::socket_t *_req;
+  shared_ptr<zmq::context_t> _context;
+  shared_ptr<zmq::socket_t> _sub;
+  shared_ptr<zmq::socket_t> _req;
   map<string, msgHandler> _reqmessages;
   map<string, msgHandler> _submessages;
   
   void receive();
-
-  static optional<json::iterator> get(json *json, const string &name);
+  
+  static bool getString(json *j, const string &name, string *value);
+  static bool getBool(json *j, const string &name, bool *value);
   static void handle_reply(const zmq::message_t &reply, map<string, msgHandler> *handlers);
-  void send(const string &m);
+  void send(const json &j);
   bool trySend(const string &m);
   
   // msg handlers
+  void certsMsg(json *);
   void userMsg(json *);
   void streamsMsg(json *);
   void policyUsersMsg(json *);

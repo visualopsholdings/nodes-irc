@@ -3,7 +3,7 @@ class IRC
 
    def wait_for(msg)
       result = ""
-      while IO.select([@socket], nil, nil, 2) && (line = @socket.recv(50))
+      while IO.select([@socket], nil, nil, 2) && (line = @socket.recv(100))
          result += line
          if result.include? msg
             puts "matching " + msg

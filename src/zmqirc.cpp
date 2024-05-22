@@ -27,14 +27,12 @@ using namespace std;
 
 int main(int argc, char *argv[]) {
 
-  string version = "ZMQIRC 1.1, 16-May-2024.";
+  string version = "ZMQIRC 1.2, 22-May-2024.";
 
   int subPort;
   int reqPort;
   int port;
   string logLevel;
-  string chainFile;
-  string certFile;
   
   po::options_description desc("Allowed options");
   desc.add_options()
@@ -42,8 +40,6 @@ int main(int argc, char *argv[]) {
     ("reqPort", po::value<int>(&reqPort)->default_value(3013), "ZMQ Req port.")
     ("port", po::value<int>(&port)->default_value(6667), "IRC port.")
     ("logLevel", po::value<string>(&logLevel)->default_value("info"), "Logging level [trace, debug, warn, info].")
-    ("chainFile", po::value<string>(&chainFile)->default_value(""), "Use SSL, this is the CERT file for the chain.")
-    ("certFile", po::value<string>(&certFile)->default_value(""), "Use SSL, this is the CERT file.")
     ("help", "produce help message")
     ;
   po::positional_options_description p;
@@ -67,7 +63,7 @@ int main(int argc, char *argv[]) {
   }
 
   boost::log::formatter logFmt =
-         boost::log::expressions::format("%1%\t[%2%]\t%3%")
+         boost::log::expressions::format("%1%\tZMQIRC\t[%2%]\t%3%")
         %  boost::log::expressions::format_date_time<boost::posix_time::ptime>("TimeStamp", "%Y-%m-%d %H:%M:%S.%f") 
         %  boost::log::expressions::attr< boost::log::trivial::severity_level>("Severity")
         %  boost::log::expressions::smessage;
@@ -81,21 +77,7 @@ int main(int argc, char *argv[]) {
     return 1;
   }
  
-  zmq::context_t context (1);
-  zmq::socket_t sub(context, ZMQ_SUB);
-  sub.connect("tcp://127.0.0.1:" + to_string(subPort));
-#if CPPZMQ_VERSION == ZMQ_MAKE_VERSION(4, 3, 1)  
-  sub.setsockopt(ZMQ_SUBSCRIBE, "");
-#else
-  sub.set(zmq::sockopt::subscribe, "");
-#endif
-	BOOST_LOG_TRIVIAL(info) << "Connect to ZMQ as Local SUB on " << subPort;
-
-  zmq::socket_t req(context, ZMQ_REQ);
-  req.connect("tcp://127.0.0.1:" + to_string(reqPort));
-	BOOST_LOG_TRIVIAL(info) << "Connect to ZMQ as Local REQ on " << reqPort;
-  
-  Server server(version, &sub, &req, port, certFile, chainFile);
-  server.run();
+  Server server(version, subPort, reqPort, port);
+  server.start();
 
 }

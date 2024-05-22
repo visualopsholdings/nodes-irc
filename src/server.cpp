@@ -22,11 +22,10 @@
 #include <iostream>
 #include <boost/log/trivial.hpp>
 
-Server::Server(const string &version, zmq::socket_t *sub, zmq::socket_t *req, int port, const string &certFile, const string &chainFile) :
+Server::Server(const string &version, int sub, int req, int port) :
     _version(version), _context(boost::asio::ssl::context::method::sslv23), _acceptor(_io_service), _ssl(false) {
 		
 	_zmq = zmqClientPtr(new ZMQClient(this, sub, req));
-  _zmq->run();
 	
 	boost::asio::ip::tcp::endpoint const endpoint{{}, (boost::asio::ip::port_type)port};
 	_acceptor.open(boost::asio::ip::tcp::v4());
@@ -34,19 +33,40 @@ Server::Server(const string &version, zmq::socket_t *sub, zmq::socket_t *req, in
 	_acceptor.bind(endpoint);
 	_acceptor.listen();
 
-  if (!certFile.empty() && !chainFile.empty()) {
-    SSLSession::setup(&_context, chainFile, certFile);
-    _ssl = true;
-  }
-  
-	start_accept();
 }
 
 Server::~Server() {
 }
 
+void Server::start() {
+
+  // request SSL info.
+  _zmq->certs();
+  _zmq->receive1();
+  
+}
+
 void Server::run() {
+
+	BOOST_LOG_TRIVIAL(trace) << "server run";
+
+	start_accept();
+
 	_io_service.run();
+	
+}
+
+void Server::run(const string &certFile, const string &chainFile) {
+
+	BOOST_LOG_TRIVIAL(trace) << "server run ssl";
+
+  _ssl = true;
+  SSLSession::setup(&_context, chainFile, certFile);
+  
+	start_accept();
+
+	_io_service.run();
+	
 }
 
 void Server::start_accept() {

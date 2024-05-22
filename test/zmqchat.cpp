@@ -18,20 +18,21 @@
 #include <boost/log/utility/setup/console.hpp>
 #include <boost/log/utility/setup/common_attributes.hpp>
 #include <zmq.hpp>
-#include <nlohmann/json.hpp>
+#include <boost/json.hpp>
 #include <vector>
 #include <boost/algorithm/string/join.hpp>
 
 using namespace std;
-using json = nlohmann::json;
+using json = boost::json::value;
 
 typedef function<void (json *json, zmq::socket_t *socket)> msgHandler;
+void certsMsg(json *json, zmq::socket_t *socket);
 void loginMsg(json *json, zmq::socket_t *socket);
 void streamsMsg(json *json, zmq::socket_t *socket);
 void policyUsersMsg(json *json, zmq::socket_t *socket);
 void messageMsg(json *json, zmq::socket_t *socket);
-optional<json::iterator> get(json *json, const string &name);
 void send(zmq::socket_t *socket, const string &m);
+bool getString(json *j, const string &name, string *value);
 
 int main(int argc, char *argv[]) {
 
@@ -41,14 +42,14 @@ int main(int argc, char *argv[]) {
 //  boost::log::core::get()->set_filter(boost::log::trivial::severity >= boost::log::trivial::debug);
   boost::log::core::get()->set_filter(boost::log::trivial::severity >= boost::log::trivial::info);
   boost::log::formatter logFmt =
-         boost::log::expressions::format("%1%\t[%2%]\t%3%")
+         boost::log::expressions::format("%1%\tZMQCHAT\t[%2%]\t%3%")
         %  boost::log::expressions::format_date_time<boost::posix_time::ptime>("TimeStamp", "%Y-%m-%d %H:%M:%S.%f") 
         %  boost::log::expressions::attr< boost::log::trivial::severity_level>("Severity")
         %  boost::log::expressions::smessage;
   boost::log::add_common_attributes();
   boost::log::add_console_log(clog)->set_formatter(logFmt);
 
-  BOOST_LOG_TRIVIAL(info) << "ZMQCHAT (Test) 0.1, 10-May-2024.";
+  BOOST_LOG_TRIVIAL(info) << "ZMQCHAT (Test) 0.2, 22-May-2024.";
 
   zmq::context_t context (1);
 
@@ -61,6 +62,7 @@ int main(int argc, char *argv[]) {
 	BOOST_LOG_TRIVIAL(info) << "Connect to ZMQ as Local REP on " << repPort;
 
   map<string, msgHandler> handlers;
+  handlers["certs"] = bind(&certsMsg, placeholders::_1, placeholders::_2);
   handlers["login"] = bind(&loginMsg, placeholders::_1, placeholders::_2);
   handlers["streams"] = bind(&streamsMsg, placeholders::_1, placeholders::_2);
   handlers["policyusers"] = bind(&policyUsersMsg, placeholders::_1, placeholders::_2 );
@@ -87,19 +89,19 @@ int main(int argc, char *argv[]) {
 #endif
         // convert to JSON
         string r((const char *)reply.data(), reply.size());
-        json doc = json::parse(r);
+        json doc = boost::json::parse(r);
 
         BOOST_LOG_TRIVIAL(debug) << "got reply " << doc;
 
-        // switch the handler based on the message type.
-        optional<json::iterator> type = get(&doc, "type");
-        if (!type) {
+        string type;
+        if (!getString(&doc, "type", &type)) {
           BOOST_LOG_TRIVIAL(error) << "no type";
           continue;
         }
-        map<string, msgHandler>::iterator handler = handlers.find(**type);
+
+        map<string, msgHandler>::iterator handler = handlers.find(type);
         if (handler == handlers.end()) {
-          BOOST_LOG_TRIVIAL(error) << "unknown reply type " << **type;
+          BOOST_LOG_TRIVIAL(error) << "unknown msg type " << type;
           continue;
         }
         handler->second(&doc, &rep);
@@ -112,134 +114,12 @@ int main(int argc, char *argv[]) {
 
 }
 
-string jobj(const vector<string> &nvps) {
-  return "{ " + boost::algorithm::join(nvps, ", ") + " }";
-}
+void send(zmq::socket_t *socket, const json &j) {
 
-string jnvps(const string &name, const string &val) {
-  return "\"" + name + "\": \"" + val + "\"";
-}
-
-string jarray(const string &name, const vector<string> &objs) {
-  return "\"" + name + "\": [ " + boost::algorithm::join(objs, ", ") + " ]";
-}
-
-void loginMsg(json *json, zmq::socket_t *socket) {
-
-  optional<json::iterator> session = get(json, "session");
-  if (!session) {
-    BOOST_LOG_TRIVIAL(error) << "no session";
-    return;
-  }
-  optional<json::iterator> password = get(json, "password");
-  if (!password) {
-    BOOST_LOG_TRIVIAL(error) << "no password";
-    return;
-  }
-  if (**password == "tracy") {
-    send(socket, jobj({ jnvps("type", "user"), jnvps("session", **session), jnvps("id", "u1"), jnvps("name", "tracy"), jnvps("fullname", "Tracy")}));
-    return;
-  }
-  if (**password == "leanne") {
-    send(socket, jobj({ jnvps("type", "user"), jnvps("session", **session), jnvps("id", "u2"), jnvps("name", "leanne"), jnvps("fullname", "Leanne")}));
-    return;
-  }
-  send(socket, jobj({ jnvps("type", "err"),  jnvps("msg", "User not found") }));
-}
-
-void streamsMsg(json *json, zmq::socket_t *socket) {
-
-  optional<json::iterator> user = get(json, "user");
-  if (!user) {
-    BOOST_LOG_TRIVIAL(error) << "no user";
-    return;
-  }
+  stringstream ss;
+  ss << j;
+  string m = ss.str();
   
-  send(socket, jobj({ jnvps("type", "streams"), jnvps("user", **user), 
-      jarray("streams", { 
-        jobj({ jnvps("name", "My Conversation"),  jnvps("id", "s1"),  jnvps("id", "s1"),  jnvps("policy", "p1")})
-      })
-    }));
-
-}
-
-void policyUsersMsg(json *json, zmq::socket_t *socket) {
-
-  optional<json::iterator> policy = get(json, "policy");
-  if (!policy) {
-    BOOST_LOG_TRIVIAL(error) << "no policy";
-    return;
-  }
-  if (**policy != "p1") {
-    send(socket, jobj({ jnvps("type", "err"),  jnvps("msg", "not correct policy") }));
-    return;
-  }
-  send(socket, jobj({ jnvps("type", "policyusers"), jnvps("id", "p1"), 
-      jarray("users", { 
-        jobj({ jnvps("id", "u1"),  jnvps("name", "tracy"),  jnvps("fullname", "Tracy")}),
-        jobj({ jnvps("id", "u2"),  jnvps("name", "leanne"),  jnvps("fullname", "Leanne")})
-      })
-    }));
-  
-}
-
-void messageMsg(json *json, zmq::socket_t *socket) {
-
-  optional<json::iterator> user = get(json, "user");
-  if (!user) {
-    BOOST_LOG_TRIVIAL(error) << "no user";
-    return;
-  }
-  if (**user != "u1" && **user != "u2") {
-    send(socket, jobj({ jnvps("type", "err"),  jnvps("msg", "not correct user") }));
-    return;
-  }
-  optional<json::iterator> stream = get(json, "stream");
-  if (!stream) {
-    BOOST_LOG_TRIVIAL(error) << "no stream";
-    return;
-  }
-  if (**stream != "s1") {
-    send(socket, jobj({ jnvps("type", "err"),  jnvps("msg", "not correct stream") }));
-    return;
-  }
-  optional<json::iterator> policy = get(json, "policy");
-  if (!policy) {
-    BOOST_LOG_TRIVIAL(error) << "no policy";
-    return;
-  }
-  if (**policy != "p1") {
-    send(socket, jobj({ jnvps("type", "err"),  jnvps("msg", "not correct policy") }));
-    return;
-  }
-  optional<json::iterator> text = get(json, "text");
-  if (!text) {
-    BOOST_LOG_TRIVIAL(error) << "no text";
-    return;
-  }
-  if (**text == "hello") {
-    send(socket, jobj({ jnvps("type", "message"), jnvps("text", "world"), 
-      jnvps("stream", "s1"), jnvps("policy", "p1"), 
-      jnvps("user", (string)**user == "u1" ? "u2": "u1")}));
-      return;
-  }
-  BOOST_LOG_TRIVIAL(info) << "got " << **text << " from " << **user;
-  send(socket, jobj({ jnvps("type", "ack") }));
-
-}
-
-optional<json::iterator> get(json *json, const string &name) {
-
-  json::iterator i = json->find(name);
-  if (i == json->end()) {
-    return nullopt;
-  }
-  return i;
-  
-}
-
-void send(zmq::socket_t *socket, const string &m) {
-
   BOOST_LOG_TRIVIAL(info) << "sending " << m;
 
 	zmq::message_t msg(m.length());
@@ -254,5 +134,146 @@ void send(zmq::socket_t *socket, const string &m) {
   catch (zmq::error_t &e) {
     BOOST_LOG_TRIVIAL(warning) << "got exc send" << e.what() << "(" << e.num() << ")";
   }
+
+}
+
+bool getString(json *j, const string &name, string *value) {
+
+  try {
+    *value = boost::json::value_to<string>(j->at(name));
+    return true;
+  }
+  catch (const boost::system::system_error& ex) {
+    return false;
+  }
+
+}
+
+void certsMsg(json *j, zmq::socket_t *socket) {
+
+  send(socket, { { "type", "certs" }, { "ssl", false } });
+
+}
+
+void loginMsg(json *j, zmq::socket_t *socket) {
+
+  string session;
+  if (!getString(j, "session", &session)) {
+    BOOST_LOG_TRIVIAL(error) << "no session";
+    return;
+  }
+  string password;
+  if (!getString(j, "password", &password)) {
+    BOOST_LOG_TRIVIAL(error) << "no password";
+    return;
+  }
+  if (password == "tracy") {
+    send(socket, {
+      { "type", "user" },
+      { "session", session },
+      { "id", "u1" },
+      { "name", "tracy" },
+      { "fullname", "Tracy" }
+    });
+    return;
+  }
+  if (password == "leanne") {
+    send(socket, {
+      { "type", "user" },
+      { "session", session },
+      { "id", "u2" },
+      { "name", "leanne" },
+      { "fullname", "Leanne" }
+    });
+    return;
+  }
+  send(socket, { { "type", "err" }, { "msg", "User not found" } });
+
+}
+
+void streamsMsg(json *j, zmq::socket_t *socket) {
+
+  string user;
+  if (!getString(j, "user", &user)) {
+    BOOST_LOG_TRIVIAL(error) << "no user";
+    return;
+  }
+  send(socket, {
+    { "type", "streams" },
+    { "user", user },
+    { "streams", {
+      { { "name", "My Conversation 1" }, { "id", "s1" }, { "policy", "p1" } },
+      { { "name", "My Conversation 2" }, { "id", "s2" }, { "policy", "p2" } }
+      } 
+    }
+  });
+
+}
+
+void policyUsersMsg(json *j, zmq::socket_t *socket) {
+
+  string policy;
+  if (!getString(j, "policy", &policy)) {
+    BOOST_LOG_TRIVIAL(error) << "no policy";
+    return;
+  }
+  if (policy != "p1") {
+    send(socket, { { "type", "err" }, { "msg", "not correct policy" } });
+    return;
+  }
+  send(socket, {
+    { "type", "policyusers" },
+    { "id", "p1" },
+    { "users", {
+      { { "id", "u1" }, { "name", "tracy" }, { "fullname", "Tracy" } },
+      { { "id", "u2" }, { "name", "leanne" }, { "fullname", "Leanne" } }  
+      } 
+    }
+  });
+  
+}
+
+void messageMsg(json *j, zmq::socket_t *socket) {
+
+  string user;
+  if (!getString(j, "user", &user)) {
+    BOOST_LOG_TRIVIAL(error) << "no user";
+    return;
+  }
+  string stream;
+  if (!getString(j, "stream", &stream)) {
+    BOOST_LOG_TRIVIAL(error) << "no stream";
+    return;
+  }
+  if (stream != "s1") {
+    send(socket, { { "type", "err" }, { "msg", "not correct stream" } });
+    return;
+  }
+  string policy;
+  if (!getString(j, "policy", &policy)) {
+    BOOST_LOG_TRIVIAL(error) << "no policy";
+    return;
+  }
+  if (policy != "p1") {
+    send(socket, { { "type", "err" }, { "msg", "policy" } });
+    return;
+  }
+  string text;
+  if (!getString(j, "text", &text)) {
+    BOOST_LOG_TRIVIAL(error) << "no text";
+    return;
+  }
+  if (text == "hello") {
+    send(socket, {
+      { "type", "message" },
+      { "text", "world" },
+      { "stream", "s1" },
+      { "policy", "p1" },
+      { "user", user == "u1" ? "u2": "u1" }
+    });
+    return;
+  }
+  BOOST_LOG_TRIVIAL(info) << "got " << text << " from " << user;
+  send(socket, { { "type", "ack" } });
 
 }
