@@ -61,7 +61,11 @@ void ZMQClient::run() {
 void ZMQClient::receive1() {
 
   zmq::message_t reply;
- _req->recv(&reply);
+#if CPPZMQ_VERSION == ZMQ_MAKE_VERSION(4, 3, 1)
+  _req->recv(&reply);
+#else
+  auto res = _req->recv(reply, zmq::recv_flags::none);
+#endif
   handle_reply(reply, &_reqmessages);
 
 }
