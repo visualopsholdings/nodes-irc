@@ -26,7 +26,6 @@ void Session::listCmd(const vector<string> &args) {
   if (!_user) {
 	  BOOST_LOG_TRIVIAL(error) << "LIST session has no user";
 	  return;
-	  
   }
 
   vector<string> names;

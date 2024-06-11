@@ -26,7 +26,7 @@
 template<typename T>
 T find_in(vector<T> &ve, const string &token, string (* member)(T &)) {
 
-  typename vector<T>::iterator i = find_if(ve.begin(), ve.end(), 
+  auto i = find_if(ve.begin(), ve.end(), 
     [&token, &member](T &e) { return member(e) == token; });
   if (i == ve.end()) {
     return 0;

@@ -117,7 +117,7 @@ void Server::remove_session(sessionPtr session) {
 
   BOOST_LOG_TRIVIAL(debug) << _sessions.size() << " sessions when removing";
   
-  vector<sessionPtr>::iterator i = find_if(_sessions.begin(), _sessions.end(), 
+  auto i = find_if(_sessions.begin(), _sessions.end(), 
     [&session](sessionPtr &e) { return e->_user ? e->_user->_id == session->_user->_id : false; });
   if (i == _sessions.end()) {
     BOOST_LOG_TRIVIAL(error) << "session not found to remove " << session->_user->_id;
