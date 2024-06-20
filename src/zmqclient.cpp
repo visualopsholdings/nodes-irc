@@ -81,7 +81,7 @@ void ZMQClient::receive() {
   const std::chrono::milliseconds timeout{500};
   while (1) {
     
-    BOOST_LOG_TRIVIAL(debug) << "polling for messages";
+//    BOOST_LOG_TRIVIAL(debug) << "polling for messages";
     zmq::message_t message;
     zmq::poll(&items[0], 2, timeout);
 
