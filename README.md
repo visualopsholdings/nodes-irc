@@ -292,8 +292,7 @@ make && make test || cat Testing/Temporary/LastTest.log
 The end to end tests use cucumber (Ruby), to get that going:
 
 ```
-$ bundle install
-$ bundle exec cucumber
+bundle exec cucumber
 ```
 
 This will run up a dummy "Nodes" with some dummy data and run end to end tests
