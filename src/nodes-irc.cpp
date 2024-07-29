@@ -1,14 +1,14 @@
 /*
-  zmqirc.cpp
+  nodes-irc.cpp
   
   Author: Paul Hamilton (paul@visualops.com)
   Date: 16-Apr-2024
     
-  Command line driver for ZMQ to IRC integration.
+  Command line driver for Nodes to IRC integration.
   
   Licensed under [version 3 of the GNU General Public License] contained in LICENSE.
  
-  https://github.com/visualopsholdings/zmqirc
+  https://github.com/visualopsholdings/nodes-irc
 */
 
 #include "server.hpp"
@@ -27,7 +27,7 @@ using namespace std;
 
 int main(int argc, char *argv[]) {
 
-  string version = "ZMQIRC 1.2, 22-May-2024.";
+  string version = "nodes-irc 1.2, 22-May-2024.";
 
   int subPort;
   int reqPort;
@@ -63,7 +63,7 @@ int main(int argc, char *argv[]) {
   }
 
   boost::log::formatter logFmt =
-         boost::log::expressions::format("%1%\tZMQIRC\t[%2%]\t%3%")
+         boost::log::expressions::format("%1%\tnodes-irc\t[%2%]\t%3%")
         %  boost::log::expressions::format_date_time<boost::posix_time::ptime>("TimeStamp", "%Y-%m-%d %H:%M:%S.%f") 
         %  boost::log::expressions::attr< boost::log::trivial::severity_level>("Severity")
         %  boost::log::expressions::smessage;

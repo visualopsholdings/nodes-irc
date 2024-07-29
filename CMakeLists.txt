@@ -3,15 +3,15 @@
 #   Author: Paul Hamilton (paul@visualops.com)
 #   Date: 16-Apr-2024
 #
-#   Input file for ZMQIRC driver for Visual Ops
+#   Input file for Nodes IRC driver for Visual Ops
 #
 #   Licensed under [version 3 of the GNU General Public License] contained in LICENSE.
 #   
-#   https://github.com/visualopsholdings/zmqirc
+#   https://github.com/visualopsholdings/nodes-irc
 
 cmake_minimum_required(VERSION 3.5)
 
-project (zmqirc)
+project (nodes-irc)
   find_package(Boost 1.85.0 COMPONENTS program_options filesystem unit_test_framework chrono thread log_setup log json REQUIRED)
   find_package(cppzmq REQUIRED)
   find_package(OpenSSL REQUIRED)
@@ -37,13 +37,13 @@ set(BOOSTLIBS ${Boost_CHRONO_LIBRARY} ${Boost_THREAD_LIBRARY} ${Boost_PROGRAM_OP
 include_directories(include)
 include_directories(${OPENSSL_INCLUDE_DIR})
 
-add_executable(ZMQIRC src/zmqirc.cpp src/server.cpp src/zmqclient.cpp src/session.cpp 
+add_executable(nodes-irc src/nodes-irc.cpp src/server.cpp src/zmqclient.cpp src/session.cpp 
                       src/commands.cpp src/parser.cpp src/channel.cpp src/user.cpp 
                       src/tcpsession.cpp src/sslsession.cpp)
-  target_link_libraries(ZMQIRC ${LIBS} ${BOOSTLIBS})
+  target_link_libraries(nodes-irc ${LIBS} ${BOOSTLIBS})
 
-add_executable(ZMQCHAT test/zmqchat.cpp)
-  target_link_libraries(ZMQCHAT ${LIBS} ${BOOSTLIBS})
+add_executable(nodes test/nodes.cpp)
+  target_link_libraries(nodes ${LIBS} ${BOOSTLIBS})
 
 add_executable(TestParser test/testparser.cpp src/parser.cpp)
   target_link_libraries(TestParser ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})

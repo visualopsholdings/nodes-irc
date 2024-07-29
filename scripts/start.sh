@@ -1,32 +1,32 @@
 #!/bin/bash
 # 
-# Start ZMQIRC
+# Start Nodes IRC.
 
-if [ ! -f "zmqirc/build/ZMQIRC" ];
+if [ ! -f "nodes-irc/build/nodes-irc" ];
 then
   echo "Need to build project first"
   exit 1
 fi
 
-if [ -d zmqirc/lib ];
+if [ -d nodes-irc/lib ];
 then
   # for those machines that have local libs on them
-  sudo LD_LIBRARY_PATH=/home/visualops/zmqirc/lib ./zmqirc/build/ZMQIRC \
+  sudo LD_LIBRARY_PATH=/home/visualops/nodes-irc/lib ./nodes-irc/build/nodes-irc \
     --logLevel=trace \
-    > zmqirc.log 2>&1 &
+    > nodes-irc.log 2>&1 &
     
 # when running without sudo
-#   LD_LIBRARY_PATH=/home/visualops/zmqirc/lib
+#   LD_LIBRARY_PATH=/home/visualops/nodes-irc/lib
 #   export LD_LIBRARY_PATH
 else
-  sudo ./zmqirc/build/ZMQIRC \
+  sudo ./nodes-irc/build/nodes-irc \
     --logLevel=trace \
-    > zmqirc.log 2>&1 &
+    > nodes-irc.log 2>&1 &
 fi
 
 # to run without SSL, comment out the above and just used this.
 # BUT DONT!!!!
 #
-#./zmqirc/build/ZMQIRC \
-#  > zmqirc.log 2>&1 &
+#./nodes-irc/build/nodes-irc \
+#  > nodes-irc.log 2>&1 &
 

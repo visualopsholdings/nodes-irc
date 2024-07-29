@@ -1,4 +1,4 @@
-# ZMQIRC
+# nodes-irc
 
 A frontend for IRC that uses ZMQ to send/receive messages.
 
@@ -6,14 +6,14 @@ A frontend for IRC that uses ZMQ to send/receive messages.
 
 This is a companion project to:
 
-https://github.com/visualopsholdings/zmqchat
+https://github.com/visualopsholdings/nodes
 
 Visual Ops is a proprietary (closed source) system that runs on very low end hardware
 like T4G's in AWS, or on a Raspberry Pi 4/5.
 
 This "plugin" can run on a Visual Ops server and provide simple IRC access to the server.
 
-An Open Source version of Visual Ops called "ZMQChat" is being developed, but for now at least
+An Open Source version of Visual Ops called "Nodes" is being developed, but for now at least
 this small part of the server, the IRC protocol is available to build and use.
 
 If you would like access to the Visual Ops software it is available as an image download 
@@ -21,11 +21,11 @@ after we get to know you.
 
 Visit https://info.visualops.com/ for more info.
 
-All the places that mention "Visual Ops", could be interchanged with "ZMQChat".
+All the places that mention "Visual Ops", could be interchanged with "Nodes".
 
 ## Protocol
 
-The protocol used to talk to ZMQChat is sending stringified JSON over 2 ZMQ message queues.
+The protocol used to talk to Nodes is sending stringified JSON over 2 ZMQ message queues.
 
 ### Supported IRC commands
 
@@ -133,7 +133,7 @@ This will be processed by the Visual Ops system and it will return:
 
 #### Policy users
 
-Since the Visual Ops (and the ZMQChat system) is persistent, when you join a stream, you can query the 
+Since the Visual Ops (and the Nodes system) is persistent, when you join a stream, you can query the 
 users in that stream by the stream policy and join those users too.
 
 ```
@@ -272,8 +272,8 @@ cd ../..
 Now this project:
 
 ```
-git clone https://github.com/visualopsholdings/zmqirc.git
-cd zmqirc
+git clone https://github.com/visualopsholdings/nodes-irc.git
+cd ndoes-irc
 mkdir build
 cd build
 cmake ..
@@ -296,7 +296,7 @@ $ bundle install
 $ bundle exec cucumber
 ```
 
-This will run up a dummy "ZMQChat" with some dummy data and run end to end tests
+This will run up a dummy "Nodes" with some dummy data and run end to end tests
 against the IRC client.
 
 You can find the actual tests in "features".
@@ -310,18 +310,18 @@ bundle exec cucumber -n "More than one user can connect and login"
 ## Installation in Visual Ops
 
 You use the same SSL certs that visualops has, which are in /etc/letsencrypt/live/mydomain, so 
-edit zmqirc/scripts/start.sh and set it to that folder.
+edit nodes-irc/scripts/start.sh and set it to that folder.
 
 Once built, to start it on a Visual Ops server:
 
 ```
-$ zmqirc/scripts/start.sh
+$ nodes-irc/scripts/start.sh
 ```
 
 To stop it:
 
 ```
-$ zmqirc/scripts/stop.sh
+$ nodes-irc/scripts/stop.sh
 ```
 
 On reboot, Visual ops will look for the start script file and run it up.
@@ -335,7 +335,7 @@ server and chat that way.
 
 ## License
 
-ZMQIRC is licensed under [version 3 of the GNU General Public License] contained in LICENSE.
+Nodes is licensed under [version 3 of the GNU General Public License] contained in LICENSE.
 
 ## Acknowlegements
 
@@ -365,7 +365,7 @@ ZMQIRC is licensed under [version 3 of the GNU General Public License] contained
 - Initial project creation.
 
 ### 15 Apr 2024
-- Cucumber tests, slight rename to include the ZMQChat project (new) which is an open source
+- Cucumber tests, slight rename to include the Nodes project (new) which is an open source
 implementation of the proprietary "Visual Ops" server.
 
 ### 18 Apr 2024
@@ -394,10 +394,13 @@ implementation of the proprietary "Visual Ops" server.
 - FInish initial C++ implementation running in Visual Ops
 
 ### 10 May 2024
-- Rewrite zmqchat test program in C++. Get rid of nodejs.
+- Rewrite nodes test program in C++. Get rid of nodejs.
 
 ### 12 May
 - SSL support
 
 ### 16 May
 - Solve "LIST" deadlock problem in SSL.
+
+### 29 Jul 2024
+- rename to https://github.com/visualopsholdings/nodes-irc

@@ -1,14 +1,14 @@
 /*
-  zmqchat.cpp
+  nodes.cpp
   
   Author: Paul Hamilton (paul@visualops.com)
   Date: 10-May-2024
     
-  Dummy ZMQCHAT for testing
+  Dummy Nodes for testing
   
   Licensed under [version 3 of the GNU General Public License] contained in LICENSE.
  
-  https://github.com/visualopsholdings/zmqirc
+  https://github.com/visualopsholdings/nodes-irc
 */
 
 #include <iostream>
@@ -42,14 +42,14 @@ int main(int argc, char *argv[]) {
 //  boost::log::core::get()->set_filter(boost::log::trivial::severity >= boost::log::trivial::debug);
   boost::log::core::get()->set_filter(boost::log::trivial::severity >= boost::log::trivial::info);
   boost::log::formatter logFmt =
-         boost::log::expressions::format("%1%\tZMQCHAT\t[%2%]\t%3%")
+         boost::log::expressions::format("%1%\tNodes\t[%2%]\t%3%")
         %  boost::log::expressions::format_date_time<boost::posix_time::ptime>("TimeStamp", "%Y-%m-%d %H:%M:%S.%f") 
         %  boost::log::expressions::attr< boost::log::trivial::severity_level>("Severity")
         %  boost::log::expressions::smessage;
   boost::log::add_common_attributes();
   boost::log::add_console_log(clog)->set_formatter(logFmt);
 
-  BOOST_LOG_TRIVIAL(info) << "ZMQCHAT (Test) 0.2, 22-May-2024.";
+  BOOST_LOG_TRIVIAL(info) << "Nodes (Test) 0.2, 22-May-2024.";
 
   zmq::context_t context (1);
 

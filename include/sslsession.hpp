@@ -4,11 +4,11 @@
   Author: Paul Hamilton (paul@visualops.com)
   Date: 10-May-2024
     
-  An SSL session for ZMQ to IRC integration.
+  An SSL session for Nodes to IRC integration.
   
   Licensed under [version 3 of the GNU General Public License] contained in LICENSE.
  
-  https://github.com/visualopsholdings/zmqirc
+  https://github.com/visualopsholdings/nodes-irc
 */
 
 #ifndef H_sslsession

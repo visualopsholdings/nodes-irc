@@ -2,17 +2,17 @@
 # 
 # Build the project
 
-if [ ! -d "zmqirc" ];
+if [ ! -d "nodes-irc" ];
 then
-  echo "zmqirc project missing."
+  echo "nodes-irc project missing."
   exit 1
 fi
 
-if [ ! -d "zmqirc/build" ];
+if [ ! -d "nodes-irc/build" ];
 then
-  mkdir zmqirc/build
+  mkdir nodes-irc/build
 fi
-pushd zmqirc/build
+pushd nodes-irc/build
 git pull
 cmake ..
 make

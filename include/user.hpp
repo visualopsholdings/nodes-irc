@@ -4,11 +4,11 @@
   Author: Paul Hamilton (paul@visualops.com)
   Date: 26-Apr-2024
     
-  A user for ZMQ to IRC integration.
+  A user for Nodes to IRC integration.
   
   Licensed under [version 3 of the GNU General Public License] contained in LICENSE.
  
-  https://github.com/visualopsholdings/zmqirc
+  https://github.com/visualopsholdings/nodes-irc
 */
 
 #ifndef H_user
