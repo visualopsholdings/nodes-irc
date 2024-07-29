@@ -40,3 +40,7 @@ Then('she LISTS and gets {string}') do |match|
    
 end
 
+When("she waits {int} seconds") do |n|
+  sleep(n.to_i)
+end
+

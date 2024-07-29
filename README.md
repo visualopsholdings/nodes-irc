@@ -215,6 +215,13 @@ sudo apt-get -y install g++ gcc make cmake
 
 ### Prerequisites
 
+We rely on https://github.com/visualopsholdings/nodes being built first, so do that, and then
+in your shell, define a variable to point to that:
+
+```
+export NODES_HOME=/where/nodes/went
+```
+
 For convenience, do all these inside a folder you can remove, they take a lot of disk space
 but aren't used once instsalled.
 
@@ -403,3 +410,5 @@ implementation of the proprietary "Visual Ops" server.
 
 ### 29 Jul 2024
 - rename to https://github.com/visualopsholdings/nodes-irc
+- implement end to end tests using the real nodes.
+

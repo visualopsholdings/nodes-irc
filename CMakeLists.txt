@@ -42,9 +42,6 @@ add_executable(nodes-irc src/nodes-irc.cpp src/server.cpp src/zmqclient.cpp src/
                       src/tcpsession.cpp src/sslsession.cpp)
   target_link_libraries(nodes-irc ${LIBS} ${BOOSTLIBS})
 
-add_executable(nodes test/nodes.cpp)
-  target_link_libraries(nodes ${LIBS} ${BOOSTLIBS})
-
 add_executable(TestParser test/testparser.cpp src/parser.cpp)
   target_link_libraries(TestParser ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})
 
