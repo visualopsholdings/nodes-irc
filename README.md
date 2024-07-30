@@ -90,6 +90,8 @@ mkdir working
 cd working
 ```
 
+#### Boost 1.85.0
+
 Boost 1.85.0 if you can get this or later with a simple tool then do that, otherwise you will
 need to build it from source:
 
@@ -104,7 +106,10 @@ as root user:
 ./b2 install threading=multi link=shared
 ```
 
-ZMQ and JSON Stuff.
+#### ZMQ
+
+If you can get zeromq 4.3.5 or later, then use that otherwise you will need to build it
+all from source.
 
 ```
 wget https://download.libsodium.org/libsodium/releases/libsodium-1.0.19-stable.tar.gz  
