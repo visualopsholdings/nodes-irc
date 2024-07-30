@@ -23,9 +23,20 @@ Visit https://info.visualops.com/ for more info.
 
 All the places that mention "Visual Ops", could be interchanged with "Nodes".
 
-## Protocol
+### ZMQ API
 
-The protocol used to talk to Nodes is sending stringified JSON over 2 ZMQ message queues.
+This project communicate with Nodes using the ZMQ message queues.
+
+A PUB/SUB socket on port tcp://127.0.0.1:3012.
+
+This is used to receive new messages from other nodes and users locally connected to this node.
+
+A REP/REQ socket on port tcp://127.0.0.1:3013.
+
+This is used to send messages to other nodes and users connected locally to this node. 
+This port is also used to "ask" for things of the Nodes system such as login etc.
+
+[Here are the formats for the messages](https://github.com/visualopsholdings/nodes/blob/main/src/msg/README.md)
 
 ### Supported IRC commands
 
@@ -49,157 +60,6 @@ Log off the server.
 #### PRIVMSG
 
 Send a message to the server.
-
-### ZMQ messages
-
-A SUB socket on port tcp://127.0.0.1:3012 which is used to receive new messages from other nodes
-and users locally connected to this node.
-
-A REQ socket on port tcp://127.0.0.1:3013 which is used to send messages to other nodes and
-users connected locally to this node. This port is also used to "ask" for things of the Visual Ops
-system such as login etc.
-
-### JSON formats
-
-#### Certs
-
-```
-{ 
-  "type": "certs"
-}
-```
-
-This will be processed by the Visual Ops system and it will return:
-
-```
-{ 
-  "type": "certs", 
-  "ssl": true,
-  "cettFile": "xxxx",
-  "chainFile": "yyy"
-}
-```
-
-The session id, is just turned around for convenience. It isn't used by Visual Ops.
-
-#### Login
-
-```
-{ 
-  "type": "login", 
-  "session": "internal session id",
-  "password": "password" 
-}
-```
-
-This will be processed by the Visual Ops system and it will return:
-
-```
-{ 
-  "type": "user", 
-  "name": "tracy",
-  "fullname": "Tracy",
-  "id": "user guid",
-  "session": "internal session id"
-}
-```
-
-The session id, is just turned around for convenience. It isn't used by Visual Ops.
-
-#### Streams
-
-```
-{ 
-  "type": "streams", 
-  "user": "user guid",
-}
-```
-
-This will be processed by the Visual Ops system and it will return:
-
-```
-{ 
-  "type": "streams", 
-  "user": "user guid",
-  "streams": [
-    {
-      "name": "Conversation 1",
-      "stream": "stream guid",
-      "policy": "stream policy guid"
-    }
-  ]
-}
-```
-
-#### Policy users
-
-Since the Visual Ops (and the Nodes system) is persistent, when you join a stream, you can query the 
-users in that stream by the stream policy and join those users too.
-
-```
-{ 
-  "type": "policyusers", 
-  "policy": "stream policy guid" 
-}
-```
-
-This will be processed by the Visual Ops system and it will return:
-
-```
-{ 
-  "type": "user", 
-  "name": "policyusers",
-  "id": "stream policy guid",
-  "users": [
-    {
-      "name": "tracy",
-      "fullname": "Tracy",
-      "id": "user guid"
-    },
-    {
-      "name": "leanne",
-      "fullname": "Leanne",
-      "id": "user guid"
-    }
-  ]
-}
-```
-
-#### Message
-
-This is sent to the REQ socket when a message happens on IRC, and will be received on the 
-SUB socket when a new message is received.
-
-```
-{ 
-  "type": "message", 
-  "text": "Message text",
-  "stream": "stream guid",
-  "policy": "stream policy guid",
-  "user": "user guid"
-}
-```
-
-#### Acknowlege
-
-This is received on the REQ socket when a Message is sent.
-
-```
-{ 
-  "type": "ack"
-}
-```
-
-#### Error
-
-This is received on the REQ socket when a a bad request has happened
-
-```
-{ 
-  "type": "err",
-  "msg": "LOL what are you doing!"
-}
-```
 
 ## Building
 
