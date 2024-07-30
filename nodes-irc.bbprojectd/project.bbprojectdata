@@ -14,6 +14,7 @@
 		<string>8D88F5E3-FCDF-45E8-9F8F-2F2D4171490A</string>
 		<string>0F84F5B5-2A39-4F49-A687-B7592E473D97</string>
 		<string>0469FC9B-8001-41DB-BE96-5AE1D370129B</string>
+		<string>2A55DA91-C153-4A5B-9118-E8DCE1FCE686</string>
 	</array>
 	<key>ProjectItems</key>
 	<dict>
@@ -107,6 +108,54 @@
 			<string>CMakeLists.txt</string>
 			<key>ItemType</key>
 			<string>FileReference</string>
+		</dict>
+		<key>2A55DA91-C153-4A5B-9118-E8DCE1FCE686</key>
+		<dict>
+			<key>ItemData</key>
+			<dict>
+				<key>BookmarkData</key>
+				<data>
+				Ym9va9gCAAAAAAQQMAAAAG6rTSTjspdAk6gEzq689UCO
+				ISXY6SUb4fGb4gGx1T3g1AEAAAQAAAADAwAAAAgAKAUA
+				AAABAQAAVXNlcnMAAAAEAAAAAQEAAHBhdWwDAAAAAQEA
+				AERldgAJAAAAAQEAAG5vZGVzLWlyYwAAAAcAAAABAQAA
+				dGVzdC5zaAAUAAAAAQYAABAAAAAgAAAALAAAADgAAABM
+				AAAACAAAAAQDAADYWgAAAAAAAAgAAAAEAwAAvDIEAAAA
+				AAAIAAAABAMAAEaDFgAAAAAACAAAAAQDAAAfPD0SAAAA
+				AAgAAAAEAwAAAcBCEgAAAAAUAAAAAQYAAHgAAACIAAAA
+				mAAAAKgAAAC4AAAACAAAAAAEAABBxixj3cI8OhgAAAAB
+				AgAAAQAAAAAAAAAPAAAAAAAAAAAAAAAAAAAACAAAAAQD
+				AAADAAAAAAAAAAQAAAADAwAA9QEAAAgAAAABCQAAZmls
+				ZTovLy8MAAAAAQEAAE1hY2ludG9zaCBIRAgAAAAEAwAA
+				AJCClucAAAAIAAAAAAQAAEHF9QSsAAAAJAAAAAEBAABB
+				MTRFOUYzOC1BQ0FELTRFRkItOTRDQS0zNDQ1NzFGRTVD
+				NjkYAAAAAQIAAIEAAAABAAAA7xMAAAEAAAAAAAAAAAAA
+				AAEAAAABAQAALwAAAAAAAAABBQAAzAAAAP7///8BAAAA
+				AAAAABAAAAAEEAAAXAAAAAAAAAAFEAAAyAAAAAAAAAAQ
+				EAAA9AAAAAAAAABAEAAA5AAAAAAAAAACIAAAwAEAAAAA
+				AAAFIAAAMAEAAAAAAAAQIAAAQAEAAAAAAAARIAAAdAEA
+				AAAAAAASIAAAVAEAAAAAAAATIAAAZAEAAAAAAAAgIAAA
+				oAEAAAAAAAAwIAAAzAEAAAAAAAABwAAAFAEAAAAAAAAR
+				wAAAIAAAAAAAAAASwAAAJAEAAAAAAAAQ0AAABAAAAAAA
+				AAA=
+				</data>
+				<key>FileURL</key>
+				<string>file:///Users/paul/Dev/nodes-irc/test.sh</string>
+				<key>HasSecurityScope</key>
+				<true/>
+				<key>RelativePath</key>
+				<string>./test.sh</string>
+				<key>TypeID</key>
+				<string>_CFileLocator</string>
+				<key>Version</key>
+				<integer>1</integer>
+			</dict>
+			<key>ItemName</key>
+			<string>test.sh</string>
+			<key>ItemType</key>
+			<string>FileReference</string>
+			<key>UserOverrideItemName</key>
+			<true/>
 		</dict>
 		<key>2A7CE8C7-9038-475C-8C44-8DE7899A9512</key>
 		<dict>

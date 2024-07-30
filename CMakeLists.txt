@@ -22,6 +22,22 @@ set(CMAKE_BUILD_TYPE Debug)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+# fetch from other repos.
+
+include(FetchContent)
+
+FetchContent_Declare(
+  nodes-test
+  GIT_REPOSITORY https://github.com/visualopsholdings/nodes-test.git
+  GIT_TAG main
+)
+FetchContent_GetProperties(nodes-test)
+
+if(NOT nodes-test_POPULATED)
+  message(STATUS "Fetching nodes-test...")
+  FetchContent_Populate(nodes-test)
+endif()
+
 set(LIBS zmq ${OPENSSL_LIBRARIES})
 
 if (UNIX AND NOT APPLE)
