@@ -49,7 +49,7 @@ void Channel::join(userPtr user) {
 
 void Channel::send_message(userPtr user, const string &text) {
   
-  // thread safe.
+   // thread safe.
   lock_guard<mutex> guard(_users_mutex);
   
   send(user.get(), "PRIVMSG", { _name, ":" + text });
@@ -64,6 +64,8 @@ userPtr Channel::find_user_id(const string &id) {
 }
 
 void Channel::send(Prefixable *prefix, const string &cmd, const list<string> &args) {
+
+  BOOST_LOG_TRIVIAL(trace) << "send channel " << cmd;
 
   itemsType items;
   items.push_back({ cmd, args });

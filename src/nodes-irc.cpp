@@ -27,7 +27,7 @@ using namespace std;
 
 int main(int argc, char *argv[]) {
 
-  string version = "nodes-irc 1.2, 22-May-2024.";
+  string version = "Nodes IRC 1.3, 1-Aug-2024.";
 
   int subPort;
   int reqPort;
@@ -63,21 +63,19 @@ int main(int argc, char *argv[]) {
   }
 
   boost::log::formatter logFmt =
-         boost::log::expressions::format("%1%\tNodes IRC \t[%2%]\t%3%")
+         boost::log::expressions::format("%1%\tNodes IRC [%2%]\t%3%")
         %  boost::log::expressions::format_date_time<boost::posix_time::ptime>("TimeStamp", "%Y-%m-%d %H:%M:%S.%f") 
         %  boost::log::expressions::attr< boost::log::trivial::severity_level>("Severity")
         %  boost::log::expressions::smessage;
   boost::log::add_common_attributes();
   boost::log::add_console_log(clog)->set_formatter(logFmt);
 
-  BOOST_LOG_TRIVIAL(info) << version;
-
   if (vm.count("help")) {
     cout << desc << endl;
     return 1;
   }
  
-  BOOST_LOG_TRIVIAL(info) << "Nodes IRC 0.1, 29-Jul-2024.";
+  BOOST_LOG_TRIVIAL(info) << version;
 
   Server server(version, subPort, reqPort, port);
   server.start();

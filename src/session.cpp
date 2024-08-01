@@ -72,6 +72,8 @@ void Session::handle_write(const boost::system::error_code& error) {
 
 void Session::send(Prefixable *prefix, itemsType &items) {
   
+  BOOST_LOG_TRIVIAL(trace) << "send session " << prefix->prefix();
+
   // thread safe.
   lock_guard<mutex> guard(_socket_mutex);
   

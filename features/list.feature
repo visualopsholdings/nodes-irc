@@ -9,6 +9,8 @@ Feature: List
 
 	Scenario: A server will return a list of conversations
 	   When she connects to localhost as "tracy"
-	   When she waits 1 seconds
-      Then she LISTS and gets "#my+conversation+1"
- 
+      Then she receives "tracy +w"
+	   Then she waits 1 seconds
+      Then she LISTS
+      Then she receives "#my+conversation+1"
+      Then she receives ":End of /LIST"

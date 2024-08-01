@@ -65,6 +65,7 @@ private:
   void streamsMsg(json *);
   void policyUsersMsg(json *);
   void messageMsg(json *);
+  void ideaMsg(json *);
   void ackMsg(json *);
   void errMsg(json *);
   

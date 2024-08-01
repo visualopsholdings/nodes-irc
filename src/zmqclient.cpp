@@ -27,7 +27,7 @@ ZMQClient::ZMQClient(Server *server, int subPort, int reqPort) :
   _sub.reset(new zmq::socket_t(*_context, ZMQ_SUB));
   _sub->connect("tcp://127.0.0.1:" + to_string(subPort));
 #if CPPZMQ_VERSION == ZMQ_MAKE_VERSION(4, 3, 1)  
-  _sub->setsockopt(ZMQ_SUBSCRIBE, "");
+  _sub->setsockopt(ZMQ_SUBSCRIBE, 0, 0);
 #else
   _sub->set(zmq::sockopt::subscribe, "");
 #endif
@@ -42,12 +42,12 @@ ZMQClient::ZMQClient(Server *server, int subPort, int reqPort) :
   _reqmessages["user"] = bind( &ZMQClient::userMsg, this, placeholders::_1 );
   _reqmessages["streams"] = bind( &ZMQClient::streamsMsg, this, placeholders::_1 );
   _reqmessages["policyusers"] = bind( &ZMQClient::policyUsersMsg, this, placeholders::_1 );
-  _reqmessages["message"] = bind( &ZMQClient::messageMsg, this, placeholders::_1 );
+  _reqmessages["idea"] = bind( &ZMQClient::ideaMsg, this, placeholders::_1 );
   _reqmessages["ack"] = bind( &ZMQClient::ackMsg, this, placeholders::_1 );
   _reqmessages["err"] = bind( &ZMQClient::errMsg, this, placeholders::_1 );
   
   // expect these being published
-  _submessages["message"] = bind( &ZMQClient::messageMsg, this, placeholders::_1 );
+  _submessages["idea"] = bind( &ZMQClient::ideaMsg, this, placeholders::_1 );
 
 }
 
@@ -75,32 +75,20 @@ void ZMQClient::receive() {
   BOOST_LOG_TRIVIAL(trace) << "start receiving";
 
   zmq::pollitem_t items [] = {
-      { *_req, 0, ZMQ_POLLIN, 0 },
-      { *_sub, 0, ZMQ_POLLIN, 0 }
+      { *_sub, 0, ZMQ_POLLIN, 0 },
+      { *_req, 0, ZMQ_POLLIN, 0 }
   };
   const std::chrono::milliseconds timeout{500};
   while (1) {
     
 //    BOOST_LOG_TRIVIAL(debug) << "polling for messages";
     zmq::message_t message;
-    zmq::poll(&items[0], 2, timeout);
+    zmq::poll(items, 2, timeout);
+
+//     BOOST_LOG_TRIVIAL(trace) << "sub events " << items[0].revents;
+//     BOOST_LOG_TRIVIAL(trace) << "req events " << items[1].revents;
 
     if (items[0].revents & ZMQ_POLLIN) {
-      BOOST_LOG_TRIVIAL(debug) << "got _req message";
-      zmq::message_t reply;
-      try {
-#if CPPZMQ_VERSION == ZMQ_MAKE_VERSION(4, 3, 1)
-        _req->recv(&reply);
-#else
-        auto res = _req->recv(reply, zmq::recv_flags::none);
-#endif
-        handle_reply(reply, &_reqmessages);
-      }
-      catch (zmq::error_t &e) {
-        BOOST_LOG_TRIVIAL(warning) << "got exc with _req recv" << e.what() << "(" << e.num() << ")";
-      }
-    }
-    if (items[1].revents & ZMQ_POLLIN) {
       BOOST_LOG_TRIVIAL(debug) << "got _sub message";
       zmq::message_t reply;
       try {
@@ -113,6 +101,21 @@ void ZMQClient::receive() {
       }
       catch (zmq::error_t &e) {
         BOOST_LOG_TRIVIAL(warning) << "got exc with _sub recv " << e.what() << "(" << e.num() << ")";
+      }
+    }
+    if (items[1].revents & ZMQ_POLLIN) {
+      BOOST_LOG_TRIVIAL(debug) << "got _req message";
+      zmq::message_t reply;
+      try {
+#if CPPZMQ_VERSION == ZMQ_MAKE_VERSION(4, 3, 1)
+        _req->recv(&reply);
+#else
+        auto res = _req->recv(reply, zmq::recv_flags::none);
+#endif
+        handle_reply(reply, &_reqmessages);
+      }
+      catch (zmq::error_t &e) {
+        BOOST_LOG_TRIVIAL(warning) << "got exc with _req recv" << e.what() << "(" << e.num() << ")";
       }
     }
   }
@@ -396,7 +399,7 @@ void ZMQClient::policyUsersMsg(json *doc) {
 
 }
 
-void ZMQClient::messageMsg(json *doc) {
+void ZMQClient::ideaMsg(json *doc) {
 
   string stream;
   if (!getString(doc, "stream", &stream)) {
