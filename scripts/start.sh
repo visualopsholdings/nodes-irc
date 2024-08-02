@@ -4,29 +4,15 @@
 
 if [ ! -f "nodes-irc/build/nodes-irc" ];
 then
-  echo "Need to build project first"
+  echo "Need to build or install project first"
   exit 1
 fi
 
-if [ -d nodes-irc/lib ];
+if [ -d /home/nodes/nodes-lib ];
 then
-  # for those machines that have local libs on them
-  sudo LD_LIBRARY_PATH=/home/visualops/nodes-irc/lib ./nodes-irc/build/nodes-irc \
-    --logLevel=trace \
-    > nodes-irc.log 2>&1 &
-    
-# when running without sudo
-#   LD_LIBRARY_PATH=/home/visualops/nodes-irc/lib
-#   export LD_LIBRARY_PATH
-else
-  sudo ./nodes-irc/build/nodes-irc \
-    --logLevel=trace \
-    > nodes-irc.log 2>&1 &
+  $LIBS="LD_LIBRARY_PATH=/usr/local/lib:/home/nodes/nodes/build:/home/nodes/nodes-lib"
 fi
 
-# to run without SSL, comment out the above and just used this.
-# BUT DONT!!!!
-#
-#./nodes-irc/build/nodes-irc \
-#  > nodes-irc.log 2>&1 &
-
+sudo $LIBs ./nodes-irc/build/nodes-irc \
+  --logLevel=trace \
+  > nodes-irc.log 2>&1 &
