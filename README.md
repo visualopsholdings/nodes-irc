@@ -200,9 +200,23 @@ On reboot, Visual ops will look for the start script file and run it up.
 Make sure that port 6667 is punched through your firewall and you can connect to the Visual Ops
 server and chat that way.
 
+## Companion projects
+
+### DevOps
+
+https://github.com/visualopsholdings/nodes-devops
+
+### The main nodes system
+
+https://github.com/visualopsholdings/nodes
+
+### A web front end
+
+https://github.com/visualopsholdings/nodes-web
+
 ## Current development focus
 
-### Remove need to embed SSL cert path in start script.
+### Add commands.
 
 ## License
 
