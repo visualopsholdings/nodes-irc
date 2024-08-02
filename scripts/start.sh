@@ -8,13 +8,17 @@ then
   exit 1
 fi
 
+# we run this as sudo so that it has access to a certificate that might be in /etc
+
 if [ -d /home/nodes/nodes-lib ];
 then
-  export LD_LIBRARY_PATH=/usr/local/lib:/usr/local/lib:/home/nodes/nodes/build:/home/nodes/nodes-lib:$LD_LIBRARY_PATH
+  # for those machines that have local libs on them
+  sudo LD_LIBRARY_PATH=/home/nodes/nodes/build:/home/nodes/nodes-lib \
+    ./nodes-irc/build/nodes-irc \
+    --logLevel=trace \
+    > nodes-irc.log 2>&1 &
 else
-  export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
+  sudo ./nodes-irc/build/nodes-irc \
+    --logLevel=trace \
+    > nodes-irc.log 2>&1 &
 fi
-
-sudo ./nodes-irc/build/nodes-irc \
-  --logLevel=trace \
-  > nodes-irc.log 2>&1 &
