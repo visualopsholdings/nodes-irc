@@ -10,9 +10,11 @@ fi
 
 if [ -d /home/nodes/nodes-lib ];
 then
-  LIBS="LD_LIBRARY_PATH=/usr/local/lib;/home/nodes/nodes/build;/home/nodes/nodes-lib"
+  export LD_LIBRARY_PATH=/usr/local/lib:/usr/local/lib:/home/nodes/nodes/build:/home/nodes/nodes-lib:$LD_LIBRARY_PATH
+else
+  export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
 fi
 
-sudo $LIBs ./nodes-irc/build/nodes-irc \
+sudo ./nodes-irc/build/nodes-irc \
   --logLevel=trace \
   > nodes-irc.log 2>&1 &
