@@ -109,12 +109,7 @@ all from source.
 
 ```
 git clone https://github.com/visualopsholdings/nodes-irc.git
-cd ndoes-irc
-mkdir build
-cd build
-cmake ..
-make
-make test
+nodes-irc/scripts/build.sh
 ```
 
 To run all the unit tests. And show failures.
