@@ -8,7 +8,7 @@
 	<integer>1218</integer>
 	<key>ExpandedItems:paul</key>
 	<array>
-		<string>78BFBF8D-5110-4F63-8BE2-AA2BF674FC57</string>
+		<string>7E99D3A9-C801-4CB8-BD0D-81CA433014A9</string>
 	</array>
 	<key>FileFilterMode:paul</key>
 	<integer>0</integer>
@@ -17,33 +17,72 @@
 		<dict>
 			<key>BookmarkData</key>
 			<data>
-			Ym9va/QCAAAAAAQQMAAAAH+IODBdHuOmecbKEu6McXfUu2yUNnOh
-			K+9jDKf/ubvs5AEAAAQAAAADAwAAAAgAKAUAAAABAQAAVXNlcnMA
-			AAAEAAAAAQEAAHBhdWwGAAAAAQEAAC5UcmFzaAAADQAAAAEBAABo
-			ZWxsby5mZWF0dXJlAAAAEAAAAAEGAAAQAAAAIAAAACwAAAA8AAAA
-			CAAAAAQDAADYWgAAAAAAAAgAAAAEAwAAvDIEAAAAAAAIAAAABAMA
-			AGgXlQIAAAAACAAAAAQDAABwPD0SAAAAABAAAAABBgAAbAAAAHwA
-			AACMAAAAnAAAAAgAAAAABAAAQcYrr9Gf/TcYAAAAAQIAAAEAAAAA
-			AAAADwAAAAAAAAAAAAAAAAAAAAgAAAAEAwAAAgAAAAAAAAAEAAAA
-			AwMAAPUBAAAIAAAAAQkAAGZpbGU6Ly8vDAAAAAEBAABNYWNpbnRv
-			c2ggSEQIAAAABAMAAACQgpbnAAAACAAAAAAEAABBxfUErAAAACQA
-			AAABAQAAQTE0RTlGMzgtQUNBRC00RUZCLTk0Q0EtMzQ0NTcxRkU1
-			QzY5GAAAAAECAACBAAAAAQAAAO8TAAABAAAAAAAAAAAAAAABAAAA
-			AQEAAC8AAAAAAAAAAQUAABoAAAABAQAATlNVUkxEb2N1bWVudElk
-			ZW50aWZpZXJLZXkAAAQAAAADAwAA1g4GANgAAAD+////AQAAAAAA
-			AAARAAAABBAAAFQAAAAAAAAABRAAAKwAAAAAAAAAEBAAANQAAAAA
-			AAAAQBAAAMQAAAAAAAAAAiAAAKABAAAAAAAABSAAABABAAAAAAAA
-			ECAAACABAAAAAAAAESAAAFQBAAAAAAAAEiAAADQBAAAAAAAAEyAA
-			AEQBAAAAAAAAICAAAIABAAAAAAAAMCAAAKwBAAAAAAAAAcAAAPQA
-			AAAAAAAAEcAAACAAAAAAAAAAEsAAAAQBAAAAAAAAENAAAAQAAAAA
-			AAAAtAEAgNgBAAAAAAAA
+			Ym9va0QDAAAAAAQQMAAAAIYyFzxQUVZ7fUEOl726AUPNnwtVpqJB
+			pu14s+rl5EGKNAIAAAQAAAADAwAAAAgAKAUAAAABAQAAVXNlcnMA
+			AAAEAAAAAQEAAHBhdWwDAAAAAQEAAERldgAJAAAAAQEAAG5vZGVz
+			LWlyYwAAAAgAAAABAQAAZmVhdHVyZXMPAAAAAQEAAG1lc3NhZ2Uu
+			ZmVhdHVyZQAYAAAAAQYAABAAAAAgAAAALAAAADgAAABMAAAAXAAA
+			AAgAAAAEAwAA2FoAAAAAAAAIAAAABAMAALwyBAAAAAAACAAAAAQD
+			AABGgxYAAAAAAAgAAAAEAwAAHzw9EgAAAAAIAAAABAMAAG88PRIA
+			AAAACAAAAAQDAAAdtEQSAAAAABgAAAABBgAAlAAAAKQAAAC0AAAA
+			xAAAANQAAADkAAAACAAAAAAEAABBxi0BdWucnBgAAAABAgAAAQAA
+			AAAAAAAPAAAAAAAAAAAAAAAAAAAACAAAAAQDAAAEAAAAAAAAAAQA
+			AAADAwAA9QEAAAgAAAABCQAAZmlsZTovLy8MAAAAAQEAAE1hY2lu
+			dG9zaCBIRAgAAAAEAwAAAJCClucAAAAIAAAAAAQAAEHF9QSsAAAA
+			JAAAAAEBAABBMTRFOUYzOC1BQ0FELTRFRkItOTRDQS0zNDQ1NzFG
+			RTVDNjkYAAAAAQIAAIEAAAABAAAA7xMAAAEAAAAAAAAAAAAAAAEA
+			AAABAQAALwAAAAAAAAABBQAAGgAAAAEBAABOU1VSTERvY3VtZW50
+			SWRlbnRpZmllcktleQAABAAAAAMDAAD+DgYA2AAAAP7///8BAAAA
+			AAAAABEAAAAEEAAAdAAAAAAAAAAFEAAA9AAAAAAAAAAQEAAAJAEA
+			AAAAAABAEAAAFAEAAAAAAAACIAAA8AEAAAAAAAAFIAAAYAEAAAAA
+			AAAQIAAAcAEAAAAAAAARIAAApAEAAAAAAAASIAAAhAEAAAAAAAAT
+			IAAAlAEAAAAAAAAgIAAA0AEAAAAAAAAwIAAA/AEAAAAAAAABwAAA
+			RAEAAAAAAAARwAAAIAAAAAAAAAASwAAAVAEAAAAAAAAQ0AAABAAA
+			AAAAAAAEAgCAKAIAAAAAAAA=
 			</data>
 			<key>FileURL</key>
-			<string>file:///Users/paul/.Trash/hello.feature</string>
+			<string>file:///Users/paul/Dev/nodes-irc/features/message.feature</string>
 			<key>HasSecurityScope</key>
 			<true/>
 			<key>RelativePath</key>
-			<string>../../.Trash/hello.feature</string>
+			<string>./features/message.feature</string>
+			<key>TypeID</key>
+			<string>_CFileLocator</string>
+			<key>Version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>BookmarkData</key>
+			<data>
+			Ym9vazwDAAAAAAQQMAAAAPcywJXU9sy1i8X5qPoKf9tdxEEyIkxN
+			D3sAqBfpMELvLAIAAAQAAAADAwAAAAgAKAUAAAABAQAAVXNlcnMA
+			AAAEAAAAAQEAAHBhdWwDAAAAAQEAAERldgAJAAAAAQEAAG5vZGVz
+			LWlyYwAAAAMAAAABAQAAc3JjAAsAAAABAQAAc2Vzc2lvbi5jcHAA
+			GAAAAAEGAAAQAAAAIAAAACwAAAA4AAAATAAAAFgAAAAIAAAABAMA
+			ANhaAAAAAAAACAAAAAQDAAC8MgQAAAAAAAgAAAAEAwAARoMWAAAA
+			AAAIAAAABAMAAB88PRIAAAAACAAAAAQDAACIPD0SAAAAAAgAAAAE
+			AwAAjTw9EgAAAAAYAAAAAQYAAIwAAACcAAAArAAAALwAAADMAAAA
+			3AAAAAgAAAAABAAAQcYrr9GgV6sYAAAAAQIAAAEAAAAAAAAADwAA
+			AAAAAAAAAAAAAAAAAAgAAAAEAwAABAAAAAAAAAAEAAAAAwMAAPUB
+			AAAIAAAAAQkAAGZpbGU6Ly8vDAAAAAEBAABNYWNpbnRvc2ggSEQI
+			AAAABAMAAACQgpbnAAAACAAAAAAEAABBxfUErAAAACQAAAABAQAA
+			QTE0RTlGMzgtQUNBRC00RUZCLTk0Q0EtMzQ0NTcxRkU1QzY5GAAA
+			AAECAACBAAAAAQAAAO8TAAABAAAAAAAAAAAAAAABAAAAAQEAAC8A
+			AAAAAAAAAQUAABoAAAABAQAATlNVUkxEb2N1bWVudElkZW50aWZp
+			ZXJLZXkAAAQAAAADAwAAAQ8GANgAAAD+////AQAAAAAAAAARAAAA
+			BBAAAGwAAAAAAAAABRAAAOwAAAAAAAAAEBAAABwBAAAAAAAAQBAA
+			AAwBAAAAAAAAAiAAAOgBAAAAAAAABSAAAFgBAAAAAAAAECAAAGgB
+			AAAAAAAAESAAAJwBAAAAAAAAEiAAAHwBAAAAAAAAEyAAAIwBAAAA
+			AAAAICAAAMgBAAAAAAAAMCAAAPQBAAAAAAAAAcAAADwBAAAAAAAA
+			EcAAACAAAAAAAAAAEsAAAEwBAAAAAAAAENAAAAQAAAAAAAAA/AEA
+			gCACAAAAAAAA
+			</data>
+			<key>FileURL</key>
+			<string>file:///Users/paul/Dev/nodes-irc/src/session.cpp</string>
+			<key>HasSecurityScope</key>
+			<true/>
+			<key>RelativePath</key>
+			<string>./src/session.cpp</string>
 			<key>TypeID</key>
 			<string>_CFileLocator</string>
 			<key>Version</key>
@@ -126,8 +165,8 @@
 		<dict>
 			<key>BookmarkData</key>
 			<data>
-			Ym9vazADAAAAAAQQMAAAAHb1AbMAhOy9D/h1epekSmYizdX0YBqB
-			+9yCwlTOCWUMLAIAAAQAAAADAwAAAAgAKAUAAAABAQAAVXNlcnMA
+			Ym9va2wDAAAAAAQQMAAAAGvyrG9ZbRrQL6pJkQjGyKTs6J8EIl7m
+			jwU8CFx35vHGXAIAAAQAAAADAwAAAAgAKAUAAAABAQAAVXNlcnMA
 			AAAEAAAAAQEAAHBhdWwDAAAAAQEAAERldgAJAAAAAQEAAG5vZGVz
 			LWlyYwAAAAgAAAABAQAAZmVhdHVyZXMQAAAAAQEAAHN0ZXBfZGVm
 			aW5pdGlvbnMGAAAAAQEAAGlyYy5yYgAAHAAAAAEGAAAQAAAAIAAA
@@ -141,12 +180,14 @@
 			bnRvc2ggSEQIAAAABAMAAACQgpbnAAAACAAAAAAEAABBxfUErAAA
 			ACQAAAABAQAAQTE0RTlGMzgtQUNBRC00RUZCLTk0Q0EtMzQ0NTcx
 			RkU1QzY5GAAAAAECAACBAAAAAQAAAO8TAAABAAAAAAAAAAAAAAAB
-			AAAAAQEAAC8AAAAAAAAAAQUAAMwAAAD+////AQAAAAAAAAAQAAAA
-			BBAAAIQAAAAAAAAABRAAABgBAAAAAAAAEBAAAEwBAAAAAAAAQBAA
-			ADwBAAAAAAAAAiAAABgCAAAAAAAABSAAAIgBAAAAAAAAECAAAJgB
-			AAAAAAAAESAAAMwBAAAAAAAAEiAAAKwBAAAAAAAAEyAAALwBAAAA
-			AAAAICAAAPgBAAAAAAAAMCAAACQCAAAAAAAAAcAAAGwBAAAAAAAA
-			EcAAACAAAAAAAAAAEsAAAHwBAAAAAAAAENAAAAQAAAAAAAAA
+			AAAAAQEAAC8AAAAAAAAAAQUAABoAAAABAQAATlNVUkxEb2N1bWVu
+			dElkZW50aWZpZXJLZXkAAAQAAAADAwAA/w4GANgAAAD+////AQAA
+			AAAAAAARAAAABBAAAIQAAAAAAAAABRAAABgBAAAAAAAAEBAAAEwB
+			AAAAAAAAQBAAADwBAAAAAAAAAiAAABgCAAAAAAAABSAAAIgBAAAA
+			AAAAECAAAJgBAAAAAAAAESAAAMwBAAAAAAAAEiAAAKwBAAAAAAAA
+			EyAAALwBAAAAAAAAICAAAPgBAAAAAAAAMCAAACQCAAAAAAAAAcAA
+			AGwBAAAAAAAAEcAAACAAAAAAAAAAEsAAAHwBAAAAAAAAENAAAAQA
+			AAAAAAAALAIAgFACAAAAAAAA
 			</data>
 			<key>FileURL</key>
 			<string>file:///Users/paul/Dev/nodes-irc/features/step_definitions/irc.rb</string>
@@ -383,18 +424,6 @@
 			<integer>1</integer>
 		</dict>
 		<dict>
-			<key>FileURL</key>
-			<string>file:///Users/paul/.Trash/security%205.06.30%E2%80%AFPM.rb</string>
-			<key>HasSecurityScope</key>
-			<true/>
-			<key>RelativePath</key>
-			<string>../../.Trash/security 5.06.30 PM.rb</string>
-			<key>TypeID</key>
-			<string>_CFileLocator</string>
-			<key>Version</key>
-			<integer>1</integer>
-		</dict>
-		<dict>
 			<key>BookmarkData</key>
 			<data>
 			Ym9vazwDAAAAAAQQMAAAAJRrD10cmPqWghhbdpeNS0OkcJG8B5Us
@@ -434,41 +463,6 @@
 		<dict>
 			<key>BookmarkData</key>
 			<data>
-			Ym9va/ACAAAAAAQQMAAAALwhoqkqUI2YVuMZVsPIFjxjzC7jRruc
-			9bl9skcBlvw04AEAAAQAAAADAwAAAAgAKAUAAAABAQAAVXNlcnMA
-			AAAEAAAAAQEAAHBhdWwGAAAAAQEAAC5UcmFzaAAACQAAAAEBAABu
-			b2Rlcy5jcHAAAAAQAAAAAQYAABAAAAAgAAAALAAAADwAAAAIAAAA
-			BAMAANhaAAAAAAAACAAAAAQDAAC8MgQAAAAAAAgAAAAEAwAAaBeV
-			AgAAAAAIAAAABAMAAJY8PRIAAAAAEAAAAAEGAABoAAAAeAAAAIgA
-			AACYAAAACAAAAAAEAABBxiuv0aB47BgAAAABAgAAAQAAAAAAAAAP
-			AAAAAAAAAAAAAAAAAAAACAAAAAQDAAACAAAAAAAAAAQAAAADAwAA
-			9QEAAAgAAAABCQAAZmlsZTovLy8MAAAAAQEAAE1hY2ludG9zaCBI
-			RAgAAAAEAwAAAJCClucAAAAIAAAAAAQAAEHF9QSsAAAAJAAAAAEB
-			AABBMTRFOUYzOC1BQ0FELTRFRkItOTRDQS0zNDQ1NzFGRTVDNjkY
-			AAAAAQIAAIEAAAABAAAA7xMAAAEAAAAAAAAAAAAAAAEAAAABAQAA
-			LwAAAAAAAAABBQAAGgAAAAEBAABOU1VSTERvY3VtZW50SWRlbnRp
-			ZmllcktleQAABAAAAAMDAADNDgYA2AAAAP7///8BAAAAAAAAABEA
-			AAAEEAAAUAAAAAAAAAAFEAAAqAAAAAAAAAAQEAAA0AAAAAAAAABA
-			EAAAwAAAAAAAAAACIAAAnAEAAAAAAAAFIAAADAEAAAAAAAAQIAAA
-			HAEAAAAAAAARIAAAUAEAAAAAAAASIAAAMAEAAAAAAAATIAAAQAEA
-			AAAAAAAgIAAAfAEAAAAAAAAwIAAAqAEAAAAAAAABwAAA8AAAAAAA
-			AAARwAAAIAAAAAAAAAASwAAAAAEAAAAAAAAQ0AAABAAAAAAAAACw
-			AQCA1AEAAAAAAAA=
-			</data>
-			<key>FileURL</key>
-			<string>file:///Users/paul/.Trash/nodes.cpp</string>
-			<key>HasSecurityScope</key>
-			<true/>
-			<key>RelativePath</key>
-			<string>../../.Trash/nodes.cpp</string>
-			<key>TypeID</key>
-			<string>_CFileLocator</string>
-			<key>Version</key>
-			<integer>1</integer>
-		</dict>
-		<dict>
-			<key>BookmarkData</key>
-			<data>
 			Ym9va0ADAAAAAAQQMAAAAAINJDWQC1rlintVuHRqUgosWAxIplDC
 			Ixgc0NoHtl7uMAIAAAQAAAADAwAAAAgAKAUAAAABAQAAVXNlcnMA
 			AAAEAAAAAQEAAHBhdWwDAAAAAQEAAERldgAJAAAAAQEAAG5vZGVz
@@ -498,18 +492,6 @@
 			<true/>
 			<key>RelativePath</key>
 			<string>./config/mongoid.yml</string>
-			<key>TypeID</key>
-			<string>_CFileLocator</string>
-			<key>Version</key>
-			<integer>1</integer>
-		</dict>
-		<dict>
-			<key>FileURL</key>
-			<string>file:///Users/paul/.Trash/db%205.06.29%E2%80%AFPM.rb</string>
-			<key>HasSecurityScope</key>
-			<true/>
-			<key>RelativePath</key>
-			<string>../../.Trash/db 5.06.29 PM.rb</string>
 			<key>TypeID</key>
 			<string>_CFileLocator</string>
 			<key>Version</key>
@@ -1179,18 +1161,6 @@
 			<integer>1</integer>
 		</dict>
 		<dict>
-			<key>FileURL</key>
-			<string>file:///Users/paul/.Trash/services%205.06.25%E2%80%AFPM.rb</string>
-			<key>HasSecurityScope</key>
-			<true/>
-			<key>RelativePath</key>
-			<string>../../.Trash/services 5.06.25 PM.rb</string>
-			<key>TypeID</key>
-			<string>_CFileLocator</string>
-			<key>Version</key>
-			<integer>1</integer>
-		</dict>
-		<dict>
 			<key>BookmarkData</key>
 			<data>
 			Ym9va0ADAAAAAAQQMAAAAFThjICABMvvQParxpFBqS9vMvc18suV
@@ -1302,18 +1272,6 @@
 			<integer>1</integer>
 		</dict>
 		<dict>
-			<key>FileURL</key>
-			<string>file:///Users/paul/.Trash/factories%205.06.23%E2%80%AFPM.rb</string>
-			<key>HasSecurityScope</key>
-			<true/>
-			<key>RelativePath</key>
-			<string>../../.Trash/factories 5.06.23 PM.rb</string>
-			<key>TypeID</key>
-			<string>_CFileLocator</string>
-			<key>Version</key>
-			<integer>1</integer>
-		</dict>
-		<dict>
 			<key>BookmarkData</key>
 			<data>
 			Ym9vaxgDAAAAAAQQMAAAAA69fmQYJ8GhMk1/wP6CdsUYzEnmSt1g
@@ -1398,7 +1356,7 @@
 	<array>
 		<dict>
 			<key>Date</key>
-			<date>2024-07-30T07:06:31Z</date>
+			<date>2024-08-02T09:44:36Z</date>
 			<key>Location</key>
 			<dict>
 				<key>BookmarkData</key>
@@ -1440,7 +1398,7 @@
 		</dict>
 		<dict>
 			<key>Date</key>
-			<date>2024-07-30T07:06:31Z</date>
+			<date>2024-08-02T09:44:36Z</date>
 			<key>Location</key>
 			<dict>
 				<key>BookmarkData</key>
@@ -1482,7 +1440,7 @@
 		</dict>
 		<dict>
 			<key>Date</key>
-			<date>2024-07-30T07:06:31Z</date>
+			<date>2024-08-02T09:44:36Z</date>
 			<key>Location</key>
 			<dict>
 				<key>BookmarkData</key>
@@ -1524,7 +1482,7 @@
 		</dict>
 		<dict>
 			<key>Date</key>
-			<date>2024-07-30T07:06:31Z</date>
+			<date>2024-08-02T09:44:36Z</date>
 			<key>Location</key>
 			<dict>
 				<key>BookmarkData</key>
@@ -1566,7 +1524,7 @@
 		</dict>
 		<dict>
 			<key>Date</key>
-			<date>2024-07-30T07:06:31Z</date>
+			<date>2024-08-02T09:44:36Z</date>
 			<key>Location</key>
 			<dict>
 				<key>BookmarkData</key>
@@ -1608,7 +1566,7 @@
 		</dict>
 		<dict>
 			<key>Date</key>
-			<date>2024-07-30T07:06:31Z</date>
+			<date>2024-08-02T09:44:36Z</date>
 			<key>Location</key>
 			<dict>
 				<key>BookmarkData</key>
@@ -1650,7 +1608,7 @@
 		</dict>
 		<dict>
 			<key>Date</key>
-			<date>2024-07-30T07:06:31Z</date>
+			<date>2024-08-02T09:44:36Z</date>
 			<key>Location</key>
 			<dict>
 				<key>BookmarkData</key>
@@ -1692,7 +1650,7 @@
 		</dict>
 		<dict>
 			<key>Date</key>
-			<date>2024-07-30T07:06:31Z</date>
+			<date>2024-08-02T09:44:36Z</date>
 			<key>Location</key>
 			<dict>
 				<key>BookmarkData</key>
@@ -1734,7 +1692,7 @@
 		</dict>
 		<dict>
 			<key>Date</key>
-			<date>2024-07-30T07:06:31Z</date>
+			<date>2024-08-02T09:44:36Z</date>
 			<key>Location</key>
 			<dict>
 				<key>BookmarkData</key>
@@ -1776,7 +1734,7 @@
 		</dict>
 		<dict>
 			<key>Date</key>
-			<date>2024-07-30T07:06:31Z</date>
+			<date>2024-08-02T09:44:36Z</date>
 			<key>Location</key>
 			<dict>
 				<key>BookmarkData</key>
@@ -1818,7 +1776,7 @@
 		</dict>
 		<dict>
 			<key>Date</key>
-			<date>2024-07-30T07:06:31Z</date>
+			<date>2024-08-02T09:44:36Z</date>
 			<key>Location</key>
 			<dict>
 				<key>BookmarkData</key>
@@ -1860,7 +1818,7 @@
 		</dict>
 		<dict>
 			<key>Date</key>
-			<date>2024-07-30T07:06:31Z</date>
+			<date>2024-08-02T09:44:36Z</date>
 			<key>Location</key>
 			<dict>
 				<key>BookmarkData</key>
@@ -1902,7 +1860,7 @@
 		</dict>
 		<dict>
 			<key>Date</key>
-			<date>2024-07-30T07:06:31Z</date>
+			<date>2024-08-02T09:44:36Z</date>
 			<key>Location</key>
 			<dict>
 				<key>BookmarkData</key>
@@ -1944,7 +1902,7 @@
 		</dict>
 		<dict>
 			<key>Date</key>
-			<date>2024-07-30T07:06:31Z</date>
+			<date>2024-08-02T09:44:36Z</date>
 			<key>Location</key>
 			<dict>
 				<key>BookmarkData</key>
@@ -1985,7 +1943,7 @@
 		</dict>
 		<dict>
 			<key>Date</key>
-			<date>2024-07-30T07:06:31Z</date>
+			<date>2024-08-02T09:44:36Z</date>
 			<key>Location</key>
 			<dict>
 				<key>BookmarkData</key>
