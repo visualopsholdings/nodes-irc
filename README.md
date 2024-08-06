@@ -115,6 +115,7 @@ nodes-irc/scripts/build.sh
 To run all the unit tests. And show failures.
 
 ```
+cd nodes-irc/build
 make && make test || cat Testing/Temporary/LastTest.log 
 ```
 
