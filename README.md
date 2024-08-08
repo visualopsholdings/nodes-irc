@@ -11,7 +11,8 @@ https://github.com/visualopsholdings/nodes
 Visual Ops is a proprietary (closed source) system that runs on very low end hardware
 like T4G's in AWS, or on a Raspberry Pi 4/5.
 
-This "plugin" can run on a Visual Ops server and provide simple IRC access to the server.
+This "plugin" can run on a Visual Ops server and provides simple IRC access to Visual Ops 
+allowing for any IRC client or IRC server to talk to Visual Ops vs IRC.
 
 An Open Source version of Visual Ops called "Nodes" is being developed, but for now at least
 this small part of the server, the IRC protocol is available to build and use.
