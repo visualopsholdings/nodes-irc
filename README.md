@@ -252,3 +252,6 @@ implementation of the proprietary "Visual Ops" server.
 - rename to https://github.com/visualopsholdings/nodes-irc
 - implement end to end tests using the real nodes.
 
+### 19 Sep 2024
+- message parametes changed slghtly.
+

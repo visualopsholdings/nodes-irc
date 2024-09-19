@@ -208,7 +208,7 @@ void ZMQClient::streams(const string &user) {
   
 	send({ 
 	  { "type", "streams" }, 
-	  { "user", user }
+	  { "me", user }
 	});
 
 }
@@ -226,7 +226,7 @@ void ZMQClient::send(userPtr user, channelPtr channel, const string &text) {
 
 	send({ 
 	  { "type", "message" }, 
-	  { "user", user->id() },
+	  { "me", user->id() },
 	  { "stream", channel->id() },
 	  { "policy", channel->policy() },
 	  { "text", text }
