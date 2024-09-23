@@ -301,14 +301,19 @@ void ZMQClient::userMsg(json *doc) {
     return;
   }
   
-  string id;
-  if (!getString(doc, "id", &id)) {
-    BOOST_LOG_TRIVIAL(error) << "no id for user";
-    return;
-  }
   string name;
   if (!getString(doc, "name", &name)) {
     BOOST_LOG_TRIVIAL(error) << "no name for user";
+    return;
+  }
+  if (name.size() == 0) {
+    session->send_error("401", "user does not have name set");
+    return;
+  }
+
+  string id;
+  if (!getString(doc, "id", &id)) {
+    BOOST_LOG_TRIVIAL(error) << "no id for user";
     return;
   }
   string fullname;

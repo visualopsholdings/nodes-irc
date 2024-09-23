@@ -255,3 +255,7 @@ implementation of the proprietary "Visual Ops" server.
 ### 19 Sep 2024
 - message parametes changed slghtly.
 
+### 23 Sep 2024
+- Return 401 for server when the user doesn't have their name set in the DB.
+
+

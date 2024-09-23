@@ -48,6 +48,7 @@ public:
   void set_user_details(const string &id, const string &name, const string &fullname);
   void send_banner();
   void send(Prefixable *prefix, itemsType &items);
+  void send_error(const string &err, const string &msg);
   
   virtual void start();
   virtual boost::asio::basic_socket<boost::asio::ip::tcp, boost::asio::any_io_executor> &socket() = 0;

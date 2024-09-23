@@ -142,3 +142,10 @@ void Session::send_banner() {
     
 }
 
+void Session::send_error(const string &err, const string &msg) {
+
+  itemsType items;
+  items.push_back({ err, { msg } });
+  send(_server, items);
+
+}
