@@ -8,11 +8,14 @@ Feature: Message
          | My Conversation 1  | p1     |
 
 	Scenario: send a messsage to a user
-	   When she connects to localhost as "tracy"
+	   When she CONNECTs to localhost as "tracy"
       Then she receives "tracy +w"
 	   And she waits 1 seconds
-      And she joins "#my+conversation+1"
+      And she JOINs "#my+conversation+1"
 	   And she waits 1 seconds
- 	   And she sends direct message "xxxxx" as "tracy" to "My Conversation 1"
-      And she receives "xxxxx"
- 
+ 	   And she sends direct message "What's up?" as "leanne" to "My Conversation 1"
+      And she receives "What's up?"
+      And she PRIVMSGs "Nothing much" to "#my+conversation+1"
+      And she recieves nothing
+ 	   And she sends direct message "That's good" as "leanne" to "My Conversation 1"
+      And she receives "That's good"

@@ -55,7 +55,7 @@ private:
   
   static bool getString(json *j, const string &name, string *value);
   static bool getBool(json *j, const string &name, bool *value);
-  static void handle_reply(const zmq::message_t &reply, map<string, msgHandler> *handlers);
+  static void handle_reply(const zmq::message_t &reply, map<string, msgHandler> *handlers, const string &name);
   void send(const json &j);
   bool trySend(const string &m);
   

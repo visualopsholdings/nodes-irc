@@ -6,6 +6,6 @@ Feature: Missing name
          | Chuck     |
 
 	Scenario: A wont allow login without name
-	   When she connects to localhost as "Chuck"
+	   When she CONNECTs to localhost as "Chuck"
       Then she receives "401"
  

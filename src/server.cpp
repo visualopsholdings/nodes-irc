@@ -186,7 +186,7 @@ userPtr Server::find_user_nick(const string &nick) {
 
 sessionPtr Server::find_session(const string &id) {
 
-  BOOST_LOG_TRIVIAL(debug) << "searching " << _sessions.size() << " sessions";
+  BOOST_LOG_TRIVIAL(trace) << "searching " << _sessions.size() << " sessions";
   return find_in<sessionPtr>(_sessions, id,
     [](sessionPtr &c) { return c->_id; });
 
@@ -194,7 +194,7 @@ sessionPtr Server::find_session(const string &id) {
 
 sessionPtr Server::find_session_for_nick(const string &nick) {
 
-  BOOST_LOG_TRIVIAL(debug) << "searching " << _sessions.size() << " sessions";
+  BOOST_LOG_TRIVIAL(trace) << "searching " << _sessions.size() << " sessions";
   return find_in<sessionPtr>(_sessions, nick,
     [](sessionPtr &c) { return c->_user ? c->_user->_nick : ""; });
 

@@ -43,16 +43,16 @@ void Channel::join(userPtr user) {
   _users.push_back(user);
   
   // users username is the same as the nickname.
-  send(user.get(), "JOIN", { _name, user->_nick, user->_realname });
+  send(user.get(), "JOIN", { _name, user->_nick, user->_realname }, "");
   
 }
 
-void Channel::send_message(userPtr user, const string &text) {
+void Channel::send_message(userPtr user, const string &text, const string &corr) {
   
    // thread safe.
   lock_guard<mutex> guard(_users_mutex);
   
-  send(user.get(), "PRIVMSG", { _name, ":" + text });
+  send(user.get(), "PRIVMSG", { _name, ":" + text }, corr);
   
 }
 
@@ -63,7 +63,7 @@ userPtr Channel::find_user_id(const string &id) {
 
 }
 
-void Channel::send(Prefixable *prefix, const string &cmd, const list<string> &args) {
+void Channel::send(Prefixable *prefix, const string &cmd, const list<string> &args, const string &corr) {
 
   BOOST_LOG_TRIVIAL(trace) << "send channel " << cmd;
 
@@ -71,6 +71,11 @@ void Channel::send(Prefixable *prefix, const string &cmd, const list<string> &ar
   items.push_back({ cmd, args });
   
   for (auto i: _users) {
+    // the correllation is just the nick that sent the message for now
+    // so you don't get them back.
+    if (i->prefix() == corr) {
+      continue;
+    }
     sessionPtr session = _server->find_session_for_nick(i->_nick);
     if (session) {
       session->send(prefix, items);

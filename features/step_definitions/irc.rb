@@ -16,6 +16,13 @@ class IRC
       return false
    end
 
+   def wait_for_nothing()
+      while IO.select([@socket], nil, nil, 2) && (line = @socket.recv(100))
+         return false
+      end
+      return true
+   end
+
    def connect(server, port)
       @socket = TCPSocket.new(server, port)
    end

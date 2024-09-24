@@ -66,7 +66,7 @@ void ZMQClient::receive1() {
 #else
   auto res = _req->recv(reply, zmq::recv_flags::none);
 #endif
-  handle_reply(reply, &_reqmessages);
+  handle_reply(reply, &_reqmessages, "<-");
 
 }
 
@@ -89,7 +89,7 @@ void ZMQClient::receive() {
 //     BOOST_LOG_TRIVIAL(trace) << "req events " << items[1].revents;
 
     if (items[0].revents & ZMQ_POLLIN) {
-      BOOST_LOG_TRIVIAL(debug) << "got _sub message";
+      BOOST_LOG_TRIVIAL(trace) << "got _sub message";
       zmq::message_t reply;
       try {
 #if CPPZMQ_VERSION == ZMQ_MAKE_VERSION(4, 3, 1)
@@ -97,14 +97,14 @@ void ZMQClient::receive() {
 #else
         auto res = _sub->recv(reply, zmq::recv_flags::none);
 #endif
-        handle_reply(reply, &_submessages);
+        handle_reply(reply, &_submessages, "<-&");
       }
       catch (zmq::error_t &e) {
         BOOST_LOG_TRIVIAL(warning) << "got exc with _sub recv " << e.what() << "(" << e.num() << ")";
       }
     }
     if (items[1].revents & ZMQ_POLLIN) {
-      BOOST_LOG_TRIVIAL(debug) << "got _req message";
+      BOOST_LOG_TRIVIAL(trace) << "got _req message";
       zmq::message_t reply;
       try {
 #if CPPZMQ_VERSION == ZMQ_MAKE_VERSION(4, 3, 1)
@@ -112,7 +112,7 @@ void ZMQClient::receive() {
 #else
         auto res = _req->recv(reply, zmq::recv_flags::none);
 #endif
-        handle_reply(reply, &_reqmessages);
+        handle_reply(reply, &_reqmessages, "<-");
       }
       catch (zmq::error_t &e) {
         BOOST_LOG_TRIVIAL(warning) << "got exc with _req recv" << e.what() << "(" << e.num() << ")";
@@ -122,7 +122,7 @@ void ZMQClient::receive() {
 
 }
 
-void ZMQClient::handle_reply(const zmq::message_t &reply, map<string, msgHandler> *handlers) {
+void ZMQClient::handle_reply(const zmq::message_t &reply, map<string, msgHandler> *handlers, const string &name) {
 
   BOOST_LOG_TRIVIAL(trace) << "handling reply";
 
@@ -130,7 +130,7 @@ void ZMQClient::handle_reply(const zmq::message_t &reply, map<string, msgHandler
   string r((const char *)reply.data(), reply.size());
   json doc = boost::json::parse(r);
 
-  BOOST_LOG_TRIVIAL(debug) << "got reply " << doc;
+  BOOST_LOG_TRIVIAL(debug) << name << " " << doc;
 
   // switch the handler based on the message type.
   string type;
@@ -229,7 +229,8 @@ void ZMQClient::send(userPtr user, channelPtr channel, const string &text) {
 	  { "me", user->id() },
 	  { "stream", channel->id() },
 	  { "policy", channel->policy() },
-	  { "text", text }
+	  { "text", text },
+	  { "corr", user->prefix() }
 	});
 
 }
@@ -421,11 +422,16 @@ void ZMQClient::ideaMsg(json *doc) {
     BOOST_LOG_TRIVIAL(error) << "no text for message";
     return;
   }
+  string corr;
+  if (!getString(doc, "corr", &corr)) {
+    BOOST_LOG_TRIVIAL(error) << "no corr for message";
+    return;
+  }
   channelPtr channel = _server->find_channel_stream(stream);
   if (channel) {
     userPtr user = _server->find_user_id(userid);
     if (user) {
-      channel->send_message(user, text);
+      channel->send_message(user, text, corr);
     }
     else {
       BOOST_LOG_TRIVIAL(error) << "user not found";

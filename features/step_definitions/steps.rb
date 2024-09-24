@@ -1,7 +1,7 @@
 
 lastResult = nil
 
-When('she connects to localhost as {string}') do |name|
+When('she CONNECTs to localhost as {string}') do |name|
 
    @irc = IRC.new()
    @irc.connect("localhost", 6667)
@@ -9,21 +9,33 @@ When('she connects to localhost as {string}') do |name|
    
 end
 
-When('she joins {string}') do |channel|
+When('she JOINs {string}') do |channel|
 
    @irc.join(channel)
 
 end
 
-Then('she LISTS') do
+Then('she LISTs') do
 
    @irc.list()
    
 end
 
+Then('she PRIVMSGs {string} to {string}') do |message, channel|
+
+   @irc.privmsg(channel, message)
+
+end
+
 When('she receives {string}') do |msg|
    if !@irc.wait_for(msg)
       fail("Got error")
+   end
+end
+
+Then('she recieves nothing') do
+   if !@irc.wait_for_nothing()
+      fail("Got message")
    end
 end
 
@@ -36,7 +48,7 @@ end
 When('she sends direct message {string} as {string} to {string}') do |text, user, stream|
    u = User.where(name: user).first._id.to_s
    s = Stream.where(name: stream).first._id.to_s
-   lastResult = JSON.parse(`$NODES_HOME/build/Send --logLevel=trace --cmd=message --args="#{u},#{s},#{text}"`)
+   lastResult = JSON.parse(`$NODES_HOME/build/Send --logLevel=debug --cmd=message --args="#{u},#{s},#{text}"`)
    expect(lastResult["type"]).to eq("ack")
 end
 

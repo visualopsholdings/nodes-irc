@@ -258,4 +258,7 @@ implementation of the proprietary "Visual Ops" server.
 ### 23 Sep 2024
 - Return 401 for server when the user doesn't have their name set in the DB.
 
+### 24 Sep 2024
+- Correctly set correlation id so we don't get messages back.
+
 

@@ -40,11 +40,11 @@ public:
   string policy();
 
   userPtr find_user_id(const string &id);
-  void send(Prefixable *prefix, const string &cmd, const list<string> &args);
+  void send(Prefixable *prefix, const string &cmd, const list<string> &args, const string &corr);
 
   // thread safe
   void join(userPtr user);
-  void send_message(userPtr user, const string &text);
+  void send_message(userPtr user, const string &text, const string &corr);
   
 private:
   friend class Server;

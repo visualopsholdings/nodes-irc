@@ -9,13 +9,13 @@ Feature: Multiple Login
          | My Conversation 2     | p1     |
 
 	Scenario: More than one user can connect and login
-	   When she connects to localhost as "tracy"
+	   When she CONNECTs to localhost as "tracy"
       Then she receives "tracy +w"
 	   Then she waits 1 seconds
-      Then she joins "#my+conversation+1"
+      Then she JOINs "#my+conversation+1"
       Then she receives ":No topic"
-      Then she connects to localhost as "leanne"
+      Then she CONNECTs to localhost as "leanne"
       Then she receives "leanne +w"
 	   Then she waits 1 seconds
-      Then she joins "#my+conversation+1"
+      Then she JOINs "#my+conversation+1"
       Then she receives ":No topic"
