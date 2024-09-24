@@ -15,10 +15,10 @@ then
   # for those machines that have local libs on them
   sudo LD_LIBRARY_PATH=/home/nodes/nodes/build:/home/nodes/nodes-lib \
     ./nodes-irc/build/nodes-irc \
-    --logLevel=trace \
+    --logLevel=debug \
     > nodes-irc.log 2>&1 &
 else
   sudo ./nodes-irc/build/nodes-irc \
-    --logLevel=trace \
+    --logLevel=debug \
     > nodes-irc.log 2>&1 &
 fi
