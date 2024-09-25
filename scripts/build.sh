@@ -15,6 +15,6 @@ fi
 pushd nodes-irc/build
 git pull
 cmake ..
-make
+make -j
 make test
 popd

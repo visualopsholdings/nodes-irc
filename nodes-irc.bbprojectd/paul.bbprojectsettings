@@ -8,7 +8,7 @@
 	<integer>1186</integer>
 	<key>ExpandedItems:paul</key>
 	<array>
-		<string>70F37550-7BB5-4F28-97F0-8726CE119D5F</string>
+		<string>E4F0213A-5B46-4995-9BD8-FD6AA29981A2</string>
 		<string>96B01555-8D9C-4B4C-A032-3DE66B9BCAFD</string>
 		<dict>
 			<key>BookmarkData</key>
@@ -52,6 +52,117 @@
 	<integer>0</integer>
 	<key>OpenDocuments:paul</key>
 	<array>
+		<dict>
+			<key>BookmarkData</key>
+			<data>
+			Ym9va0ADAAAAAAQQMAAAAOUecjq93Y1NMthUInzG3Ylv03TClXNF
+			8J24OyPeAc8dMAIAAAQAAAADAwAAAAgAKAUAAAABAQAAVXNlcnMA
+			AAAEAAAAAQEAAHBhdWwDAAAAAQEAAERldgAJAAAAAQEAAG5vZGVz
+			LWlyYwAAAAcAAAABAQAAaW5jbHVkZQALAAAAAQEAAGNoYW5uZWwu
+			aHBwABgAAAABBgAAEAAAACAAAAAsAAAAOAAAAEwAAABcAAAACAAA
+			AAQDAADYWgAAAAAAAAgAAAAEAwAAvDIEAAAAAAAIAAAABAMAAEaD
+			FgAAAAAACAAAAAQDAAAfPD0SAAAAAAgAAAAEAwAAeTw9EgAAAAAI
+			AAAABAMAAHo8PRIAAAAAGAAAAAEGAACQAAAAoAAAALAAAADAAAAA
+			0AAAAOAAAAAIAAAAAAQAAEHGK6/RoBe/GAAAAAECAAABAAAAAAAA
+			AA8AAAAAAAAAAAAAAAAAAAAIAAAABAMAAAQAAAAAAAAABAAAAAMD
+			AAD1AQAACAAAAAEJAABmaWxlOi8vLwwAAAABAQAATWFjaW50b3No
+			IEhECAAAAAQDAAAAkIKW5wAAAAgAAAAABAAAQcZE11qAAAAkAAAA
+			AQEAAEExNEU5RjM4LUFDQUQtNEVGQi05NENBLTM0NDU3MUZFNUM2
+			ORgAAAABAgAAgQAAAAEAAADvEwAAAQAAAAAAAAAAAAAAAQAAAAEB
+			AAAvAAAAAAAAAAEFAAAaAAAAAQEAAE5TVVJMRG9jdW1lbnRJZGVu
+			dGlmaWVyS2V5AAAEAAAAAwMAAMEOBgDYAAAA/v///wEAAAAAAAAA
+			EQAAAAQQAABwAAAAAAAAAAUQAADwAAAAAAAAABAQAAAgAQAAAAAA
+			AEAQAAAQAQAAAAAAAAIgAADsAQAAAAAAAAUgAABcAQAAAAAAABAg
+			AABsAQAAAAAAABEgAACgAQAAAAAAABIgAACAAQAAAAAAABMgAACQ
+			AQAAAAAAACAgAADMAQAAAAAAADAgAAD4AQAAAAAAAAHAAABAAQAA
+			AAAAABHAAAAgAAAAAAAAABLAAABQAQAAAAAAABDQAAAEAAAAAAAA
+			AAACAIAkAgAAAAAAAA==
+			</data>
+			<key>FileURL</key>
+			<string>file:///Users/paul/Dev/nodes-irc/include/channel.hpp</string>
+			<key>HasSecurityScope</key>
+			<true/>
+			<key>RelativePath</key>
+			<string>./include/channel.hpp</string>
+			<key>TypeID</key>
+			<string>_CFileLocator</string>
+			<key>Version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>BookmarkData</key>
+			<data>
+			Ym9vazwDAAAAAAQQMAAAAFXG4D5oE9q7GVY0bb8xjMa44ctFoJOC
+			mcql4DF7suy0LAIAAAQAAAADAwAAAAgAKAUAAAABAQAAVXNlcnMA
+			AAAEAAAAAQEAAHBhdWwDAAAAAQEAAERldgAJAAAAAQEAAG5vZGVz
+			LWlyYwAAAAcAAAABAQAAaW5jbHVkZQAIAAAAAQEAAHVzZXIuaHBw
+			GAAAAAEGAAAQAAAAIAAAACwAAAA4AAAATAAAAFwAAAAIAAAABAMA
+			ANhaAAAAAAAACAAAAAQDAAC8MgQAAAAAAAgAAAAEAwAARoMWAAAA
+			AAAIAAAABAMAAB88PRIAAAAACAAAAAQDAAB5PD0SAAAAAAgAAAAE
+			AwAAgTw9EgAAAAAYAAAAAQYAAIwAAACcAAAArAAAALwAAADMAAAA
+			3AAAAAgAAAAABAAAQcYrr9GgL/YYAAAAAQIAAAEAAAAAAAAADwAA
+			AAAAAAAAAAAAAAAAAAgAAAAEAwAABAAAAAAAAAAEAAAAAwMAAPUB
+			AAAIAAAAAQkAAGZpbGU6Ly8vDAAAAAEBAABNYWNpbnRvc2ggSEQI
+			AAAABAMAAACQgpbnAAAACAAAAAAEAABBxkTXWoAAACQAAAABAQAA
+			QTE0RTlGMzgtQUNBRC00RUZCLTk0Q0EtMzQ0NTcxRkU1QzY5GAAA
+			AAECAACBAAAAAQAAAO8TAAABAAAAAAAAAAAAAAABAAAAAQEAAC8A
+			AAAAAAAAAQUAABoAAAABAQAATlNVUkxEb2N1bWVudElkZW50aWZp
+			ZXJLZXkAAAQAAAADAwAAyA4GANgAAAD+////AQAAAAAAAAARAAAA
+			BBAAAGwAAAAAAAAABRAAAOwAAAAAAAAAEBAAABwBAAAAAAAAQBAA
+			AAwBAAAAAAAAAiAAAOgBAAAAAAAABSAAAFgBAAAAAAAAECAAAGgB
+			AAAAAAAAESAAAJwBAAAAAAAAEiAAAHwBAAAAAAAAEyAAAIwBAAAA
+			AAAAICAAAMgBAAAAAAAAMCAAAPQBAAAAAAAAAcAAADwBAAAAAAAA
+			EcAAACAAAAAAAAAAEsAAAEwBAAAAAAAAENAAAAQAAAAAAAAA/AEA
+			gCACAAAAAAAA
+			</data>
+			<key>FileURL</key>
+			<string>file:///Users/paul/Dev/nodes-irc/include/user.hpp</string>
+			<key>HasSecurityScope</key>
+			<true/>
+			<key>RelativePath</key>
+			<string>./include/user.hpp</string>
+			<key>TypeID</key>
+			<string>_CFileLocator</string>
+			<key>Version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>BookmarkData</key>
+			<data>
+			Ym9va0QDAAAAAAQQMAAAAGiVj/qiZYOJHLu25w2oZHELvxKhKoqJ
+			OlL/AsaRUsHVNAIAAAQAAAADAwAAAAgAKAUAAAABAQAAVXNlcnMA
+			AAAEAAAAAQEAAHBhdWwDAAAAAQEAAERldgAJAAAAAQEAAG5vZGVz
+			LWlyYwAAAAcAAAABAQAAaW5jbHVkZQANAAAAAQEAAHptcWNsaWVu
+			dC5ocHAAAAAYAAAAAQYAABAAAAAgAAAALAAAADgAAABMAAAAXAAA
+			AAgAAAAEAwAA2FoAAAAAAAAIAAAABAMAALwyBAAAAAAACAAAAAQD
+			AABGgxYAAAAAAAgAAAAEAwAAHzw9EgAAAAAIAAAABAMAAHk8PRIA
+			AAAACAAAAAQDAACDPD0SAAAAABgAAAABBgAAlAAAAKQAAAC0AAAA
+			xAAAANQAAADkAAAACAAAAAAEAABBxiuv0aA3iBgAAAABAgAAAQAA
+			AAAAAAAPAAAAAAAAAAAAAAAAAAAACAAAAAQDAAAEAAAAAAAAAAQA
+			AAADAwAA9QEAAAgAAAABCQAAZmlsZTovLy8MAAAAAQEAAE1hY2lu
+			dG9zaCBIRAgAAAAEAwAAAJCClucAAAAIAAAAAAQAAEHGRNdagAAA
+			JAAAAAEBAABBMTRFOUYzOC1BQ0FELTRFRkItOTRDQS0zNDQ1NzFG
+			RTVDNjkYAAAAAQIAAIEAAAABAAAA7xMAAAEAAAAAAAAAAAAAAAEA
+			AAABAQAALwAAAAAAAAABBQAAGgAAAAEBAABOU1VSTERvY3VtZW50
+			SWRlbnRpZmllcktleQAABAAAAAMDAADKDgYA2AAAAP7///8BAAAA
+			AAAAABEAAAAEEAAAdAAAAAAAAAAFEAAA9AAAAAAAAAAQEAAAJAEA
+			AAAAAABAEAAAFAEAAAAAAAACIAAA8AEAAAAAAAAFIAAAYAEAAAAA
+			AAAQIAAAcAEAAAAAAAARIAAApAEAAAAAAAASIAAAhAEAAAAAAAAT
+			IAAAlAEAAAAAAAAgIAAA0AEAAAAAAAAwIAAA/AEAAAAAAAABwAAA
+			RAEAAAAAAAARwAAAIAAAAAAAAAASwAAAVAEAAAAAAAAQ0AAABAAA
+			AAAAAAAEAgCAKAIAAAAAAAA=
+			</data>
+			<key>FileURL</key>
+			<string>file:///Users/paul/Dev/nodes-irc/include/zmqclient.hpp</string>
+			<key>HasSecurityScope</key>
+			<true/>
+			<key>RelativePath</key>
+			<string>./include/zmqclient.hpp</string>
+			<key>TypeID</key>
+			<string>_CFileLocator</string>
+			<key>Version</key>
+			<integer>1</integer>
+		</dict>
 		<dict>
 			<key>BookmarkData</key>
 			<data>
@@ -753,6 +864,43 @@
 			<key>Version</key>
 			<integer>1</integer>
 		</dict>
+		<dict>
+			<key>BookmarkData</key>
+			<data>
+			Ym9vazwDAAAAAAQQMAAAAEJwGKD4TFfOgL2HNTE8g3sEz4NYzkA9
+			Z8xQk/x1d9h3LAIAAAQAAAADAwAAAAgAKAUAAAABAQAAVXNlcnMA
+			AAAEAAAAAQEAAHBhdWwDAAAAAQEAAERldgAJAAAAAQEAAG5vZGVz
+			LWlyYwAAAAcAAAABAQAAc2NyaXB0cwAIAAAAAQEAAGJ1aWxkLnNo
+			GAAAAAEGAAAQAAAAIAAAACwAAAA4AAAATAAAAFwAAAAIAAAABAMA
+			ANhaAAAAAAAACAAAAAQDAAC8MgQAAAAAAAgAAAAEAwAARoMWAAAA
+			AAAIAAAABAMAAB88PRIAAAAACAAAAAQDAACEPD0SAAAAAAgAAAAE
+			AwAAhTw9EgAAAAAYAAAAAQYAAIwAAACcAAAArAAAALwAAADMAAAA
+			3AAAAAgAAAAABAAAQcYrr9GgPSEYAAAAAQIAAAEAAAAAAAAADwAA
+			AAAAAAAAAAAAAAAAAAgAAAAEAwAABAAAAAAAAAAEAAAAAwMAAPUB
+			AAAIAAAAAQkAAGZpbGU6Ly8vDAAAAAEBAABNYWNpbnRvc2ggSEQI
+			AAAABAMAAACQgpbnAAAACAAAAAAEAABBxkTXWoAAACQAAAABAQAA
+			QTE0RTlGMzgtQUNBRC00RUZCLTk0Q0EtMzQ0NTcxRkU1QzY5GAAA
+			AAECAACBAAAAAQAAAO8TAAABAAAAAAAAAAAAAAABAAAAAQEAAC8A
+			AAAAAAAAAQUAABoAAAABAQAATlNVUkxEb2N1bWVudElkZW50aWZp
+			ZXJLZXkAAAQAAAADAwAAzg4GANgAAAD+////AQAAAAAAAAARAAAA
+			BBAAAGwAAAAAAAAABRAAAOwAAAAAAAAAEBAAABwBAAAAAAAAQBAA
+			AAwBAAAAAAAAAiAAAOgBAAAAAAAABSAAAFgBAAAAAAAAECAAAGgB
+			AAAAAAAAESAAAJwBAAAAAAAAEiAAAHwBAAAAAAAAEyAAAIwBAAAA
+			AAAAICAAAMgBAAAAAAAAMCAAAPQBAAAAAAAAAcAAADwBAAAAAAAA
+			EcAAACAAAAAAAAAAEsAAAEwBAAAAAAAAENAAAAQAAAAAAAAA/AEA
+			gCACAAAAAAAA
+			</data>
+			<key>FileURL</key>
+			<string>file:///Users/paul/Dev/nodes-irc/scripts/build.sh</string>
+			<key>HasSecurityScope</key>
+			<true/>
+			<key>RelativePath</key>
+			<string>./scripts/build.sh</string>
+			<key>TypeID</key>
+			<string>_CFileLocator</string>
+			<key>Version</key>
+			<integer>1</integer>
+		</dict>
 	</array>
 	<key>OpenDocumentsExpanded</key>
 	<true/>
@@ -766,7 +914,7 @@
 	<array>
 		<dict>
 			<key>Date</key>
-			<date>2024-09-24T07:47:59Z</date>
+			<date>2024-09-25T05:59:23Z</date>
 			<key>Location</key>
 			<dict>
 				<key>BookmarkData</key>
@@ -810,7 +958,7 @@
 		</dict>
 		<dict>
 			<key>Date</key>
-			<date>2024-09-24T07:47:59Z</date>
+			<date>2024-09-25T05:59:23Z</date>
 			<key>Location</key>
 			<dict>
 				<key>BookmarkData</key>
@@ -854,7 +1002,7 @@
 		</dict>
 		<dict>
 			<key>Date</key>
-			<date>2024-09-24T07:47:59Z</date>
+			<date>2024-09-25T05:59:23Z</date>
 			<key>Location</key>
 			<dict>
 				<key>BookmarkData</key>
@@ -898,7 +1046,7 @@
 		</dict>
 		<dict>
 			<key>Date</key>
-			<date>2024-09-24T07:47:59Z</date>
+			<date>2024-09-25T05:59:23Z</date>
 			<key>Location</key>
 			<dict>
 				<key>BookmarkData</key>
@@ -942,7 +1090,7 @@
 		</dict>
 		<dict>
 			<key>Date</key>
-			<date>2024-09-24T07:47:59Z</date>
+			<date>2024-09-25T05:59:23Z</date>
 			<key>Location</key>
 			<dict>
 				<key>BookmarkData</key>
@@ -986,7 +1134,7 @@
 		</dict>
 		<dict>
 			<key>Date</key>
-			<date>2024-09-24T07:47:59Z</date>
+			<date>2024-09-25T05:59:23Z</date>
 			<key>Location</key>
 			<dict>
 				<key>BookmarkData</key>
@@ -1030,7 +1178,7 @@
 		</dict>
 		<dict>
 			<key>Date</key>
-			<date>2024-09-24T07:47:59Z</date>
+			<date>2024-09-25T05:59:23Z</date>
 			<key>Location</key>
 			<dict>
 				<key>BookmarkData</key>
@@ -1073,7 +1221,7 @@
 		</dict>
 		<dict>
 			<key>Date</key>
-			<date>2024-09-24T07:47:59Z</date>
+			<date>2024-09-25T05:59:23Z</date>
 			<key>Location</key>
 			<dict>
 				<key>BookmarkData</key>
@@ -1118,7 +1266,7 @@
 		</dict>
 		<dict>
 			<key>Date</key>
-			<date>2024-09-24T07:47:59Z</date>
+			<date>2024-09-25T05:59:23Z</date>
 			<key>Location</key>
 			<dict>
 				<key>BookmarkData</key>
@@ -1163,7 +1311,7 @@
 		</dict>
 		<dict>
 			<key>Date</key>
-			<date>2024-09-24T07:47:59Z</date>
+			<date>2024-09-25T05:59:23Z</date>
 			<key>Location</key>
 			<dict>
 				<key>BookmarkData</key>
@@ -1207,7 +1355,7 @@
 		</dict>
 		<dict>
 			<key>Date</key>
-			<date>2024-09-24T07:47:59Z</date>
+			<date>2024-09-25T05:59:23Z</date>
 			<key>Location</key>
 			<dict>
 				<key>BookmarkData</key>
@@ -1249,7 +1397,7 @@
 		</dict>
 		<dict>
 			<key>Date</key>
-			<date>2024-09-24T07:47:59Z</date>
+			<date>2024-09-25T05:59:23Z</date>
 			<key>Location</key>
 			<dict>
 				<key>BookmarkData</key>
@@ -1293,7 +1441,7 @@
 		</dict>
 		<dict>
 			<key>Date</key>
-			<date>2024-09-24T07:47:59Z</date>
+			<date>2024-09-25T05:59:23Z</date>
 			<key>Location</key>
 			<dict>
 				<key>BookmarkData</key>
@@ -1334,7 +1482,7 @@
 		</dict>
 		<dict>
 			<key>Date</key>
-			<date>2024-09-24T07:47:59Z</date>
+			<date>2024-09-25T05:59:23Z</date>
 			<key>Location</key>
 			<dict>
 				<key>BookmarkData</key>
@@ -1378,7 +1526,7 @@
 		</dict>
 		<dict>
 			<key>Date</key>
-			<date>2024-09-24T07:47:59Z</date>
+			<date>2024-09-25T05:59:23Z</date>
 			<key>Location</key>
 			<dict>
 				<key>BookmarkData</key>
