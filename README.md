@@ -1,30 +1,12 @@
 # nodes-irc
 
-A frontend for IRC that uses ZMQ to send/receive messages.
+An IRC component that handles the transfer of messages from IRC based clients to Nodes.
 
-## Visual Ops
+The best way to get started is to take a look at:
 
-This is a companion project to:
+https://github.com/visualopsholdings/nodes-devops
 
-https://github.com/visualopsholdings/nodes
-
-Visual Ops is a proprietary (closed source) system that runs on very low end hardware
-like T4G's in AWS, or on a Raspberry Pi 4/5.
-
-This "plugin" can run on a Visual Ops server and provides simple IRC access to Visual Ops 
-allowing for any IRC client or IRC server to talk to Visual Ops via IRC.
-
-An Open Source version of Visual Ops called "Nodes" is being developed, but for now at least
-this small part of the server, the IRC protocol is available to build and use.
-
-If you would like access to the Visual Ops software it is available as an image download 
-after we get to know you.
-
-Visit https://info.visualops.com/ for more info.
-
-All the places that mention "Visual Ops", could be interchanged with "Nodes".
-
-### ZMQ API
+## ZMQ API
 
 This project communicate with Nodes using the ZMQ message queues.
 
@@ -39,26 +21,26 @@ This port is also used to "ask" for things of the Nodes system such as login etc
 
 [Here are the formats for the messages](https://github.com/visualopsholdings/nodes/blob/main/src/msg/README.md)
 
-### Supported IRC commands
+## Supported IRC commands
 
-#### PASS [password]
+### PASS [password]
 
 Sends the "login" command below, you can pass your VID here which is all that is needed by 
 Visual Ops to return your nickname and your real name.
 
-#### LIST
+### LIST
 
 List all channels (streams in Visual Ops)
 
-#### JOIN
+### JOIN
 
 Join a particular channel.
 
-#### QUIT
+### QUIT
 
 Log off the server.
 
-#### PRIVMSG
+### PRIVMSG
 
 Send a message to the server.
 
