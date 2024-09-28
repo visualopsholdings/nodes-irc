@@ -48,8 +48,8 @@ end
 When('she sends direct message {string} as {string} to {string}') do |text, user, stream|
    u = User.where(name: user).first._id.to_s
    s = Stream.where(name: stream).first._id.to_s
-   lastResult = JSON.parse(`$NODES_HOME/build/Send --logLevel=debug --cmd=message --args="#{u},#{s},#{text}"`)
-   expect(lastResult["type"]).to eq("ack")
+   j = JSON.generate({ "type": "message" , "me": u,  "stream": s, "text": text, "corr": "1" })
+   lastResult = JSON.parse(`$NODES_HOME/build/Send --logLevel=debug '#{j}'`)
 end
 
 
