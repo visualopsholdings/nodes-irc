@@ -27,7 +27,7 @@ using namespace std;
 
 int main(int argc, char *argv[]) {
 
-  string version = "Nodes IRC v0.3.0, 25-Sep-2024.";
+  string version = "Nodes IRC v0.4.0, 7-Oct-2024.";
 
   int subPort;
   int reqPort;
