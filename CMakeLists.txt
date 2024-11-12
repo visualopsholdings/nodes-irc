@@ -10,6 +10,8 @@
 #   https://github.com/visualopsholdings/nodes-irc
 
 cmake_minimum_required(VERSION 3.5)
+cmake_policy(SET CMP0167 NEW) # Boost
+cmake_policy(SET CMP0169 OLD) # FetchContent
 
 project (nodes-irc)
   find_package(Boost 1.85.0 COMPONENTS program_options filesystem unit_test_framework chrono thread log_setup log json REQUIRED)
