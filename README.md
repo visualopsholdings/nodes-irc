@@ -258,4 +258,8 @@ implementation of the proprietary "Visual Ops" server.
 ### 24 Sep 2024
 - Correctly set correlation id so we don't get messages back.
 
+### 22 Nov 2024
+- "streams" message is now objects with an objtype of "stream".
+
+
 

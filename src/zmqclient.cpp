@@ -207,7 +207,8 @@ void ZMQClient::login(const string &session, const string &password) {
 void ZMQClient::streams(const string &user) {
   
 	send({ 
-	  { "type", "streams" }, 
+	  { "type", "objects" }, 
+	  { "objtype", "stream" }, 
 	  { "me", user }
 	});
 
