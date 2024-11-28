@@ -226,10 +226,10 @@ void ZMQClient::policy_users(const string &policy) {
 void ZMQClient::send(userPtr user, channelPtr channel, const string &text) {
 
 	send({ 
-	  { "type", "message" }, 
+	  { "type", "addobject" }, 
+	  { "objtype", "idea" },
 	  { "me", user->id() },
-	  { "stream", channel->id() },
-	  { "policy", channel->policy() },
+    { "stream", channel->id() },
 	  { "text", text },
 	  { "corr", user->prefix() }
 	});

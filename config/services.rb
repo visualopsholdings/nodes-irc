@@ -8,7 +8,7 @@ require 'service_manager'
 # end
 
 ServiceManager.define_service 'nodes' do |s|
-   s.start_cmd = '$NODES_HOME/build/nodes --test --logLevel=debug'
+   s.start_cmd = '$NODES_HOME/build/nodes --test --logLevel=debug --schema=scripts/schema.json'
    s.loaded_cue = /Local REP/
    s.cwd = Dir.pwd
    s.pid_file = 'nodes.pid'
